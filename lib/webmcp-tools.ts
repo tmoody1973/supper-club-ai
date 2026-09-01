@@ -232,6 +232,11 @@ const planSources = (plan: PartyPlan) => {
     ...plan.soundtrack.flatMap((track) => [
       track.source,
       track.releaseContext?.source,
+      ...(track.provenance?.discovery.sources ?? []),
+      ...(track.provenance?.discovery.origin === "REVIEWED_SEED"
+        ? track.provenance.discovery.attemptedCandidate?.sources ?? []
+        : []),
+      track.provenance?.verification.source,
       ...(track.editorialContext?.sources ?? []),
     ].filter((source): source is SourceRef => Boolean(source))),
   ];

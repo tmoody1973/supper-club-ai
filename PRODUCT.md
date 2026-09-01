@@ -70,13 +70,17 @@ website exposes the broader composition and export toolkit.
 ### Data and integrations
 
 - The implemented provider gateway is documented in `docs/integrations/provider-gateway.md`.
-- Spoonacular is the primary structured recipe API; Perplexity Agent supplies a complete menu
-  when Spoonacular cannot, followed by the reviewed recipe catalog as the final fallback.
+- Each course independently follows Spoonacular → Perplexity Agent API → reviewed recipe
+  fallback. Successful live courses are preserved when another role fails, and Perplexity
+  candidates must retain the actual Agent API search-result ID that supports the recipe.
 - Open Library is the first prototype book source, with Google Books as a metadata or preview-link fallback.
 - GrapeMinds supplies live wine discovery, with X-Wines as its local fallback. Perplexity Agent
   supplies source-backed zero-proof discovery, with the reviewed zero-proof catalog as fallback.
-- Apple MusicKit supplies catalog search and previews, with reviewed soundtrack anchors as fallback.
-- Discogs enriches music with release, genre, style, and historical context.
+- Perplexity Agent proposes 6–8 source-ID-bound recordings across the dinner moments. Apple
+  Music verifies exact artist/title matches and supplies catalog metadata before four tracks are
+  selected against the theme and energy arc; reviewed anchors fill only unresolved slots.
+- Discogs adds release, genre, style, and historical context when available. Each selected track
+  retains a receipt for its discovery origin, Apple Music verification, and supporting sources.
 - Dynamic-plan responses identify each provider's selected mode and source count so the host can
   distinguish live, hybrid, and local-fallback results.
 - All third-party payloads are untrusted and must be validated and normalized on the server.

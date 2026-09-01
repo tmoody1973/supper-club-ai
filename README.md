@@ -62,7 +62,13 @@ for (const definition of tools) {
 }
 ```
 
-The twenty-fifth website tool, `create_party_plan`, accepts an inspiration, guest count, budget, dietary requirements, and wine and zero-proof preferences. It sends that brief to the dynamic-plan endpoint, activates the returned plan ID in the website, and reports the provider and mode used for each curation stage. A new plan can use Spoonacular with Perplexity Agent and the reviewed recipe catalog as fallbacks, GrapeMinds with X-Wines fallback, Perplexity-backed zero-proof discovery with a reviewed catalog fallback, and Apple Music with reviewed soundtrack anchors. The executable implementation also includes version-conflict protection, structured success and error responses, visible change receipts, source attribution, and explicit confirmation for finalization and PDF download.
+The twenty-fifth website tool, `create_party_plan`, accepts an inspiration, guest count, budget, dietary requirements, and wine and zero-proof preferences. It sends that brief to the dynamic-plan endpoint, activates the returned plan ID in the website, and reports the provider and mode used for each curation stage. Each menu course is resolved independently through Spoonacular → Perplexity Agent API → reviewed recipe fallback, so one missing dessert does not discard a successful live starter or main. Pairings use GrapeMinds with X-Wines fallback and Perplexity-backed zero-proof discovery with a reviewed fallback. The soundtrack uses Perplexity discovery, Apple Music verification, optional Discogs context, and reviewed anchors only for unfilled slots. The executable implementation also includes version-conflict protection, structured success and error responses, visible change receipts, source attribution, and explicit confirmation for finalization and PDF download.
+
+### How live menu and soundtrack curation work
+
+- **Menu:** Starter, main, and dessert each run their own provider waterfall. Spoonacular is tried first. If that course has no candidate that passes source, diet, ingredient, and timing checks, Perplexity searches for that role and must return an actual Agent API search-result ID. Only that unresolved course uses the reviewed recipe catalog if both live providers fail.
+- **Soundtrack:** Perplexity is asked for 6–8 sourced candidates—currently eight—distributed across arrival, first course, main table, reflection, and closing. Every candidate must retain actual result IDs from that Agent API response and pass generic-background-audio screening. Apple Music then performs the authoritative artist/title verification and supplies catalog metadata; the app ranks verified choices against the theme, energy arc, and strength of editorial or institutional sourcing before selecting four. Reviewed anchors fill only remaining slots, while Discogs adds release context when available.
+- **Receipts:** Each selected track keeps its discovery origin, Perplexity response and result IDs when applicable, Apple Music verification status, and supporting sources. This makes a live discovery, a verified catalog match, and a reviewed fallback visibly different.
 
 ## Project structure
 
@@ -103,7 +109,7 @@ Provider credentials are optional during development. Open Library and the revie
 
 Wine pairing uses live GrapeMinds metadata when `GRAPEMINDS_API_KEY` is configured and the CC0 X-Wines subset as an automatic fallback. Zero-proof pairings use source-backed Perplexity recipe discovery when configured and the reviewed local catalog as a safe fallback. GrapeMinds records are used for live discovery and are not copied into a persistent local dataset.
 
-When `PERPLEXITY_API_KEY` is configured, the recipe gateway uses Perplexity Agent after Spoonacular cannot supply a complete menu, zero-proof curation discovers source-backed drink recipes, and `enrich_soundtrack_context` attaches concise artist, album, cultural, and hosting notes to soundtrack entries. Live food and drink candidates are screened but remain unconfirmed. The normalized plan stores selected original source links, not Perplexity credentials or raw provider payloads.
+When `PERPLEXITY_API_KEY` is configured, the recipe gateway uses Perplexity Agent for each individual course Spoonacular cannot supply; successful courses from either provider are preserved. Perplexity also discovers source-ID-bound soundtrack candidates and source-backed zero-proof recipes, while `enrich_soundtrack_context` can attach concise artist, album, cultural, and hosting notes. Live food and drink candidates are screened but remain unconfirmed. The normalized plan stores selected source links and provenance—not Perplexity credentials or raw provider payloads.
 
 ## Shared PlanStore
 

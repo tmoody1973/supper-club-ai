@@ -9,6 +9,10 @@ import {
 } from "@/lib/creative-brief";
 import { curatePairingsWithFallback } from "@/lib/pairing-engine.server";
 import { discoverMenuCoursesWithPerplexity } from "@/lib/perplexity-recipes.server";
+import {
+  discoverSoundtrackWithPerplexity,
+  type PerplexitySoundtrackCandidate,
+} from "@/lib/perplexity-soundtrack.server";
 import { courseFromRecipe } from "@/lib/seed-plan";
 import type {
   CurationRequest,
@@ -19,6 +23,7 @@ import type {
   SoundtrackCurationData,
   SoundtrackEnrichmentData,
   ThemeCurationData,
+  TrackProviderReceipt,
 } from "@/lib/curation-contracts";
 import type {
   CreativeBrief,
@@ -28,6 +33,7 @@ import type {
   ToolWarning,
   Track,
   TrackEditorialContext,
+  TrackProvenance,
 } from "@/lib/types";
 
 type BookRecord = {
@@ -342,36 +348,30 @@ const courseSubtitle = (recipe: RecipeRecord, brief?: CreativeBrief) => {
   return motif ? `${motif} as a shared gesture` : "A generous shared course";
 };
 
-const localCourses = (
+const localCourse = (
+  role: MenuCourse["role"],
+  courseId: string,
   servings: number,
   brief?: CreativeBrief,
   dietaryRequirements: string[] = [],
   preparationMinutesMax?: number,
-): MenuCourse[] => {
-  const roles: Array<{ role: MenuCourse["role"]; courseId: string }> = [
-    { role: "STARTER", courseId: "course-first" },
-    { role: "MAIN", courseId: "course-main" },
-    { role: "DESSERT", courseId: "course-dessert" },
-  ];
-  const courses = roles.map(({ role, courseId }) => {
-    const candidates = recipes
-      .map((recipe) => ({
-        recipe,
-        score: recipeScore(recipe, role, brief, dietaryRequirements, preparationMinutesMax),
-      }))
-      .filter((candidate) => Number.isFinite(candidate.score))
-      .sort((left, right) => right.score - left.score);
-    const candidate = candidates[0]?.recipe;
-    if (!candidate) {
-      throw new Error(`No reviewed ${role.toLowerCase()} satisfies the dietary requirements.`);
-    }
-    const course = courseFromRecipe(candidate.id, courseId, role, courseSubtitle(candidate, brief));
-    const themeConnection = candidate.themeConnections.find((connection) => brief?.themes.includes(connection.theme));
-    if (themeConnection) course.themeConnection = themeConnection.explanation;
-    return course;
-  });
-  courses.forEach((course) => { course.servings = servings; });
-  return courses;
+): MenuCourse => {
+  const candidates = recipes
+    .map((recipe) => ({
+      recipe,
+      score: recipeScore(recipe, role, brief, dietaryRequirements, preparationMinutesMax),
+    }))
+    .filter((candidate) => Number.isFinite(candidate.score))
+    .sort((left, right) => right.score - left.score);
+  const candidate = candidates[0]?.recipe;
+  if (!candidate) {
+    throw new Error(`No reviewed ${role.toLowerCase()} satisfies the dietary requirements.`);
+  }
+  const course = courseFromRecipe(candidate.id, courseId, role, courseSubtitle(candidate, brief));
+  const themeConnection = candidate.themeConnections.find((connection) => brief?.themes.includes(connection.theme));
+  if (themeConnection) course.themeConnection = themeConnection.explanation;
+  course.servings = servings;
+  return course;
 };
 
 async function researchTheme(
@@ -497,17 +497,37 @@ async function curateMenu(
   signal: AbortSignal,
 ): Promise<CurationResponse<MenuCurationData>> {
   const key = process.env.SPOONACULAR_API_KEY;
-  const fallback = () => localCourses(
-    request.servings,
-    request.creativeBrief,
-    request.dietaryRequirements,
-    request.preparationMinutesMax,
-  );
   const motifs = request.creativeBrief?.ingredientMotifs ?? [];
-  const searches: Array<{ role: MenuCourse["role"]; type: string; query: string; courseId: string }> = [
-    { role: "STARTER", type: "appetizer", query: motifs.slice(0, 2).join(" ") || "seasonal vegetable", courseId: "course-first" },
-    { role: "MAIN", type: "main course", query: motifs.slice(1, 4).join(" ") || "shared vegetable dinner", courseId: "course-main" },
-    { role: "DESSERT", type: "dessert", query: motifs.slice(-2).join(" ") || "fruit dessert", courseId: "course-dessert" },
+  const dessertMotifs = motifs.filter((motif) =>
+    /apple|banana|berry|cacao|chocolate|citrus|coconut|date|fig|fruit|ginger|hibiscus|honey|lemon|lime|mango|molasses|orange|peach|pear|pumpkin|sweet|vanilla/i.test(motif));
+  const searches: Array<{
+    role: MenuCourse["role"];
+    type: string;
+    query: string;
+    broadQuery: string;
+    courseId: string;
+  }> = [
+    {
+      role: "STARTER",
+      type: "appetizer",
+      query: `${motifs.slice(0, 2).join(" ") || "seasonal vegetable"} appetizer`,
+      broadQuery: "seasonal vegetable appetizer",
+      courseId: "course-first",
+    },
+    {
+      role: "MAIN",
+      type: "main course",
+      query: `${motifs.slice(1, 4).join(" ") || "shared vegetable"} main course`,
+      broadQuery: "shared vegetable main course",
+      courseId: "course-main",
+    },
+    {
+      role: "DESSERT",
+      type: "dessert",
+      query: `${dessertMotifs.slice(0, 2).join(" ") || "seasonal fruit"} dessert`,
+      broadQuery: "fruit dessert",
+      courseId: "course-dessert",
+    },
   ];
   const requiredDiet = normalizedDietaryRequirements(request.dietaryRequirements);
   const diet = requiredDiet.includes("VEGAN") ? "vegan" : requiredDiet.includes("VEGETARIAN") ? "vegetarian" : undefined;
@@ -521,60 +541,30 @@ async function curateMenu(
     code: "PRICE_UNVERIFIED",
     message: `Recipe providers do not verify live grocery prices. Confirm the shopping list against the $${request.menuBudgetCap.amount} menu cap before purchase.`,
   };
-  const perplexityFallback = async (spoonacularReason: string): Promise<CurationResponse<MenuCurationData>> => {
-    try {
-      const discovery = await discoverMenuCoursesWithPerplexity({
-        roles: searches.map((search) => search.role),
-        servings: request.servings,
-        dietaryRequirements: request.dietaryRequirements,
-        preparationMinutesMax: request.preparationMinutesMax,
-        creativeBrief: request.creativeBrief,
-        signal,
-      });
-      const byRole = new Map(discovery.courses.map((course) => [course.role, course]));
-      const courses = searches.map((search) => byRole.get(search.role)).filter((course): course is MenuCourse => Boolean(course));
-      if (courses.length !== searches.length) {
-        throw new Error("Perplexity did not return a complete three-course menu that passed dietary and source screening.");
-      }
-      return {
-        ok: true,
-        mode: "LIVE",
-        provider: "Perplexity Agent API",
-        data: { courses, estimatedMenuCost: { amount: 118, currency: "USD", confidence: "LOW" } },
-        sources: discovery.sources,
-        warnings: [{
-          code: "PROVIDER_FALLBACK",
-          message: `Spoonacular was not used (${spoonacularReason}). Supper Club AI used web-grounded Perplexity recipe discovery instead.`,
-        }, {
-          code: "LIVE_RECIPE_REVIEW",
-          message: "Perplexity recipe candidates passed structural and dietary screening but remain unconfirmed. Review original instructions, ingredient labels, allergens, cultural framing, and cross-contact before serving.",
-          affectedIds: courses.map((course) => course.courseId),
-        }, priceWarning],
-      };
-    } catch (error) {
-      if (signal.aborted || (error instanceof Error && error.name === "AbortError")) throw error;
-      const perplexityReason = error instanceof Error ? error.message : "provider unavailable";
-      const local = fallback();
-      return {
-        ok: true,
-        mode: "LOCAL_FALLBACK",
-        provider: "Reviewed recipe catalog",
-        data: { courses: local, estimatedMenuCost: { amount: 118, currency: "USD", confidence: "LOW" } },
-        sources: local.map((course) => course.source),
-        warnings: [{
-          code: "PROVIDER_FALLBACK",
-          message: `Spoonacular was not used (${spoonacularReason}); Perplexity was not used (${perplexityReason}). Supper Club AI used its reviewed local recipe catalog instead.`,
-        }, priceWarning],
-      };
+  const briefWords = briefFoodWords(request.creativeBrief);
+  const spoonacularCandidateReason = (recipe: SpoonacularRecipe) => {
+    if (!recipe.id || !recipe.title) return "candidate lacked a recipe id or title";
+    if ((recipe.extendedIngredients ?? []).length < 3) return "candidate lacked a usable ingredient list";
+    const tags = new Set(dietaryTags(recipe));
+    const missingTags = requiredDiet.filter((tag) => tag !== "NUT_FREE" && !tags.has(tag));
+    if (missingTags.length) return `candidate did not substantiate ${missingTags.join(", ")}`;
+    if (requiredDiet.includes("NUT_FREE")) {
+      const allergens = inferAllergens(recipe.extendedIngredients ?? []);
+      if (allergens.includes("PEANUT") || allergens.includes("TREE_NUT")) return "candidate ingredients conflicted with NUT_FREE";
     }
+    if (request.preparationMinutesMax !== undefined &&
+      (recipe.readyInMinutes ?? Number.POSITIVE_INFINITY) > request.preparationMinutesMax) {
+      return `candidate exceeded the ${request.preparationMinutesMax}-minute preparation limit`;
+    }
+    return undefined;
   };
-
-  if (!key) return perplexityFallback("SPOONACULAR_API_KEY is not configured");
-
-  try {
-    const results = await Promise.all(searches.map(async (search) => {
+  const searchSpoonacular = async (search: typeof searches[number]) => {
+    if (!key) return { reason: "SPOONACULAR_API_KEY is not configured" };
+    const queryAttempts = [...new Set([search.query.trim(), search.broadQuery])];
+    const rejectionDetails: string[] = [];
+    for (const query of queryAttempts) {
       const url = new URL("https://api.spoonacular.com/recipes/complexSearch");
-      url.searchParams.set("query", search.query);
+      url.searchParams.set("query", query);
       url.searchParams.set("type", search.type);
       url.searchParams.set("number", "4");
       url.searchParams.set("addRecipeInformation", "true");
@@ -583,12 +573,17 @@ async function curateMenu(
       if (diet) url.searchParams.set("diet", diet);
       if (intolerances.length) url.searchParams.set("intolerances", intolerances.join(","));
       if (request.preparationMinutesMax) url.searchParams.set("maxReadyTime", String(request.preparationMinutesMax));
-      const payload = await fetchJson<SpoonacularSearch>(url, {
-        signal,
-        headers: { "x-api-key": key },
-      });
-      const briefWords = briefFoodWords(request.creativeBrief);
-      const recipe = [...(payload.results ?? [])].sort((left, right) => {
+      let payload: SpoonacularSearch;
+      try {
+        payload = await fetchJson<SpoonacularSearch>(url, {
+          signal,
+          headers: { "x-api-key": key },
+        });
+      } catch (error) {
+        if (signal.aborted || (error instanceof Error && error.name === "AbortError")) throw error;
+        return { reason: error instanceof Error ? error.message : "provider unavailable" };
+      }
+      const candidates = [...(payload.results ?? [])].sort((left, right) => {
         const score = (candidate: SpoonacularRecipe) => {
           const candidateWords = tokens([
             candidate.title ?? "",
@@ -599,27 +594,107 @@ async function curateMenu(
           return value;
         };
         return score(right) - score(left);
-      })[0];
-      if (!recipe) throw new Error(`No ${search.role.toLowerCase()} candidate was returned.`);
-      return recipeToCourse(recipe, search.courseId, search.role, request.servings, request.creativeBrief);
-    }));
-    return {
-      ok: true,
-      mode: "LIVE",
-      provider: "Spoonacular",
-      data: { courses: results, estimatedMenuCost: { amount: 118, currency: "USD", confidence: "LOW" } },
-      sources: results.map((course) => course.source),
-      warnings: [{
-        code: "LIVE_RECIPE_REVIEW",
-        message: "Live recipe candidates are unconfirmed. Verify the original instructions, ingredient labels, allergens, cultural framing, and cross-contact before serving.",
-        affectedIds: results.map((course) => course.courseId),
-      }, priceWarning],
-    };
-  } catch (error) {
-    if (signal.aborted || (error instanceof Error && error.name === "AbortError")) throw error;
-    const reason = error instanceof Error ? error.message : "provider unavailable";
-    return perplexityFallback(reason);
+      });
+      const recipe = candidates.find((candidate) => !spoonacularCandidateReason(candidate));
+      if (recipe) {
+        return {
+          course: recipeToCourse(recipe, search.courseId, search.role, request.servings, request.creativeBrief),
+          query,
+        };
+      }
+      const reasons = candidates.map(spoonacularCandidateReason).filter((reason): reason is string => Boolean(reason));
+      rejectionDetails.push(
+        candidates.length
+          ? `${query}: ${[...new Set(reasons)].join("; ") || "no candidate passed screening"}`
+          : `${query}: no candidate returned`,
+      );
+    }
+    return { reason: rejectionDetails.join(" | ") };
+  };
+
+  type CourseProvider = "Spoonacular" | "Perplexity Agent API" | "Reviewed recipe catalog";
+  const resolved: Array<{ course: MenuCourse; provider: CourseProvider }> = [];
+  const warnings: ToolWarning[] = [];
+
+  for (const search of searches) {
+    const spoonacular = await searchSpoonacular(search);
+    if (spoonacular.course) {
+      resolved.push({ course: spoonacular.course, provider: "Spoonacular" });
+      continue;
+    }
+
+    const spoonacularReason = spoonacular.reason || "no candidate passed dietary and source screening";
+    let perplexityReason = "Perplexity returned no candidate for this role.";
+    try {
+      const discovery = await discoverMenuCoursesWithPerplexity({
+        roles: [search.role],
+        servings: request.servings,
+        dietaryRequirements: request.dietaryRequirements,
+        preparationMinutesMax: request.preparationMinutesMax,
+        creativeBrief: request.creativeBrief,
+        signal,
+      });
+      const course = discovery.courses.find((candidate) => candidate.role === search.role);
+      if (course) {
+        resolved.push({ course, provider: "Perplexity Agent API" });
+        warnings.push({
+          code: "PROVIDER_FALLBACK",
+          message: `${search.role.toLowerCase()}: Spoonacular was not used (${spoonacularReason}). Perplexity Agent API supplied “${course.title}” using verified source ${course.source.sourceId}.`,
+          affectedIds: [search.courseId],
+        });
+        continue;
+      }
+      perplexityReason = discovery.rejections
+        .find((rejection) => rejection.role === search.role)?.reasons.join(" ") || perplexityReason;
+    } catch (error) {
+      if (signal.aborted || (error instanceof Error && error.name === "AbortError")) throw error;
+      perplexityReason = error instanceof Error ? error.message : "provider unavailable";
+    }
+
+    const course = localCourse(
+      search.role,
+      search.courseId,
+      request.servings,
+      request.creativeBrief,
+      request.dietaryRequirements,
+      request.preparationMinutesMax,
+    );
+    resolved.push({ course, provider: "Reviewed recipe catalog" });
+    warnings.push({
+      code: "PROVIDER_FALLBACK",
+      message: `${search.role.toLowerCase()}: Spoonacular was not used (${spoonacularReason}); Perplexity was not used (${perplexityReason}). Supper Club AI used reviewed recipe “${course.title}”.`,
+      affectedIds: [search.courseId],
+    });
   }
+
+  const liveCourses = resolved.filter((item) => item.provider !== "Reviewed recipe catalog");
+  if (liveCourses.length) {
+    warnings.push({
+      code: "LIVE_RECIPE_REVIEW",
+      message: "Live recipe candidates are unconfirmed. Verify original instructions, ingredient labels, allergens, cultural framing, and cross-contact before serving.",
+      affectedIds: liveCourses.map((item) => item.course.courseId),
+    });
+  }
+  const providerCounts = resolved.reduce((counts, item) => {
+    counts.set(item.provider, (counts.get(item.provider) ?? 0) + 1);
+    return counts;
+  }, new Map<CourseProvider, number>());
+  const provider = [...providerCounts.entries()]
+    .map(([name, count]) => `${name} (${count} ${count === 1 ? "course" : "courses"})`)
+    .join(" + ");
+  const hasLocal = providerCounts.has("Reviewed recipe catalog");
+  const hasLive = liveCourses.length > 0;
+  return {
+    ok: true,
+    mode: hasLocal ? (hasLive ? "HYBRID" : "LOCAL_FALLBACK") : "LIVE",
+    provider,
+    data: {
+      courses: resolved.map((item) => item.course),
+      estimatedMenuCost: { amount: 118, currency: "USD", confidence: "LOW" },
+    },
+    sources: [...new Map(resolved.map((item) => [item.course.source.url, item.course.source])).values()],
+    warnings: [...warnings, priceWarning],
+  };
 }
 
 async function curatePairings(
@@ -693,21 +768,37 @@ const soundtrackSeedsForBrief = (brief?: CreativeBrief, customNotes?: string): S
   }).slice(0, 4);
 };
 
-const localSoundtrack = (seeds: SoundtrackSeed[]): Track[] => seeds.map((track, index) => ({
-  trackId: `track-${index + 1}`,
-  ...track,
-  provider: "Reviewed soundtrack anchors",
-  status: "DRAFT",
-  metadataStatus: "REVIEWED_SEED",
-  source: {
+const localSoundtrack = (seeds: SoundtrackSeed[]): Array<Track & { provenance: TrackProvenance }> => seeds.map((track, index) => {
+  const source: SourceRef = {
     sourceId: `src-reviewed-soundtrack-${index + 1}`,
     provider: "Reviewed soundtrack anchors",
     title: `${track.artist} — ${track.title}`,
     url: "https://www.thesupperclub.app/about",
     accessedAt: accessedAt(),
     attribution: "Reviewed listening anchor selected by Supper Club AI; verify the recording in the linked music catalog before use.",
-  },
-}));
+  };
+  return {
+    trackId: `track-${index + 1}`,
+    ...track,
+    provider: "Reviewed soundtrack anchors",
+    status: "DRAFT",
+    metadataStatus: "REVIEWED_SEED",
+    source,
+    provenance: {
+      discovery: {
+        origin: "REVIEWED_SEED",
+        provider: "Reviewed soundtrack anchors",
+        sources: [source],
+        rationale: "Reviewed listening anchor retained as a safe soundtrack fallback.",
+      },
+      verification: {
+        provider: "Apple Music",
+        status: "NOT_CONFIGURED",
+        reason: "Apple Music verification has not run for this reviewed seed.",
+      },
+    },
+  };
+});
 
 async function discogsContext(
   title: string,
@@ -744,76 +835,356 @@ async function discogsContext(
   };
 }
 
+const soundtrackMomentRequests = (brief?: CreativeBrief) => [
+  { moment: "Arrival", energy: brief?.musicDirections.arrival.join(", ") || "welcoming, spacious, grounded" },
+  { moment: "First course", energy: "warm, attentive, conversational" },
+  { moment: "Main table", energy: brief?.musicDirections.table.join(", ") || "rhythmic, generous, present" },
+  { moment: "Reflection", energy: brief?.musicDirections.reflection.join(", ") || "patient, spacious, reflective" },
+  { moment: "Closing", energy: brief?.musicDirections.closing.join(", ") || "warm, replenishing, expansive" },
+];
+
+const soundtrackTokens = (values: string[]) => new Set(
+  values
+    .join(" ")
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[^a-z0-9]+/g, " ")
+    .split(" ")
+    .filter((token) => token.length >= 4),
+);
+
+const soundtrackCandidateScore = (
+  candidate: PerplexitySoundtrackCandidate,
+  brief?: CreativeBrief,
+) => {
+  const wanted = soundtrackTokens([
+    ...(brief?.themes ?? []),
+    ...(brief?.emotionalArc ?? []),
+    ...(brief?.musicDirections.arrival ?? []),
+    ...(brief?.musicDirections.table ?? []),
+    ...(brief?.musicDirections.reflection ?? []),
+    ...(brief?.musicDirections.closing ?? []),
+  ]);
+  const candidateWords = soundtrackTokens([
+    candidate.title,
+    candidate.artist,
+    candidate.moment,
+    candidate.themeRationale,
+  ]);
+  let score = candidate.sources.length * 2 + (candidate.hasEditorialOrInstitutionalSource ? 6 : 0);
+  wanted.forEach((token) => { if (candidateWords.has(token)) score += 1; });
+  return score;
+};
+
+const uniqueSoundtrackSources = (sources: Array<SourceRef | undefined>) => [
+  ...new Map(
+    sources
+      .filter((source): source is SourceRef => Boolean(source))
+      .map((source) => [source.url, source]),
+  ).values(),
+];
+
+const trackReceipt = (track: Track & { provenance: TrackProvenance }): TrackProviderReceipt => {
+  const discovery = track.provenance.discovery;
+  const verification = track.provenance.verification;
+  const discoveryLabel = discovery.origin === "PERPLEXITY"
+    ? "Perplexity discovered"
+    : "Reviewed soundtrack anchor supplied";
+  const verificationLabel = verification.status === "MATCHED"
+    ? "Apple Music verified the exact artist and title"
+    : verification.status === "NOT_CONFIGURED"
+      ? "Apple Music verification was unavailable"
+      : verification.status === "NO_MATCH"
+        ? "Apple Music returned no confident artist/title match"
+        : "Apple Music verification failed";
+  const attemptedSources = discovery.origin === "REVIEWED_SEED"
+    ? discovery.attemptedCandidate?.sources ?? []
+    : [];
+  return {
+    trackId: track.trackId,
+    title: track.title,
+    artist: track.artist,
+    moment: track.moment,
+    detail: `${discoveryLabel} this ${track.moment.toLowerCase()} selection. ${verificationLabel}.`,
+    provenance: track.provenance,
+    sources: uniqueSoundtrackSources([
+      ...discovery.sources,
+      ...attemptedSources,
+      verification.source,
+      track.releaseContext?.source,
+    ]),
+  };
+};
+
 async function curateSoundtrack(
   request: Extract<CurationRequest, { action: "CURATE_SOUNDTRACK" }>,
   signal: AbortSignal,
 ): Promise<CurationResponse<SoundtrackCurationData>> {
   const token = process.env.APPLE_MUSIC_DEVELOPER_TOKEN;
-  const soundtrackSeeds = soundtrackSeedsForBrief(request.creativeBrief, request.customEnergyNotes);
-  const fallback = localSoundtrack(soundtrackSeeds);
+  const reviewedSeeds = soundtrackSeedsForBrief(request.creativeBrief, request.customEnergyNotes);
+  const fallback = localSoundtrack(reviewedSeeds);
   if (!token) {
+    const trackReceipts = fallback.map(trackReceipt);
     return {
       ok: true,
       mode: "LOCAL_FALLBACK",
       provider: "Reviewed soundtrack anchors",
-      data: { soundtrack: fallback, savedToLibrary: false },
-      sources: [],
+      data: { soundtrack: fallback, trackReceipts, savedToLibrary: false },
+      sources: uniqueSoundtrackSources(trackReceipts.flatMap((item) => item.sources)),
       warnings: [fallbackWarning("Apple Music", "APPLE_MUSIC_DEVELOPER_TOKEN is not configured")],
     };
   }
+
   const warnings: ToolWarning[] = [];
-  const tracks = await Promise.all(soundtrackSeeds.map(async (seed, index): Promise<Track> => {
-    try {
-      const match = await findAppleMusicMatch(seed, request.storefront, signal);
-      if (!match) throw new Error("no confident catalog match");
-      let releaseContext: Track["releaseContext"];
-      try {
-        releaseContext = await discogsContext(match.title, match.artist, signal);
-      } catch {
-        releaseContext = undefined;
-      }
-      return {
-        trackId: `apple-${match.providerId}`,
-        providerId: match.providerId,
-        title: match.title,
-        artist: match.artist,
-        moment: seed.moment,
-        provider: "Apple Music",
-        status: "DRAFT",
-        source: match.source,
-        sourceUrl: match.sourceUrl,
-        previewUrl: match.previewUrl,
-        artwork: match.artwork,
-        albumName: match.albumName,
-        metadataStatus: "LIVE_APPLE_MUSIC_MATCH",
-        releaseContext,
-        sequence: index + 1,
-      };
-    } catch (error) {
+  let discoveredCandidates: PerplexitySoundtrackCandidate[] = [];
+  let discoveryFailure = "Perplexity returned no source-validated soundtrack candidates.";
+  try {
+    const discovery = await discoverSoundtrackWithPerplexity({
+      creativeBrief: request.creativeBrief,
+      theme: {
+        title: request.creativeBrief?.inspirationLabel ?? "Cultural dinner soundtrack",
+        framing: [
+          ...(request.creativeBrief?.themes ?? []),
+          ...(request.creativeBrief?.emotionalArc ?? []),
+        ].join(", "),
+      },
+      desiredMoments: soundtrackMomentRequests(request.creativeBrief),
+      energyArc: [
+        request.energyArc.replaceAll("_", " ").toLowerCase(),
+        ...(request.creativeBrief?.emotionalArc ?? []),
+        ...(request.customEnergyNotes ? [request.customEnergyNotes] : []),
+      ],
+      candidateTarget: 8,
+      signal,
+    });
+    discoveredCandidates = [...discovery.candidates].sort(
+      (left, right) => soundtrackCandidateScore(right, request.creativeBrief) - soundtrackCandidateScore(left, request.creativeBrief),
+    );
+    if (discovery.rejectionSummary.rejectedCandidates) {
       warnings.push({
-        code: "APPLE_MUSIC_TRACK_FALLBACK",
-        message: `${seed.artist} — ${seed.title} remains a reviewed seed because its Apple Music lookup did not complete.`,
-        affectedIds: [fallback[index].trackId],
+        code: "SOUNDTRACK_DISCOVERY_SCREENED",
+        message: `Perplexity returned ${discovery.rejectionSummary.returnedCandidates} soundtrack candidates; ${discovery.rejectionSummary.acceptedCandidates} retained exact source IDs and passed safety and source validation.`,
       });
-      return fallback[index];
+    }
+    discoveryFailure = discoveredCandidates.length
+      ? discoveryFailure
+      : "No Perplexity candidate retained a valid supporting search-result ID and passed safety screening.";
+  } catch (error) {
+    if (signal.aborted || (error instanceof Error && error.name === "AbortError")) throw error;
+    discoveryFailure = error instanceof Error ? error.message : "provider unavailable";
+  }
+
+  type VerifiedCandidate = {
+    candidate: PerplexitySoundtrackCandidate;
+    match: Awaited<ReturnType<typeof findAppleMusicMatch>> & {};
+  };
+  const verifiedCandidates: VerifiedCandidate[] = [];
+  const failedCandidates: Array<{ candidate: PerplexitySoundtrackCandidate; reason: string }> = [];
+  await Promise.all(discoveredCandidates.map(async (candidate) => {
+    try {
+      const match = await findAppleMusicMatch(candidate, request.storefront, signal);
+      if (match) verifiedCandidates.push({ candidate, match });
+      else failedCandidates.push({ candidate, reason: "Apple Music returned no confident artist/title match." });
+    } catch (error) {
+      if (signal.aborted || (error instanceof Error && error.name === "AbortError")) throw error;
+      failedCandidates.push({
+        candidate,
+        reason: error instanceof Error ? error.message : "Apple Music verification failed.",
+      });
     }
   }));
-  const liveCount = tracks.filter((track) => track.metadataStatus === "LIVE_APPLE_MUSIC_MATCH").length;
-  const sources = tracks.flatMap((track) => [track.source, track.releaseContext?.source].filter((item): item is SourceRef => Boolean(item)));
-  const reviewedCount = tracks.length - liveCount;
-  if (!process.env.DISCOGS_TOKEN && liveCount) {
+  verifiedCandidates.sort(
+    (left, right) => soundtrackCandidateScore(right.candidate, request.creativeBrief) - soundtrackCandidateScore(left.candidate, request.creativeBrief),
+  );
+
+  const selectedCandidates: VerifiedCandidate[] = [];
+  const usedCandidateIds = new Set<string>();
+  for (const moment of ["Arrival", "First course", "Main table", "Reflection", "Closing"]) {
+    const candidate = verifiedCandidates.find((item) =>
+      item.candidate.moment === moment && !usedCandidateIds.has(item.candidate.candidateId));
+    if (!candidate || selectedCandidates.length >= 4) continue;
+    selectedCandidates.push(candidate);
+    usedCandidateIds.add(candidate.candidate.candidateId);
+  }
+  for (const candidate of verifiedCandidates) {
+    if (selectedCandidates.length >= 4) break;
+    if (usedCandidateIds.has(candidate.candidate.candidateId)) continue;
+    selectedCandidates.push(candidate);
+    usedCandidateIds.add(candidate.candidate.candidateId);
+  }
+
+  const tracks: Array<Track & { provenance: TrackProvenance }> = [];
+  for (const [index, item] of selectedCandidates.entries()) {
+    let releaseContext: Track["releaseContext"];
+    try {
+      releaseContext = await discogsContext(item.match.title, item.match.artist, signal);
+    } catch {
+      releaseContext = undefined;
+    }
+    tracks.push({
+      trackId: `apple-${item.match.providerId}`,
+      providerId: item.match.providerId,
+      title: item.match.title,
+      artist: item.match.artist,
+      moment: item.candidate.moment,
+      provider: "Apple Music",
+      status: "DRAFT",
+      source: item.match.source,
+      sourceUrl: item.match.sourceUrl,
+      previewUrl: item.match.previewUrl,
+      artwork: item.match.artwork,
+      albumName: item.match.albumName,
+      metadataStatus: "LIVE_APPLE_MUSIC_MATCH",
+      releaseContext,
+      sequence: index + 1,
+      provenance: {
+        discovery: {
+          origin: "PERPLEXITY",
+          provider: "Perplexity Agent API",
+          responseId: item.candidate.responseId,
+          searchResultIds: item.candidate.sourceResultIds,
+          sources: item.candidate.sources,
+          rationale: item.candidate.themeRationale,
+        },
+        verification: {
+          provider: "Apple Music",
+          status: "MATCHED",
+          providerId: item.match.providerId,
+          source: item.match.source,
+        },
+      },
+    });
+  }
+
+  const usedRecordings = new Set(tracks.map((track) => `${track.artist}::${track.title}`.toLowerCase()));
+  const fallbackAttempts = [
+    ...failedCandidates,
+    ...verifiedCandidates
+      .filter(({ candidate }) => !usedCandidateIds.has(candidate.candidateId))
+      .map(({ candidate }) => ({ candidate, reason: "A higher-ranked verified candidate filled this soundtrack slot." })),
+  ];
+  for (const seedTrack of fallback) {
+    if (tracks.length >= 4) break;
+    if (usedRecordings.has(`${seedTrack.artist}::${seedTrack.title}`.toLowerCase())) continue;
+    const attempt = fallbackAttempts.shift();
+    let nextTrack: Track & { provenance: TrackProvenance } = {
+      ...seedTrack,
+      sequence: tracks.length + 1,
+      provenance: {
+        discovery: {
+          ...seedTrack.provenance.discovery,
+          rationale: attempt
+            ? `Reviewed fallback filled a discovery gap after ${attempt.candidate.artist} — ${attempt.candidate.title} was not selected.`
+            : discoveryFailure,
+          ...(attempt ? {
+            attemptedCandidate: {
+              title: attempt.candidate.title,
+              artist: attempt.candidate.artist,
+              responseId: attempt.candidate.responseId,
+              searchResultIds: attempt.candidate.sourceResultIds,
+              sources: attempt.candidate.sources,
+            },
+          } : {}),
+        },
+        verification: {
+          provider: "Apple Music",
+          status: "NO_MATCH",
+          reason: "Reviewed fallback has not yet been verified.",
+        },
+      },
+    };
+    try {
+      const match = await findAppleMusicMatch(seedTrack, request.storefront, signal);
+      if (match) {
+        let releaseContext: Track["releaseContext"];
+        try {
+          releaseContext = await discogsContext(match.title, match.artist, signal);
+        } catch {
+          releaseContext = undefined;
+        }
+        nextTrack = {
+          ...nextTrack,
+          trackId: `apple-${match.providerId}`,
+          providerId: match.providerId,
+          title: match.title,
+          artist: match.artist,
+          provider: "Apple Music",
+          source: match.source,
+          sourceUrl: match.sourceUrl,
+          previewUrl: match.previewUrl,
+          artwork: match.artwork,
+          albumName: match.albumName,
+          metadataStatus: "LIVE_APPLE_MUSIC_MATCH",
+          releaseContext,
+          provenance: {
+            ...nextTrack.provenance,
+            verification: {
+              provider: "Apple Music",
+              status: "MATCHED",
+              providerId: match.providerId,
+              source: match.source,
+            },
+          },
+        };
+      } else {
+        nextTrack.provenance.verification = {
+          provider: "Apple Music",
+          status: "NO_MATCH",
+          reason: "Apple Music returned no confident artist/title match for this reviewed seed.",
+        };
+      }
+    } catch (error) {
+      if (signal.aborted || (error instanceof Error && error.name === "AbortError")) throw error;
+      nextTrack.provenance.verification = {
+        provider: "Apple Music",
+        status: "FAILED",
+        reason: error instanceof Error ? error.message : "Apple Music verification failed.",
+      };
+    }
+    tracks.push(nextTrack);
+    usedRecordings.add(`${nextTrack.artist}::${nextTrack.title}`.toLowerCase());
+    if (attempt) {
+      warnings.push({
+        code: "APPLE_MUSIC_TRACK_FALLBACK",
+        message: `${attempt.candidate.artist} — ${attempt.candidate.title} did not become a verified selection (${attempt.reason}). Reviewed anchor ${nextTrack.artist} — ${nextTrack.title} filled that slot.`,
+        affectedIds: [nextTrack.trackId],
+      });
+    }
+  }
+
+  const discoveredCount = tracks.filter((track) => track.provenance.discovery.origin === "PERPLEXITY").length;
+  const reviewedCount = tracks.length - discoveredCount;
+  if (!discoveredCount) {
+    warnings.push({
+      code: "PROVIDER_FALLBACK",
+      message: `Perplexity soundtrack discovery was not used (${discoveryFailure}). Supper Club AI retained reviewed soundtrack anchors.`,
+      affectedIds: tracks.map((track) => track.trackId),
+    });
+  } else if (reviewedCount) {
+    warnings.push({
+      code: "PROVIDER_FALLBACK",
+      message: `${discoveredCount} Perplexity discoveries were verified by Apple Music; ${reviewedCount} reviewed ${reviewedCount === 1 ? "anchor filled" : "anchors filled"} the remaining ${reviewedCount === 1 ? "slot" : "slots"}.`,
+      affectedIds: tracks.map((track) => track.trackId),
+    });
+  }
+  if (!process.env.DISCOGS_TOKEN && tracks.some((track) => track.providerId)) {
     warnings.push({
       code: "DISCOGS_NOT_CONFIGURED",
       message: "Apple Music catalog matches are live; Discogs historical enrichment is not configured.",
     });
   }
+  const trackReceipts = tracks.map(trackReceipt);
+  const sources = uniqueSoundtrackSources(trackReceipts.flatMap((item) => item.sources));
   return {
     ok: true,
-    mode: liveCount ? (process.env.DISCOGS_TOKEN ? "HYBRID" : "LIVE") : "LOCAL_FALLBACK",
-    provider: liveCount
-      ? ["Apple Music", process.env.DISCOGS_TOKEN ? "Discogs" : "", reviewedCount ? "reviewed soundtrack anchors" : ""].filter(Boolean).join(" + ")
-      : "Reviewed soundtrack anchors",
-    data: { soundtrack: tracks, savedToLibrary: false },
+    mode: discoveredCount === tracks.length ? "LIVE" : discoveredCount ? "HYBRID" : "LOCAL_FALLBACK",
+    provider: [
+      discoveredCount ? "Perplexity Agent API" : "",
+      tracks.some((track) => track.providerId) ? "Apple Music" : "",
+      process.env.DISCOGS_TOKEN && tracks.some((track) => track.releaseContext) ? "Discogs" : "",
+      reviewedCount ? "reviewed soundtrack anchors" : "",
+    ].filter(Boolean).join(" + "),
+    data: { soundtrack: tracks, trackReceipts, savedToLibrary: false },
     sources,
     warnings,
   };

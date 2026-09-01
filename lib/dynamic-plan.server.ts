@@ -209,6 +209,7 @@ export async function buildDynamicPartyPlan(
       mode: soundtrackResult.mode,
       sources: soundtrackResult.sources,
       warnings: soundtrackResult.warnings,
+      trackReceipts: soundtrackResult.data.trackReceipts,
     },
   ];
 
@@ -245,7 +246,7 @@ export async function buildDynamicPartyPlan(
     prep,
     receipts: [
       receipt("create_shopping_list", "Shopping list reconciled", `${shopping.length} ingredients grouped by aisle.`, "SHOPPING"),
-      receipt("curate_soundtrack", "Soundtrack sequenced", `${soundtrackResult.provider} (${soundtrackResult.mode.toLowerCase()}): ${soundtrackResult.data.soundtrack.length} listening anchors selected from ${soundtrackResult.sources.length} source${soundtrackResult.sources.length === 1 ? "" : "s"}.`, "MUSIC"),
+      receipt("curate_soundtrack", "Soundtrack sequenced", `${soundtrackResult.data.trackReceipts.filter((item) => item.provenance.discovery.origin === "PERPLEXITY").length} Perplexity discoveries verified by Apple Music; ${soundtrackResult.data.trackReceipts.filter((item) => item.provenance.discovery.origin === "REVIEWED_SEED").length} reviewed fallbacks. ${soundtrackResult.sources.length} source${soundtrackResult.sources.length === 1 ? "" : "s"} retained.`, "MUSIC"),
       receipt("curate_pairings", "Pairings curated", `${pairingResult.provider} (${pairingResult.mode.toLowerCase()}): ${pairingResult.data.pairings.length} wine or zero-proof choices matched from ${pairingResult.sources.length} source${pairingResult.sources.length === 1 ? "" : "s"}.`, "PAIRING"),
       receipt("curate_menu", "Menu curated", `${menuResult.provider} (${menuResult.mode.toLowerCase()}): ${courses.length} courses selected from ${menuResult.sources.length} source${menuResult.sources.length === 1 ? "" : "s"} for ${guestCount} guests.`, "RECIPE"),
       receipt("research_theme", "Theme researched", `${themeResult.provider} (${themeResult.mode.toLowerCase()}): a fresh cultural brief for ${configuration.inspirationTitle} used ${themeResult.sources.length} source${themeResult.sources.length === 1 ? "" : "s"}.`, "THEME"),

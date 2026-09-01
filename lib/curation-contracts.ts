@@ -8,6 +8,7 @@ import type {
   ToolWarning,
   Track,
   TrackEditorialContext,
+  TrackProvenance,
 } from "@/lib/types";
 
 export type CurationMode = "LIVE" | "HYBRID" | "LOCAL_FALLBACK";
@@ -32,8 +33,19 @@ export type MenuCurationData = {
 
 export type PairingCurationData = { pairings: Pairing[] };
 
+export type TrackProviderReceipt = {
+  trackId: string;
+  title: string;
+  artist: string;
+  moment: string;
+  detail: string;
+  sources: SourceRef[];
+  provenance: TrackProvenance;
+};
+
 export type SoundtrackCurationData = {
   soundtrack: Track[];
+  trackReceipts: TrackProviderReceipt[];
   savedToLibrary: false;
 };
 

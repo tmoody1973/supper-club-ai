@@ -1174,6 +1174,9 @@ function CulturalPlate({
         <div className="track-list">
           {plan.soundtrack.map((track) => {
             const isLiveMatch = track.metadataStatus === "LIVE_APPLE_MUSIC_MATCH" || Boolean(track.providerId);
+            const discoveryOrigin = track.provenance?.discovery.origin;
+            const verificationStatus = track.provenance?.verification.status;
+            const discoverySource = track.provenance?.discovery.sources[0];
             return (
             <article key={track.trackId}>
               <div className="track-art" style={{ backgroundColor: track.artwork?.backgroundColor }}>
@@ -1191,6 +1194,23 @@ function CulturalPlate({
                 <strong>{track.title}</strong>
                 <small>{track.artist} · {track.moment}</small>
                 {track.albumName ? <small className="track-album">{track.albumName}</small> : null}
+                {track.provenance?.discovery.rationale ? (
+                  <details className="track-context">
+                    <summary>Why this track</summary>
+                    <div>
+                      <p><b>Selection note</b>{track.provenance.discovery.rationale}</p>
+                      {track.provenance.discovery.sources.length ? (
+                        <nav aria-label={`Discovery sources for ${track.title}`}>
+                          {track.provenance.discovery.sources.slice(0, 3).map((source) => (
+                            <a key={source.sourceId} href={source.url} target="_blank" rel="noreferrer">
+                              {source.title} <ExternalLink size={11} aria-hidden="true" />
+                            </a>
+                          ))}
+                        </nav>
+                      ) : null}
+                    </div>
+                  </details>
+                ) : null}
                 {track.editorialContext ? (
                   <details className="track-context">
                     <summary>Artist + album context</summary>
@@ -1227,9 +1247,17 @@ function CulturalPlate({
               </div>
               <div className="track-actions">
                 <em>{track.status}</em>
-                <span className={isLiveMatch ? "track-match track-match--live" : "track-match track-match--seed"}>
-                  {isLiveMatch ? "Live Apple Music match" : "Reviewed seed"}
+                <span className={discoveryOrigin === "PERPLEXITY" ? "track-match track-match--discovery" : "track-match track-match--seed"}>
+                  {discoveryOrigin === "PERPLEXITY" ? "Perplexity discovery" : "Reviewed seed"}
                 </span>
+                <span className={verificationStatus === "MATCHED" || isLiveMatch ? "track-match track-match--live" : "track-match track-match--seed"}>
+                  {verificationStatus === "MATCHED" || isLiveMatch ? "Verified by Apple Music" : "Apple match unavailable"}
+                </span>
+                {discoverySource ? (
+                  <a href={discoverySource.url} target="_blank" rel="noreferrer">
+                    Discovery source <ExternalLink size={12} aria-hidden="true" />
+                  </a>
+                ) : null}
                 {track.previewUrl && track.sourceUrl ? (
                   <a href={track.sourceUrl} target="_blank" rel="noreferrer">
                     Open in Apple Music <ExternalLink size={12} aria-hidden="true" />

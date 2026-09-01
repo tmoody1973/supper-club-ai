@@ -1632,6 +1632,11 @@ html[data-theme="dark"] .mobile-receipts-jump {
   color: var(--seed-dark);
 }
 
+.track-match--discovery {
+  border-color: var(--marginalia);
+  color: var(--marginalia);
+}
+
 .track-match--seed {
   color: var(--muted);
 }

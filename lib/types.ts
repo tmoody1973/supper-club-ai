@@ -164,6 +164,42 @@ export type TrackEditorialContext = {
   sources: SourceRef[];
 };
 
+export type TrackDiscoveryProvenance =
+  | {
+      origin: "PERPLEXITY";
+      provider: "Perplexity Agent API";
+      responseId?: string;
+      searchResultIds: number[];
+      sources: SourceRef[];
+      rationale: string;
+    }
+  | {
+      origin: "REVIEWED_SEED";
+      provider: "Reviewed soundtrack anchors";
+      sources: SourceRef[];
+      rationale: string;
+      attemptedCandidate?: {
+        title: string;
+        artist: string;
+        responseId?: string;
+        searchResultIds?: number[];
+        sources?: SourceRef[];
+      };
+    };
+
+export type TrackVerificationProvenance = {
+  provider: "Apple Music";
+  status: "MATCHED" | "NO_MATCH" | "FAILED" | "NOT_CONFIGURED";
+  providerId?: string;
+  source?: SourceRef;
+  reason?: string;
+};
+
+export type TrackProvenance = {
+  discovery: TrackDiscoveryProvenance;
+  verification: TrackVerificationProvenance;
+};
+
 export type Track = {
   trackId: string;
   providerId?: string;
@@ -191,6 +227,7 @@ export type Track = {
     source: SourceRef;
   };
   editorialContext?: TrackEditorialContext;
+  provenance?: TrackProvenance;
 };
 
 export type Movement = {

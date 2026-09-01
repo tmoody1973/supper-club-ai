@@ -1,4 +1,5 @@
 import type { PartyPlan, SourceRef, ToolWarning } from "@/lib/types";
+import type { TrackProviderReceipt } from "@/lib/curation-contracts";
 
 export type PlanCreationConfiguration = {
   title?: string;
@@ -21,6 +22,7 @@ export type PlanCreationProviderReceipt = {
   mode: "LIVE" | "HYBRID" | "LOCAL_FALLBACK";
   sources: SourceRef[];
   warnings: ToolWarning[];
+  trackReceipts?: TrackProviderReceipt[];
 };
 
 export type PlanStoreErrorCode =

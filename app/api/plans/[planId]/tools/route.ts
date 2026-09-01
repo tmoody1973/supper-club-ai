@@ -209,6 +209,9 @@ export async function POST(request: Request, context: Context) {
           hasArtwork: Boolean(track.artwork),
           hasPreview: Boolean(track.previewUrl),
           sourceUrl: track.sourceUrl,
+          discoveryOrigin: track.provenance?.discovery.origin,
+          verificationStatus: track.provenance?.verification.status,
+          discoverySourceIds: track.provenance?.discovery.sources.map((source) => source.sourceId) ?? [],
         })),
       };
     } else {

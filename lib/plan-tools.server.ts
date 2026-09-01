@@ -4,7 +4,7 @@ import { findAppleMusicMatch, searchAppleMusicCatalog } from "@/lib/apple-music.
 import { briefFromPlanTheme } from "@/lib/creative-brief";
 import { curatePairingsWithFallback, searchWinePairingCandidates } from "@/lib/pairing-engine.server";
 import { buildPrepTasks, buildShoppingList, courseFromRecipe, RECIPE_CATALOG } from "@/lib/seed-plan";
-import type { MenuCourse, Pairing, PartyPlan, Receipt, ToolWarning, Track } from "@/lib/types";
+import type { MenuCourse, Pairing, PartyPlan, Receipt, ToolWarning, Track, TrackProvenance } from "@/lib/types";
 
 type RecipeRecord = (typeof RECIPE_CATALOG)[number];
 
@@ -263,6 +263,15 @@ export async function refreshSoundtrackMetadata(
   let preservedCount = 0;
   let reviewedSeedCount = 0;
   let providerFailureCount = 0;
+  const provenanceFor = (track: Track, verification: TrackProvenance["verification"]): TrackProvenance => ({
+    discovery: track.provenance?.discovery ?? {
+      origin: "REVIEWED_SEED",
+      provider: "Reviewed soundtrack anchors",
+      sources: track.source && track.source.provider !== "Apple Music" ? [track.source] : [],
+      rationale: "Legacy soundtrack entry retained from the reviewed selection catalog.",
+    },
+    verification,
+  });
   const soundtrack = await Promise.all(plan.soundtrack.map(async (track) => {
     try {
       const match = await findAppleMusicMatch(track, storefront, signal);
@@ -272,6 +281,13 @@ export async function refreshSoundtrackMetadata(
         return {
           ...track,
           metadataStatus: track.providerId ? "LIVE_APPLE_MUSIC_MATCH" as const : "REVIEWED_SEED" as const,
+          provenance: track.providerId
+            ? track.provenance
+            : provenanceFor(track, {
+                provider: "Apple Music",
+                status: "NO_MATCH",
+                reason: "Apple Music returned no confident artist/title match.",
+              }),
         };
       }
       matchedCount += 1;
@@ -284,6 +300,12 @@ export async function refreshSoundtrackMetadata(
         sourceUrl: match.sourceUrl,
         source: match.source,
         metadataStatus: "LIVE_APPLE_MUSIC_MATCH" as const,
+        provenance: provenanceFor(track, {
+          provider: "Apple Music",
+          status: "MATCHED",
+          providerId: match.providerId,
+          source: match.source,
+        }),
       };
     } catch (error) {
       if (signal.aborted) throw error;
@@ -293,6 +315,13 @@ export async function refreshSoundtrackMetadata(
       return {
         ...track,
         metadataStatus: track.providerId ? "LIVE_APPLE_MUSIC_MATCH" as const : "REVIEWED_SEED" as const,
+        provenance: track.providerId
+          ? track.provenance
+          : provenanceFor(track, {
+              provider: "Apple Music",
+              status: "FAILED",
+              reason: error instanceof Error ? error.message : "Apple Music verification failed.",
+            }),
       };
     }
   }));

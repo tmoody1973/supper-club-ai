@@ -138,9 +138,9 @@ const beginnerCheckpoints = [
 
 const liveTools = [
   ["Theme", "Research a sourced cultural frame without reproducing copyrighted text."],
-  ["Menu", "Curate three connected courses and keep dietary information visible."],
+  ["Menu", "Resolve each course independently through Spoonacular, Perplexity, then a reviewed fallback—without discarding successful courses."],
   ["Pairings", "Attach wine and substantial zero-proof choices to each course."],
-  ["Soundtrack", "Sequence a musical arc with artwork, previews, and researched artist and album context when available."],
+  ["Soundtrack", "Discover sourced candidates with Perplexity, verify them with Apple Music, and show each track’s origin and evidence."],
   ["Shopping", "Reconcile ingredients, find nearby Kroger-family stores, and estimate a course-linked basket with visible price confidence."],
   ["Host + guest artifacts", "Export the private host packet or preview and download a redacted guest program with social cards after approval."],
 ];
@@ -409,10 +409,14 @@ export default function AboutPage() {
           </div>
           <p className={styles.toolLedgerNote}>
             Website tool 25, <code>create_party_plan</code>, starts a fresh plan, activates its new
-            plan ID, and reports whether Spoonacular or Perplexity, GrapeMinds or X-Wines, Apple
-            Music, or a reviewed fallback supplied each section. Search, lookup, and guest-share
-            preview tools are read-only. Plan changes use version checks; finalization and artifact
-            downloads wait for explicit host approval.
+            plan ID, and reports which source supplied each section. Starter, main, and dessert each
+            follow Spoonacular → Perplexity → reviewed fallback independently, so a missing course
+            does not erase successful live choices. For music, Perplexity proposes 6–8 candidates
+            tied to real search-result IDs; Apple Music verifies artist and title, four tracks are
+            selected for the dinner arc, and reviewed anchors fill only open slots. Optional Discogs
+            context and per-track origin and verification receipts remain visible. Search, lookup,
+            and guest-share preview tools are read-only. Plan changes use version checks;
+            finalization and artifact downloads wait for explicit host approval.
           </p>
         </section>
 
