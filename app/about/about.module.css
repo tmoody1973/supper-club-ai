@@ -817,10 +817,18 @@
 :global(html[data-theme="dark"]) .mcpGuide,
 :global(html[data-theme="dark"]) .chatgptNote {
   background: #25221d;
+  color: #f1e8da;
+}
+
+:global(html[data-theme="dark"]) .promptLibraryHeading h3,
+:global(html[data-theme="dark"]) .promptLibraryHeading p,
+:global(html[data-theme="dark"]) .promptExamples header strong,
+:global(html[data-theme="dark"]) .promptExamples blockquote {
+  color: #f1e8da;
 }
 
 :global(html[data-theme="dark"]) .promptExamples article > p {
-  color: #b8ad9d;
+  color: #cfc4b4;
 }
 
 :global(html[data-theme="dark"]) .toolLedger {

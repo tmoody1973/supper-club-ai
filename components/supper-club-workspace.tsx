@@ -19,7 +19,9 @@ import {
   MapPin,
   Menu as MenuIcon,
   Music2,
+  Pause,
   PenLine,
+  Play,
   ReceiptText,
   RefreshCw,
   RotateCcw,
@@ -119,6 +121,112 @@ type GroceryPricingData = {
   page: { number: number; pageSize: number; totalPages: number; totalItems: number };
   retrievedAt: string;
 };
+
+function formatPreviewTime(value: number) {
+  if (!Number.isFinite(value) || value < 0) return "0:00";
+  const wholeSeconds = Math.floor(value);
+  const minutes = Math.floor(wholeSeconds / 60);
+  return `${minutes}:${String(wholeSeconds % 60).padStart(2, "0")}`;
+}
+
+function TrackPreviewPlayer({
+  src,
+  title,
+  artist,
+}: {
+  src: string;
+  title: string;
+  artist: string;
+}) {
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    return () => audio?.pause();
+  }, []);
+
+  const togglePlayback = async () => {
+    const audio = audioRef.current;
+    if (!audio || hasError) return;
+
+    if (!audio.paused) {
+      audio.pause();
+      return;
+    }
+
+    document.querySelectorAll<HTMLAudioElement>(".track-preview-player audio").forEach((otherAudio) => {
+      if (otherAudio !== audio) otherAudio.pause();
+    });
+
+    try {
+      await audio.play();
+    } catch {
+      setIsPlaying(false);
+      setHasError(true);
+    }
+  };
+
+  return (
+    <div className={`track-preview-player${hasError ? " track-preview-player--error" : ""}`}>
+      <audio
+        ref={audioRef}
+        preload="metadata"
+        src={src}
+        aria-hidden="true"
+        onLoadedMetadata={(event) => setDuration(Number.isFinite(event.currentTarget.duration) ? event.currentTarget.duration : 0)}
+        onDurationChange={(event) => setDuration(Number.isFinite(event.currentTarget.duration) ? event.currentTarget.duration : 0)}
+        onTimeUpdate={(event) => setCurrentTime(event.currentTarget.currentTime)}
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
+        onEnded={(event) => {
+          event.currentTarget.currentTime = 0;
+          setIsPlaying(false);
+          setCurrentTime(0);
+        }}
+        onError={() => {
+          setIsPlaying(false);
+          setHasError(true);
+        }}
+      />
+      <button
+        type="button"
+        className="track-preview-toggle"
+        onClick={togglePlayback}
+        disabled={hasError}
+        aria-label={`${isPlaying ? "Pause" : "Play"} preview of ${title} by ${artist}`}
+      >
+        {isPlaying ? <Pause size={15} fill="currentColor" aria-hidden="true" /> : <Play size={15} fill="currentColor" aria-hidden="true" />}
+      </button>
+      <div className="track-preview-progress">
+        <span role="status" aria-live="polite">
+          {hasError ? "Preview could not be played" : isPlaying ? "Playing preview" : "Apple Music preview"}
+        </span>
+        <input
+          type="range"
+          min="0"
+          max={duration || 0}
+          step="0.1"
+          value={Math.min(currentTime, duration || 0)}
+          disabled={!duration || hasError}
+          aria-label={`Seek preview of ${title} by ${artist}`}
+          aria-valuetext={`${formatPreviewTime(currentTime)} of ${formatPreviewTime(duration)}`}
+          onChange={(event) => {
+            const nextTime = Number(event.currentTarget.value);
+            if (audioRef.current) audioRef.current.currentTime = nextTime;
+            setCurrentTime(nextTime);
+          }}
+        />
+      </div>
+      <output className="track-preview-time" aria-label="Preview time">
+        {formatPreviewTime(currentTime)} / {duration ? formatPreviewTime(duration) : "–:––"}
+      </output>
+    </div>
+  );
+}
 
 const navItems = [
   { number: "01", label: "Overview", view: "RUN_OF_SHOW" as const, movementId: "movement-arrival" },
@@ -1104,9 +1212,12 @@ function CulturalPlate({
                   </details>
                 ) : null}
                 {track.previewUrl ? (
-                  <audio controls preload="none" src={track.previewUrl} aria-label={`Preview ${track.title} by ${track.artist}`}>
-                    Your browser does not support Apple Music audio previews.
-                  </audio>
+                  <TrackPreviewPlayer
+                    key={track.previewUrl}
+                    src={track.previewUrl}
+                    title={track.title}
+                    artist={track.artist}
+                  />
                 ) : (
                   <span className="track-preview-unavailable">
                     Preview unavailable for this storefront.
