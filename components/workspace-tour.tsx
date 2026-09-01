@@ -50,7 +50,8 @@ export function WorkspaceTour({ startRequest, prepareStep }: WorkspaceTourProps)
       target: '[data-tour="selected-movement"]',
       title: "Open one movement",
       content: "Select any row to see its dish, pairings, cultural connection, source, and host controls. You can edit one movement without rebuilding the whole evening.",
-      placement: "bottom",
+      placement: "center",
+      isFixed: true,
       before: () => prepare(1),
     },
     {
