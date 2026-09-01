@@ -60,7 +60,7 @@ const planningSteps = [
   {
     number: "06",
     title: "Approve the useful version",
-    copy: "Explicitly finalize the plan, then use the shopping checklist, prep timeline, and downloadable host packet.",
+    copy: "Explicitly finalize the plan, then use the shopping checklist, prep timeline, private host packet, and guest-safe share kit.",
     icon: CheckCircle2,
   },
 ];
@@ -94,7 +94,7 @@ const beginnerPaths = [
     steps: [
       "Ask ChatGPT to open thesupperclub.app in the in-app browser.",
       "Open the plan you want to revise, or begin with the reviewed example already on the page.",
-      "Check the black header for 22 tools live. Preview mode means that browser does not expose WebMCP tools.",
+      "Check the black header for 24 tools live. Preview mode means that browser does not expose WebMCP tools.",
       "Ask ChatGPT to use the tools on the Supper Club AI page and describe one specific change.",
       "Watch the workspace update and read the receipt in Agent Marginalia before making the next change.",
     ],
@@ -133,7 +133,7 @@ const beginnerCheckpoints = [
   ["A tool receipt", "ChatGPT should say it used Supper Club AI, and the page records applied changes in Agent Marginalia."],
   ["One shared plan", "The interactive card and full website should show the same title, plan ID, and latest version."],
   ["Visible uncertainty", "Sources, unpriced ingredients, low-confidence matches, and dietary warnings should remain visible."],
-  ["Your approval", "Finalization and PDF export should wait for an explicit yes from you."],
+  ["Your approval", "Finalization, host-packet export, and guest-share export should wait for an explicit yes from you."],
 ];
 
 const liveTools = [
@@ -142,7 +142,7 @@ const liveTools = [
   ["Pairings", "Attach wine and substantial zero-proof choices to each course."],
   ["Soundtrack", "Sequence a musical arc with artwork, previews, and researched artist and album context when available."],
   ["Shopping", "Reconcile ingredients, find nearby Kroger-family stores, and estimate a course-linked basket with visible price confidence."],
-  ["Host packet", "Validate the complete plan and export a practical PDF after approval."],
+  ["Host + guest artifacts", "Export the private host packet or preview and download a redacted guest program with social cards after approval."],
 ];
 
 const websiteTools = [
@@ -167,6 +167,8 @@ const websiteTools = [
   "refresh_music_metadata",
   "create_shopping_list",
   "finalize_party_plan",
+  "preview_guest_share_kit",
+  "export_guest_share_kit",
   "export_host_packet",
 ];
 
@@ -272,7 +274,7 @@ export default function AboutPage() {
             <span className={styles.statusLive}>Available now</span>
             <h3>The WebMCP website</h3>
             <p>
-              Open the full visual workspace. The page exposes 22 typed WebMCP tools so an
+              Open the full visual workspace. The page exposes 24 typed WebMCP tools so an
               agent can update the board while you watch, review, and edit.
             </p>
             <ul>
@@ -391,7 +393,7 @@ export default function AboutPage() {
           </div>
           <div className={styles.toolColumns}>
             <article className={styles.toolColumn}>
-              <header><span>Website / WebMCP</span><strong>22 tools</strong></header>
+              <header><span>Website / WebMCP</span><strong>24 tools</strong></header>
               <ol className={styles.toolList}>
                 {websiteTools.map((name, index) => <li key={name}><span>{String(index + 1).padStart(2, "0")}</span><code>{name}</code></li>)}
               </ol>
@@ -404,8 +406,8 @@ export default function AboutPage() {
             </article>
           </div>
           <p className={styles.toolLedgerNote}>
-            Search and lookup tools are read-only. Plan changes use version checks; finalization
-            and PDF export wait for explicit host approval.
+            Search, lookup, and guest-share preview tools are read-only. Plan changes use version
+            checks; finalization and artifact downloads wait for explicit host approval.
           </p>
         </section>
 

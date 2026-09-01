@@ -1,10 +1,10 @@
 # Supper Club AI
 
-Supper Club AI is an **agent-readable cultural hosting workspace** for Creative Hosts—not an AI dinner planner. It turns one cultural inspiration into a shared, sourced run of show spanning the theme, menu, pairings, soundtrack, shopping list, prep timeline, and downloadable host packet. Its featured demo, **Seed & Stars**, composes an Afrofuturist gathering inspired by Octavia E. Butler's *Parable of the Sower*.
+Supper Club AI is an **agent-readable cultural hosting workspace** for Creative Hosts—not an AI dinner planner. It turns one cultural inspiration into a shared, sourced run of show spanning the theme, menu, pairings, soundtrack, shopping list, prep timeline, private host packet, and guest-facing share kit. Its featured demo, **Seed & Stars**, composes an Afrofuturist gathering inspired by Octavia E. Butler's *Parable of the Sower*.
 
 > Supper Club AI turns cultural inspiration into a coordinated, hostable experience by giving people and agents one shared, agent-readable workspace—reducing the fragmented research and manual reconciliation that make ambitious gatherings difficult to produce.
 
-The website exposes twenty-two typed WebMCP tools so an agent can read and update the same structured plan the host sees in the browser. Unlike a chat that leaves the host reconciling disconnected suggestions, Supper Club AI makes each change part of a durable, versioned plan with visible sources, warnings, and tool receipts. The repository also includes an MCP App for ChatGPT with sixteen focused tools and an interactive host-brief form.
+The website exposes twenty-four typed WebMCP tools so an agent can read and update the same structured plan the host sees in the browser. Unlike a chat that leaves the host reconciling disconnected suggestions, Supper Club AI makes each change part of a durable, versioned plan with visible sources, warnings, and tool receipts. The repository also includes an MCP App for ChatGPT with sixteen focused tools and an interactive host-brief form.
 
 - **Live application:** [thesupperclub.app](https://www.thesupperclub.app/)
 - **License:** [MIT](./LICENSE)
@@ -27,7 +27,7 @@ This turns the browser from a page the agent merely looks at into a collaborativ
 
 ## WebMCP implementation
 
-The twenty-two website tool definitions live in [`lib/webmcp-tools.ts`](./lib/webmcp-tools.ts). Each tool declares a name, description, JSON input schema, annotations, and an `execute` function. The application registers every definition with the browser's model context:
+The twenty-four website tool definitions live in [`lib/webmcp-tools.ts`](./lib/webmcp-tools.ts). Each tool declares a name, description, JSON input schema, annotations, and an `execute` function. The application registers every definition with the browser's model context:
 
 ```ts
 const tools: WebMCPTool[] = [
@@ -51,7 +51,8 @@ const tools: WebMCPTool[] = [
   // suggest_ingredient_substitutions, create_prep_timeline,
   // search_wines, set_wine_pairing, create_zero_proof_pairings,
   // search_music, refresh_music_metadata, find_grocery_stores, price_shopping_list,
-  // finalize_party_plan, and export_host_packet
+  // finalize_party_plan, preview_guest_share_kit, export_guest_share_kit,
+  // and export_host_packet
 ];
 
 for (const definition of tools) {
@@ -69,7 +70,8 @@ The executable implementation includes version-conflict protection, structured s
 - `app/api/plans/` — anonymous, versioned PlanStore HTTP boundary shared by the website and MCP app.
 - `chatgpt-app/` — MCP server and self-contained interactive ChatGPT App.
 - `components/` — the Creative Host workspace and shared WebMCP-driven interface.
-- `lib/webmcp-tools.ts` — all twenty-two WebMCP tool definitions and registration.
+- `lib/webmcp-tools.ts` — all twenty-four WebMCP tool definitions and registration.
+- `lib/guest-share-kit.ts` — redacted guest-program PDF, social cards, captions, alt text, and ZIP export.
 - `lib/apple-music.server.ts` — validated Apple Music search, per-track matching, artwork, previews, and source metadata.
 - `lib/plan-tools.server.ts` — shared recipe, substitution, prep, wine, zero-proof, and music tool logic.
 - `lib/kroger.server.ts` — server-only Kroger OAuth, store lookup, product matching, package estimates, and basket totals.

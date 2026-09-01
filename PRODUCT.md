@@ -21,7 +21,7 @@ The Creative Host begins with intent and constraints—occasion, inspiration, gu
 
 ## Product Purpose
 
-Supper Club AI turns a conversational idea for a gathering into a shared, editable dinner-party plan. ChatGPT can use WebMCP tools exposed by the open website to research a theme, curate a menu, pair drinks, build a soundtrack, create a shopping checklist, validate the plan, and generate a downloadable host packet.
+Supper Club AI turns a conversational idea for a gathering into a shared, editable dinner-party plan. An agent can use WebMCP tools exposed by the open website to research a theme, curate a menu, pair drinks, build a soundtrack, create a shopping checklist, validate the plan, generate a private host packet, and prepare a guest-safe visual share kit.
 
 Success means the host can move from one prompt to a coherent, reviewable plan without manually reconciling multiple recipe, book, wine, music, and planning services.
 
@@ -37,7 +37,8 @@ Supper Club AI is not a chat response wrapped in a webpage. Its distinguishing m
 - The website displays the evolving plan as editable sections rather than a long transcript.
 - The host may preserve, replace, or revise individual choices.
 - The host explicitly approves finalization and side effects such as saving an Apple Music playlist.
-- The final deliverables include an editable shopping checklist and a downloadable PDF host packet.
+- The final deliverables include an editable shopping checklist, a downloadable PDF host packet,
+  and a guest-safe share kit with a visual program, social cards, captions, and alt text.
 
 The featured hackathon demo is **Seed & Stars**, a hopeful Afrofuturist supper inspired by Octavia E. Butler's *Parable of the Sower*. It uses themes of change, adaptation, community, resilience, climate, and imagined futures without implying endorsement by Butler's estate or reproducing copyrighted book text.
 
@@ -55,7 +56,9 @@ The featured hackathon demo is **Seed & Stars**, a hopeful Afrofuturist supper i
 8. `finalize_party_plan`
 9. `export_host_packet`
 
-The full planned tool inventory contains twenty-two tools and is documented in `docs/plans/2026-08-31-supper-club-ai-webmcp-design.md`.
+The implemented website inventory contains twenty-four tools: the original twenty-two plus
+`preview_guest_share_kit` and `export_guest_share_kit`. The earlier twenty-two-tool scope is
+documented in `docs/plans/2026-08-31-supper-club-ai-webmcp-design.md`.
 
 ### Data and integrations
 

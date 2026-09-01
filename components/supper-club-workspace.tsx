@@ -10,6 +10,7 @@ import {
   Compass,
   Clock3,
   Download,
+  Eye,
   ExternalLink,
   FileText,
   Grape,
@@ -23,6 +24,7 @@ import {
   RefreshCw,
   RotateCcw,
   Search,
+  Share2,
   ShoppingBasket,
   Store,
   Users,
@@ -35,6 +37,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { WorkspaceTour } from "@/components/workspace-tour";
 import { downloadHostPacket } from "@/lib/export-pdf";
+import {
+  buildGuestShareKitPreview,
+  downloadGuestShareKit,
+  type GuestShareKitPreview,
+} from "@/lib/guest-share-kit";
 import {
   createSharedPlan,
   PlanClientError,
@@ -194,6 +201,9 @@ export function SupperClubWorkspace() {
   const [groceryPricing, setGroceryPricing] = useState<GroceryPricingData | null>(null);
   const [tourStartRequest, setTourStartRequest] = useState(0);
   const [refreshingMusic, setRefreshingMusic] = useState(false);
+  const [guestSharePreview, setGuestSharePreview] = useState<GuestShareKitPreview | null>(null);
+  const [guestShareIncludeLocation, setGuestShareIncludeLocation] = useState(false);
+  const [guestShareBusy, setGuestShareBusy] = useState(false);
 
   const updatePlan = useCallback((next: PartyPlan) => {
     planRef.current = next;
@@ -220,6 +230,13 @@ export function SupperClubWorkspace() {
       setGroceryPricing(data as GroceryPricingData);
       setActiveView("SHOPPING");
       announce("The grocery estimate is visible in Shopping & prep");
+    }
+    if (operation === "PREVIEW_GUEST_SHARE_KIT") {
+      const preview = data as GuestShareKitPreview;
+      setGuestSharePreview(preview);
+      setGuestShareIncludeLocation(Boolean(preview.location));
+      setActiveView("HOST_PACKET");
+      announce("The guest share kit is ready for review");
     }
   }, [announce]);
 
@@ -305,6 +322,7 @@ export function SupperClubWorkspace() {
         announce(`${saved.receipts[0]?.title ?? "Plan updated"} · v${saved.planVersion}`);
       },
       exportHostPacket: downloadHostPacket,
+      exportGuestShareKit: downloadGuestShareKit,
       showToolData: showGroceryToolData,
     }, controller)
       .then((registration) => {
@@ -566,6 +584,59 @@ export function SupperClubWorkspace() {
     );
   };
 
+  const previewGuestShare = useCallback((includeLocation = guestShareIncludeLocation) => {
+    const preview = buildGuestShareKitPreview(planRef.current, {
+      includeLocation,
+      tone: "EDITORIAL",
+    });
+    setGuestSharePreview(preview);
+    setGuestShareIncludeLocation(includeLocation);
+    setActiveView("HOST_PACKET");
+    announce("The guest share kit is ready for review");
+  }, [announce, guestShareIncludeLocation]);
+
+  const changeGuestShareLocation = useCallback((includeLocation: boolean) => {
+    setGuestShareIncludeLocation(includeLocation);
+    if (guestSharePreview) previewGuestShare(includeLocation);
+  }, [guestSharePreview, previewGuestShare]);
+
+  const exportGuestShare = async () => {
+    if (planRef.current.status !== "FINALIZED") {
+      setConfirmingFinalize(true);
+      announce("Finalize the plan before exporting guest-facing materials");
+      return;
+    }
+    setGuestShareBusy(true);
+    try {
+      const result = await downloadGuestShareKit(planRef.current, {
+        includeLocation: guestShareIncludeLocation,
+        tone: "EDITORIAL",
+      });
+      localCommit(
+        (next) => {
+          next.exports.unshift({
+            exportId: `export-${Date.now()}`,
+            filename: result.filename,
+            createdAt: new Date().toISOString(),
+          });
+        },
+        {
+          tool: "export_guest_share_kit",
+          title: "Guest share kit exported",
+          detail: `${result.filename} · ${result.files.length} guest-safe files`,
+          kind: "SYSTEM",
+          status: "APPLIED",
+        },
+      );
+      announce("Guest share kit downloaded");
+    } catch (error) {
+      console.error("[Supper Club AI] Guest share export failed", error);
+      announce("The guest share kit could not be created. Please try again.");
+    } finally {
+      setGuestShareBusy(false);
+    }
+  };
+
   const resetDemo = () => {
     const current = planRef.current;
     const seed: PartyPlan = {
@@ -712,7 +783,17 @@ export function SupperClubWorkspace() {
           ) : null}
 
           {activeView === "HOST_PACKET" ? (
-            <HostPacketReview plan={plan} onFinalize={() => setConfirmingFinalize(true)} onExport={exportPacket} />
+            <HostPacketReview
+              plan={plan}
+              onFinalize={() => setConfirmingFinalize(true)}
+              onExport={exportPacket}
+              guestSharePreview={guestSharePreview}
+              guestShareIncludeLocation={guestShareIncludeLocation}
+              guestShareBusy={guestShareBusy}
+              onPreviewGuestShare={() => previewGuestShare()}
+              onExportGuestShare={exportGuestShare}
+              onGuestShareLocationChange={changeGuestShareLocation}
+            />
           ) : null}
         </section>
 
@@ -1155,7 +1236,27 @@ function ShoppingAndPrep({
   );
 }
 
-function HostPacketReview({ plan, onFinalize, onExport }: { plan: PartyPlan; onFinalize: () => void; onExport: () => void }) {
+function HostPacketReview({
+  plan,
+  onFinalize,
+  onExport,
+  guestSharePreview,
+  guestShareIncludeLocation,
+  guestShareBusy,
+  onPreviewGuestShare,
+  onExportGuestShare,
+  onGuestShareLocationChange,
+}: {
+  plan: PartyPlan;
+  onFinalize: () => void;
+  onExport: () => void;
+  guestSharePreview: GuestShareKitPreview | null;
+  guestShareIncludeLocation: boolean;
+  guestShareBusy: boolean;
+  onPreviewGuestShare: () => void;
+  onExportGuestShare: () => void;
+  onGuestShareLocationChange: (includeLocation: boolean) => void;
+}) {
   const checks = [
     { label: "Theme framing", ready: plan.theme.ideas.length > 0, detail: `${plan.theme.ideas.length} interpreted themes` },
     { label: "Menu", ready: plan.courses.length === 3, detail: `${plan.courses.length} food courses` },
@@ -1182,6 +1283,65 @@ function HostPacketReview({ plan, onFinalize, onExport }: { plan: PartyPlan; onF
           {plan.exports.length ? <div className="export-history"><span className="field-label">Recent exports</span>{plan.exports.slice(0, 3).map((item) => <div key={item.exportId}><FileText size={15} /><span>{item.filename}</span><small>{new Date(item.createdAt).toLocaleString()}</small></div>)}</div> : null}
         </section>
       </div>
+      <section className="guest-share-studio" data-guest-share-preview aria-labelledby="guest-share-title">
+        <header className="guest-share-heading">
+          <div>
+            <span className="eyebrow">Guest-facing edition</span>
+            <h2 id="guest-share-title">Guest Share Kit</h2>
+            <p>A visual program and social package that matches the evening—without exposing budgets, shopping, prep, receipts, plan IDs, or source internals.</p>
+          </div>
+          <span className="guest-share-count">7 files</span>
+        </header>
+
+        <div className="guest-share-layout">
+          <div className="guest-card-preview" aria-label="Guest social card preview">
+            <div className="guest-card-rule" />
+            <span>Supper Club AI · Guest Edition</span>
+            <h3>{guestSharePreview?.title ?? plan.title}</h3>
+            <p>{guestSharePreview?.framing ?? "Preview the guest-safe edition before creating any files."}</p>
+            <dl>
+              <div><dt>Date</dt><dd>{guestSharePreview?.date ?? formatDate(plan.eventDate)}</dd></div>
+              <div><dt>Starts</dt><dd>{guestSharePreview?.time ?? plan.eventTime}</dd></div>
+              <div><dt>Guests</dt><dd>{guestSharePreview?.guestCount ?? plan.guestCount}</dd></div>
+            </dl>
+            {guestSharePreview?.location ? <small>{guestSharePreview.location}</small> : <small>Location kept private</small>}
+          </div>
+
+          <div className="guest-share-copy">
+            <span className="field-label">Package contents</span>
+            <ul>
+              <li>Guest program PDF</li>
+              <li>Square, portrait, and story PNG cards</li>
+              <li>Announcement and reminder captions</li>
+              <li>Alt text and a machine-readable manifest</li>
+            </ul>
+            {guestSharePreview ? (
+              <blockquote>{guestSharePreview.announcementCaption}</blockquote>
+            ) : (
+              <p>Preview first to inspect the guest language and privacy choices. Previewing does not download or publish anything.</p>
+            )}
+            <label className="guest-location-choice">
+              <input
+                type="checkbox"
+                checked={guestShareIncludeLocation}
+                onChange={(event) => onGuestShareLocationChange(event.target.checked)}
+              />
+              <span><strong>Include location in guest files</strong><small>Off by default. Only enable this for a private guest distribution.</small></span>
+            </label>
+            <div className="guest-share-actions">
+              <button className="button-secondary" type="button" onClick={onPreviewGuestShare}>
+                <Eye size={17} /> Preview guest kit
+              </button>
+              <button className="button-primary" type="button" onClick={onExportGuestShare} disabled={guestShareBusy}>
+                <Share2 size={17} /> {guestShareBusy ? "Building package…" : "Download guest kit"}
+              </button>
+            </div>
+            <p className="guest-share-status" aria-live="polite">
+              {guestSharePreview ? "Preview ready. Export still requires a finalized plan and explicit host action." : "No files have been created."}
+            </p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

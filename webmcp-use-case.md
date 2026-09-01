@@ -1,9 +1,9 @@
 # Why Supper Club AI Is a Strong Fit for WebMCP
 
 - **Public code repository:** [github.com/tmoody1973/supper-club-ai](https://github.com/tmoody1973/supper-club-ai)
-- **Live application:** [supper-club-ai.vercel.app](https://supper-club-ai.vercel.app/)
+- **Live application:** [thesupperclub.app](https://www.thesupperclub.app/)
 
-Supper Club AI turns a creative idea—such as an Afrofuturist dinner inspired by Octavia E. Butler's *Parable of the Sower*—into a complete, practical plan. The Creative Host can work with an AI agent to shape the theme, curate a menu, select wine and zero-proof pairings, sequence music, prepare a shopping list, and export a PDF host packet.
+Supper Club AI turns a creative idea—such as an Afrofuturist dinner inspired by Octavia E. Butler's *Parable of the Sower*—into a complete, practical plan. The Creative Host can work with an AI agent to shape the theme, curate a menu, select wine and zero-proof pairings, sequence music, prepare a shopping list, export a private host packet, and create a guest-safe visual program and social package.
 
 This is a strong fit for WebMCP because the work crosses several domains and changes one connected plan. A new guest count affects recipe quantities and the shopping list. A dietary requirement can change the menu and pairings. A different book or tone should influence the food, music, and cultural framing. WebMCP gives the agent structured tools for making those connected changes inside the website, instead of merely describing what the host should do next in a separate chat.
 
@@ -37,7 +37,7 @@ Before WebMCP, this collaboration was difficult because websites and agents had 
 
 ## How We Implemented WebMCP
 
-Supper Club AI registers nine typed tools with `document.modelContext.registerTool`:
+Supper Club AI registers twenty-four typed tools with `document.modelContext.registerTool`:
 
 1. `get_party_plan`
 2. `configure_party`
@@ -45,9 +45,24 @@ Supper Club AI registers nine typed tools with `document.modelContext.registerTo
 4. `curate_menu`
 5. `curate_pairings`
 6. `curate_soundtrack`
-7. `create_shopping_list`
-8. `finalize_party_plan`
-9. `export_host_packet`
+7. `enrich_soundtrack_context`
+8. `find_grocery_stores`
+9. `price_shopping_list`
+10. `search_recipes`
+11. `set_menu_course`
+12. `replace_menu_course`
+13. `suggest_ingredient_substitutions`
+14. `create_prep_timeline`
+15. `search_wines`
+16. `set_wine_pairing`
+17. `create_zero_proof_pairings`
+18. `search_music`
+19. `refresh_music_metadata`
+20. `create_shopping_list`
+21. `finalize_party_plan`
+22. `preview_guest_share_kit`
+23. `export_guest_share_kit`
+24. `export_host_packet`
 
 Each tool has a focused description, a JSON input schema, behavioral annotations, and a structured success or error response. The response can include the updated plan version, affected interface sections, source references, warnings, a human-readable summary, and suggested next actions.
 
@@ -55,7 +70,7 @@ The WebMCP tools operate on the same React plan state that renders the Supper Cl
 
 Research and curation run through a same-origin server gateway so private credentials never enter browser code or WebMCP responses. The gateway normalizes results from sources including Open Library, Spoonacular, GrapeMinds with X-Wines fallback, Apple Music, and Discogs into Supper Club AI's shared data model. Reviewed local catalogs provide graceful fallbacks, and the interface clearly identifies sources and fallback behavior.
 
-Finally, tool permissions match the consequence of each action. Reading the plan is read-only. Curation tools can revise specified sections. Finalization requires the host's explicit approval, and PDF export requires another confirmation because it creates a downloaded file. This gives the agent useful agency without removing the Creative Host from the decisions that matter.
+Finally, tool permissions match the consequence of each action. Reading the plan and previewing the redacted guest kit are read-only. Curation tools can revise specified sections. Finalization, host-packet export, and guest-share export require explicit approval because they lock state or create downloaded files. This gives the agent useful agency without removing the Creative Host from the decisions that matter.
 
 ## Short Summary
 

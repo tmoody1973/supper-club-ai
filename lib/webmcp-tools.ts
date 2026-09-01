@@ -4,6 +4,10 @@ import {
 } from "@/lib/seed-plan";
 import { briefFromPlanTheme } from "@/lib/creative-brief";
 import { requestCuration } from "@/lib/curation-client";
+import {
+  buildGuestShareKitPreview,
+  type GuestShareKitOptions,
+} from "@/lib/guest-share-kit";
 import type {
   MenuCurationData,
   PairingCurationData,
@@ -28,6 +32,10 @@ type ToolRuntime = {
   setPlan: (plan: PartyPlan) => Promise<void> | void;
   syncPlan: (plan: PartyPlan) => void;
   exportHostPacket: (plan: PartyPlan) => Promise<{ filename: string }>;
+  exportGuestShareKit: (
+    plan: PartyPlan,
+    options: GuestShareKitOptions,
+  ) => Promise<{ filename: string; files: string[] }>;
   showToolData?: (operation: string, data: unknown) => void;
 };
 
@@ -1135,8 +1143,156 @@ export async function registerSupperClubTools(
           ["FINALIZATION"],
           { finalized: true, finalizedAt: committed.updatedAt },
           `${committed.title} is finalized and ready for a host packet.`,
-          { nextActions: [{ tool: "export_host_packet", label: "Download the host packet", reason: "Create the useful kitchen-and-table artifact.", requiresConfirmation: true }] },
+          {
+            nextActions: [
+              { tool: "preview_guest_share_kit", label: "Preview the guest share kit", reason: "Review the redacted program, social cards, captions, and alt text before download.", requiresConfirmation: false },
+              { tool: "export_host_packet", label: "Download the host packet", reason: "Create the useful kitchen-and-table artifact.", requiresConfirmation: true },
+            ],
+          },
         );
+      },
+    }),
+    tool({
+      name: "preview_guest_share_kit",
+      title: "Preview the guest share kit",
+      description:
+        "Preview a guest-safe program and social package without downloading files. Omits host-only operations and location by default.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          planId: { type: "string" },
+          includeLocation: {
+            type: "boolean",
+            default: false,
+            description: "Include the event location only when the host explicitly requests it.",
+          },
+          tone: {
+            type: "string",
+            enum: ["EDITORIAL", "CELEBRATORY"],
+            default: "EDITORIAL",
+          },
+        },
+        required: ["planId"],
+        additionalProperties: false,
+      },
+      annotations: {
+        readOnlyHint: true,
+        idempotentHint: true,
+        openWorldHint: false,
+        untrustedContentHint: true,
+      },
+      execute: async (input) => {
+        const plan = runtime.getPlan();
+        if (input.planId !== plan.planId) {
+          return failure(undefined, "PLAN_NOT_FOUND", "That party plan is not open.", false);
+        }
+        const options: GuestShareKitOptions = {
+          includeLocation: input.includeLocation === true,
+          tone: input.tone === "CELEBRATORY" ? "CELEBRATORY" : "EDITORIAL",
+        };
+        const preview = buildGuestShareKitPreview(plan, options);
+        runtime.showToolData?.("PREVIEW_GUEST_SHARE_KIT", preview);
+        return success(
+          plan,
+          ["EXPORTS"],
+          {
+            title: preview.title,
+            schedule: `${preview.date} · ${preview.time}`,
+            guestCount: preview.guestCount,
+            includesLocation: Boolean(preview.location),
+            files: preview.manifest.files.map((file) => file.path),
+            announcementCaption: preview.announcementCaption,
+            privacy: "Budget, shopping, prep, receipts, plan IDs, and source internals are omitted.",
+          },
+          `Previewed a seven-file guest share kit for ${preview.title}; nothing was downloaded.`,
+          {
+            updated: false,
+            warnings: [],
+            sources: [],
+            nextActions: [{
+              tool: "export_guest_share_kit",
+              label: "Download the guest share kit",
+              reason: "Create the reviewed PDF, social cards, captions, and alt text as one ZIP.",
+              requiresConfirmation: true,
+            }],
+          },
+        );
+      },
+    }),
+    tool({
+      name: "export_guest_share_kit",
+      title: "Export the guest share kit",
+      description:
+        "Download the reviewed guest program, three social cards, captions, alt text, and manifest as one ZIP. Requires explicit confirmation.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          planId: { type: "string" },
+          expectedPlanVersion: { type: "number" },
+          confirm: {
+            type: "boolean",
+            description: "True only after the host explicitly approves creating the local download.",
+          },
+          includeLocation: {
+            type: "boolean",
+            default: false,
+            description: "Include the event location only when the host explicitly requests it.",
+          },
+          tone: {
+            type: "string",
+            enum: ["EDITORIAL", "CELEBRATORY"],
+            default: "EDITORIAL",
+          },
+        },
+        required: ["planId", "expectedPlanVersion", "confirm"],
+        additionalProperties: false,
+      },
+      annotations: {
+        readOnlyHint: false,
+        destructiveHint: false,
+        idempotentHint: false,
+        openWorldHint: false,
+        untrustedContentHint: true,
+      },
+      execute: async (input) => {
+        const plan = runtime.getPlan();
+        const versionError = checkVersion(plan, input);
+        if (versionError) return versionError;
+        if (input.confirm !== true) {
+          return failure(plan, "CONFIRMATION_REQUIRED", "Ask the host to approve downloading the guest share kit, then retry with confirm: true.");
+        }
+        if (plan.status !== "FINALIZED") {
+          return failure(plan, "PLAN_NOT_READY", "Finalize the party plan before exporting guest-facing materials.");
+        }
+        const options: GuestShareKitOptions = {
+          includeLocation: input.includeLocation === true,
+          tone: input.tone === "CELEBRATORY" ? "CELEBRATORY" : "EDITORIAL",
+        };
+        try {
+          const artifact = await runtime.exportGuestShareKit(plan, options);
+          const next = structuredClone(plan);
+          const exportRecord = {
+            exportId: `export-${Date.now()}`,
+            filename: artifact.filename,
+            createdAt: new Date().toISOString(),
+          };
+          next.exports.unshift(exportRecord);
+          const committed = await commit(
+            runtime,
+            plan,
+            next,
+            makeReceipt("export_guest_share_kit", "Guest share kit exported", `${artifact.filename} · ${artifact.files.length} guest-safe files`, "SYSTEM"),
+          );
+          return success(
+            committed,
+            ["EXPORTS"],
+            { export: exportRecord, downloaded: true, files: artifact.files },
+            `Downloaded ${artifact.filename} with ${artifact.files.length} guest-safe files.`,
+            { warnings: [], sources: [] },
+          );
+        } catch (error) {
+          return failure(plan, "EXPORT_FAILED", error instanceof Error ? error.message : "The guest share kit could not be created.", true);
+        }
       },
     }),
     tool({

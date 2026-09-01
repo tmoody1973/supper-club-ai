@@ -16,6 +16,7 @@
     "@fontsource/ibm-plex-mono": "^5.3.0",
     "@upstash/redis": "^1.38.3",
     "jspdf": "latest",
+    "jszip": "^3.10.1",
     "lucide-react": "latest",
     "next": "latest",
     "react": "latest",
