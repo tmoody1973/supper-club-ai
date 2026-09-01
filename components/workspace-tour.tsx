@@ -72,7 +72,8 @@ export function WorkspaceTour({ startRequest, prepareStep }: WorkspaceTourProps)
       target: '[data-tour="shopping-prep"]',
       title: "Turn the menu into kitchen work",
       content: "The shopping ledger collects ingredients from every dish. The prep timeline turns the same menu into an ordered cooking schedule you can check off.",
-      placement: "top",
+      placement: "center",
+      isFixed: true,
       before: () => prepare(3),
     },
     {
