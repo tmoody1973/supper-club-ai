@@ -23,7 +23,7 @@ import styles from "./about.module.css";
 export const metadata: Metadata = {
   title: "About & How to Use · Supper Club AI",
   description:
-    "Learn how Supper Club AI helps a Creative Host and an AI agent build one coherent dinner-party plan together.",
+    "Meet Supper Club AI, an agent-readable cultural hosting workspace where Creative Hosts and agents build one sourced, coherent plan together.",
 };
 
 const planningSteps = [
@@ -92,7 +92,7 @@ const beginnerPaths = [
     title: "Use the website in the in-app browser",
     intro: "Choose this in a ChatGPT or Codex surface that supports the in-app browser and webpage tools.",
     steps: [
-      "Ask ChatGPT to open supper-club-ai.vercel.app in the in-app browser.",
+      "Ask ChatGPT to open thesupperclub.app in the in-app browser.",
       "Open the plan you want to revise, or begin with the reviewed example already on the page.",
       "Check the black header for 22 tools live. Preview mode means that browser does not expose WebMCP tools.",
       "Ask ChatGPT to use the tools on the Supper Club AI page and describe one specific change.",
@@ -214,11 +214,12 @@ export default function AboutPage() {
             <span>HOST WITH INTENTION</span>
           </div>
           <div className={styles.heroCopy}>
-            <p className={styles.kicker}>A field guide for the Creative Host</p>
+            <p className={styles.kicker}>An agent-readable cultural hosting workspace</p>
             <h1 id="about-title">A dinner party is more than a menu.</h1>
             <p className={styles.dek}>
-              Supper Club AI turns one cultural idea into an evening you can actually host:
-              food, drinks, music, conversation, shopping, timing, and the story connecting them.
+              Supper Club AI gives a Creative Host and an agent one shared place to turn a
+              cultural idea into an evening you can actually host—food, drinks, music,
+              conversation, shopping, timing, and the story connecting them.
             </p>
             <div className={styles.heroActions}>
               <Link href="/" className={styles.primaryAction}>
@@ -236,7 +237,7 @@ export default function AboutPage() {
 
         <section className={styles.definition}>
           <p className={styles.sectionLabel}>01 / Plain English</p>
-          <h2>Think of it as an attentive co-host with a very organized notebook.</h2>
+          <h2>Not an AI dinner planner. A shared workspace for cultural hosting.</h2>
           <figure className={styles.definitionArtwork}>
             <Image
               src="/assets/attentive-cohost-notebook.png"
@@ -249,9 +250,9 @@ export default function AboutPage() {
           </figure>
           <div className={styles.definitionGrid}>
             <p>
-              A normal chat can give you a list of ideas. Supper Club AI gives those ideas a
-              shared home. You and the agent can see the same plan, change the same courses,
-              and keep the shopping list synchronized with the menu.
+              A normal chat can suggest ideas. Supper Club AI gives those ideas a shared,
+              agent-readable home. You and the agent can see the same versioned plan, change
+              one course, and keep linked shopping and preparation work coherent.
             </p>
             <p>
               The agent does not secretly take over. Sources and warnings remain visible, and
@@ -426,7 +427,7 @@ export default function AboutPage() {
             </div>
             <div className={styles.terminalCard}>
               <div><Terminal size={16} /><span>Full visual workspace</span></div>
-              <pre><code>{`https://supper-club-ai.vercel.app`}</code></pre>
+              <pre><code>{`https://www.thesupperclub.app`}</code></pre>
             </div>
             <div className={styles.terminalCardWide}>
               <div><Terminal size={16} /><span>Optional · inspect the public server</span></div>
@@ -472,8 +473,47 @@ Connect to: https://supper-club-ai-mcp.tarikjmoody.workers.dev/mcp`}</code></pre
           </ul>
         </section>
 
+        <section className={styles.impact} aria-labelledby="impact-title">
+          <div className={styles.impactLead}>
+            <p className={styles.sectionLabel}>09 / Why this matters</p>
+            <h2 id="impact-title">Make ambitious gatherings possible without turning the host into a project manager.</h2>
+            <p>
+              Cultural hosting asks one person to coordinate research, recipes, dietary needs,
+              bottles, music, shopping, and timing across disconnected tabs, chats, and lists.
+              Supper Club AI holds those dependencies in one agent-readable plan, so a change
+              can be traced and reconciled instead of quietly breaking the evening.
+            </p>
+          </div>
+
+          <div className={styles.impactGrid}>
+            <article>
+              <span>For Creative Hosts</span>
+              <h3>From inspiration to a hostable evening.</h3>
+              <p>Preserve your taste and judgment while the workspace coordinates the moving pieces around them.</p>
+            </article>
+            <article>
+              <span>For Guests</span>
+              <h3>Hospitality decisions stay visible.</h3>
+              <p>Dietary needs, zero-proof choices, provenance, warnings, and uncertainty remain available for review.</p>
+            </article>
+            <article>
+              <span>For Local Retailers</span>
+              <h3>Discovery can become a useful store visit.</h3>
+              <p>Bookstores, wine shops, and grocers can connect a cultural plan to relevant inventory, pricing, and reviewable offers.</p>
+            </article>
+          </div>
+
+          <div className={styles.impactChain} aria-label="What agent-readable changes">
+            <strong>What agent-readable changes</strong>
+            <span>Host asks for one precise change</span>
+            <span>WebMCP updates the typed plan</span>
+            <span>Linked work stays coordinated</span>
+            <span>The receipt remains visible</span>
+          </div>
+        </section>
+
         <section className={styles.future}>
-          <p className={styles.sectionLabel}>09 / Where this can go</p>
+          <p className={styles.sectionLabel}>10 / Where this can go</p>
           <h2>A new kind of storefront experience.</h2>
           <p>
             Wine shops and independent grocers could embed Supper Club AI so a shopping list

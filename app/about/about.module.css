@@ -188,6 +188,7 @@
 .guide h2,
 .mcpLead h2,
 .trust h2,
+.impact h2,
 .future h2,
 .footer h2 {
   margin: 14px 0 0;
@@ -659,6 +660,113 @@
 .trust ul { margin: 0; padding: 0; border-top: 1px solid rgba(239, 231, 220, 0.24); list-style: none; }
 .trust li { padding: 18px 0; border-bottom: 1px solid rgba(239, 231, 220, 0.24); font-family: var(--serif); font-size: 1.25rem; line-height: 1.35; }
 
+.impact {
+  padding: 80px clamp(28px, 6vw, 92px);
+  border-bottom: 1px solid var(--about-rule);
+  background:
+    linear-gradient(90deg, rgba(115, 121, 164, 0.08) 1px, transparent 1px),
+    color-mix(in srgb, var(--about-seed) 34%, var(--about-paper));
+  background-size: 36px 100%, auto;
+}
+
+.impactLead {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.62fr) minmax(0, 1.38fr);
+  align-items: start;
+  gap: 28px 76px;
+}
+
+.impactLead .sectionLabel {
+  grid-column: 1;
+}
+
+.impactLead h2,
+.impactLead > p:last-child {
+  grid-column: 2;
+}
+
+.impactLead h2 {
+  margin-top: 0;
+}
+
+.impactLead > p:last-child {
+  max-width: 900px;
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 1.28rem;
+  line-height: 1.55;
+}
+
+.impactGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 52px;
+  border-top: 1px solid var(--about-rule);
+  border-left: 1px solid var(--about-rule);
+}
+
+.impactGrid article {
+  min-height: 250px;
+  padding: 30px;
+  border-right: 1px solid var(--about-rule);
+  border-bottom: 1px solid var(--about-rule);
+  background: color-mix(in srgb, var(--about-paper) 72%, transparent);
+}
+
+.impactGrid span {
+  color: var(--about-red);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.impactGrid h3 {
+  margin: 30px 0 14px;
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.impactGrid p {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.52;
+}
+
+.impactChain {
+  display: grid;
+  grid-template-columns: 1.15fr repeat(4, minmax(0, 1fr));
+  margin-top: 24px;
+  background: var(--about-ink);
+  color: var(--about-paper);
+}
+
+.impactChain strong,
+.impactChain span {
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border-right: 1px solid rgba(239, 231, 220, 0.2);
+  font-size: 0.98rem;
+  line-height: 1.35;
+}
+
+.impactChain strong {
+  color: var(--about-seed);
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.impactChain span:last-child {
+  border-right: 0;
+}
+
 .future { padding: 80px clamp(28px, 12vw, 180px); background: var(--about-blue); color: #fffaf0; }
 .future .sectionLabel { color: var(--about-seed); }
 .future > p { max-width: 950px; margin-top: 30px; }
@@ -742,6 +850,14 @@
   .capabilityGrid,
   .appInstructions { grid-template-columns: repeat(2, 1fr); }
 
+  .impactChain {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .impactChain strong {
+    grid-column: 1 / -1;
+  }
+
   .toolLedgerHeading {
     grid-template-columns: 1fr;
     align-items: start;
@@ -770,7 +886,8 @@
   .definition,
   .mcpLead,
   .guide,
-  .trust { grid-template-columns: 1fr; }
+  .trust,
+  .impactLead { grid-template-columns: 1fr; }
   .definitionGrid,
   .mcpLead > p { grid-column: 1; }
   .definitionArtwork { grid-column: 1; }
@@ -793,6 +910,14 @@
   .promptExamples article:last-child { grid-column: 1; }
   .beginnerCheckpoints { gap: 26px; }
   .trust { gap: 36px; }
+  .impactLead h2,
+  .impactLead > p:last-child { grid-column: 1; }
+  .impactGrid,
+  .impactChain { grid-template-columns: 1fr; }
+  .impactChain strong { grid-column: 1; }
+  .impactChain strong,
+  .impactChain span { min-height: auto; border-right: 0; border-bottom: 1px solid rgba(239, 231, 220, 0.2); }
+  .impactChain span:last-child { border-bottom: 0; }
   .footer { align-items: stretch; flex-direction: column; }
 }
 

@@ -1,11 +1,27 @@
 # Supper Club AI
 
-Supper Club AI is a culturally literate planning workspace for Creative Hosts. Its featured demo, **Seed & Stars**, turns an Afrofuturist dinner inspired by Octavia E. Butler's *Parable of the Sower* into a sourced run of show: theme, menu, pairings, soundtrack, shopping list, prep timeline, and downloadable host packet.
+Supper Club AI is an **agent-readable cultural hosting workspace** for Creative Hosts—not an AI dinner planner. It turns one cultural inspiration into a shared, sourced run of show spanning the theme, menu, pairings, soundtrack, shopping list, prep timeline, and downloadable host packet. Its featured demo, **Seed & Stars**, composes an Afrofuturist gathering inspired by Octavia E. Butler's *Parable of the Sower*.
 
-The website exposes twenty-two typed WebMCP tools so an agent can read and update the same structured plan the host sees in the browser. The repository also includes an MCP App for ChatGPT with sixteen focused tools and an interactive host-brief form.
+The website exposes twenty-two typed WebMCP tools so an agent can read and update the same structured plan the host sees in the browser. Unlike a chat that leaves the host reconciling disconnected suggestions, Supper Club AI makes each change part of a durable, versioned plan with visible sources, warnings, and tool receipts. The repository also includes an MCP App for ChatGPT with sixteen focused tools and an interactive host-brief form.
 
-- **Live application:** [supper-club-ai.vercel.app](https://supper-club-ai.vercel.app/)
+- **Live application:** [thesupperclub.app](https://www.thesupperclub.app/)
 - **License:** [MIT](./LICENSE)
+
+## Why this matters
+
+Ambitious cultural gatherings are coordination projects disguised as dinner parties. A Creative Host may research a book or artist, account for allergies, choose recipes and bottles, sequence music, reconcile ingredients, estimate costs, and build a cooking schedule across separate tabs, chats, and lists. One late change—such as replacing a course—can quietly make the pairing, shopping list, and prep timeline wrong.
+
+Supper Club AI gives the host and agent one shared planning surface. The agent can make a precise, typed change through WebMCP; the workspace can preserve the rest of the evening, update linked decisions, and show what changed. That creates practical value for three audiences:
+
+- **Creative Hosts** move from inspiration to a hostable evening without manually reconciling every menu, music, shopping, and timing decision.
+- **Guests** benefit when dietary needs, substantial zero-proof choices, provenance, and uncertainty stay visible for host review.
+- **Local retailers** gain a structured bridge from cultural inspiration to relevant products. Live Kroger location and pricing tools already demonstrate store-aware basket estimates; wine-shop inventory, reviewable offers, discounts, and coupons are credible next steps rather than hidden purchase actions.
+
+## Why “agent-readable” is the innovation
+
+The product is not a chatbot wrapped around a list of recommendations. The webpage itself exposes typed capabilities and a versioned party plan that both the person and the agent can read. An agent can search for alternatives, change one selected course, rebuild its dependent shopping or prep work, and leave a receipt on the same surface the host is reviewing. Consequential actions still wait for explicit approval.
+
+This turns the browser from a page the agent merely looks at into a collaborative workspace it can safely operate with the host. The result is a reusable product model for other high-consideration experiences—bookstores, wine shops, independent grocers, cultural venues, and hospitality businesses—where discovery, judgment, provenance, and action need to remain connected.
 
 ## WebMCP implementation
 
