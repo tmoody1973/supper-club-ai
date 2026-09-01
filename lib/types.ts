@@ -143,6 +143,13 @@ export type Track = {
   source?: SourceRef;
   sourceUrl?: string;
   previewUrl?: string;
+  artwork?: {
+    url: string;
+    width: number;
+    height: number;
+    backgroundColor?: string;
+  };
+  albumName?: string;
   releaseContext?: {
     year?: number;
     genres: string[];

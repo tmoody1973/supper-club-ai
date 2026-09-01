@@ -9,6 +9,7 @@ import {
   CircleAlert,
   Clock3,
   Download,
+  ExternalLink,
   FileText,
   Grape,
   Leaf,
@@ -647,7 +648,41 @@ function CulturalPlate({ movementId, plan }: { movementId: string; plan: PartyPl
     return (
       <div className="cultural-plate">
         <div><span className="field-label">Listening interval</span><h2>Music for the long view</h2><p>A draft sequence supports arrival, focus, conversation, and reflection without saving anything to the host’s library.</p></div>
-        <div className="track-list">{plan.soundtrack.map((track) => <div key={track.trackId}><Music2 size={16} /><span><strong>{track.title}</strong><small>{track.artist} · {track.moment}</small></span><em>{track.status}</em></div>)}</div>
+        <div className="track-list">
+          {plan.soundtrack.map((track) => (
+            <article key={track.trackId}>
+              <div className="track-art" style={{ backgroundColor: track.artwork?.backgroundColor }}>
+                {track.artwork ? (
+                  <img
+                    src={track.artwork.url}
+                    width={track.artwork.width}
+                    height={track.artwork.height}
+                    alt={`${track.title} by ${track.artist} artwork`}
+                    loading="lazy"
+                  />
+                ) : <Music2 size={22} aria-hidden="true" />}
+              </div>
+              <div className="track-copy">
+                <strong>{track.title}</strong>
+                <small>{track.artist} · {track.moment}</small>
+                {track.albumName ? <small className="track-album">{track.albumName}</small> : null}
+                {track.previewUrl ? (
+                  <audio controls preload="none" src={track.previewUrl} aria-label={`Preview ${track.title} by ${track.artist}`}>
+                    Your browser does not support Apple Music audio previews.
+                  </audio>
+                ) : <span className="track-preview-unavailable">Preview unavailable</span>}
+              </div>
+              <div className="track-actions">
+                <em>{track.status}</em>
+                {track.sourceUrl ? (
+                  <a href={track.sourceUrl} target="_blank" rel="noreferrer">
+                    Apple Music <ExternalLink size={12} aria-hidden="true" />
+                  </a>
+                ) : null}
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
     );
   }

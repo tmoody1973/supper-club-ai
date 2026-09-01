@@ -88,13 +88,22 @@ type SpoonacularRecipe = {
 
 type SpoonacularSearch = { results?: SpoonacularRecipe[] };
 
+type AppleMusicArtwork = {
+  width?: number;
+  height?: number;
+  url?: string;
+  bgColor?: string;
+};
+
 type AppleMusicSong = {
   id?: string;
   attributes?: {
     name?: string;
     artistName?: string;
+    albumName?: string;
     url?: string;
     previews?: Array<{ url?: string }>;
+    artwork?: AppleMusicArtwork;
   };
 };
 
@@ -595,6 +604,17 @@ const soundtrackSeedsForBrief = (brief?: CreativeBrief, customNotes?: string): S
 const normalizedCatalogText = (value: string) =>
   value.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, " ").trim();
 
+const appleArtwork = (artwork?: AppleMusicArtwork): Track["artwork"] => {
+  if (!artwork?.url || !artwork.width || !artwork.height) return undefined;
+  const size = Math.min(320, artwork.width, artwork.height);
+  return {
+    url: artwork.url.replaceAll("{w}", String(size)).replaceAll("{h}", String(size)),
+    width: size,
+    height: size,
+    backgroundColor: artwork.bgColor ? `#${artwork.bgColor.replace(/^#/, "")}` : undefined,
+  };
+};
+
 const appleMatchScore = (
   item: AppleMusicSong,
   seed: SoundtrackSeed,
@@ -712,6 +732,8 @@ async function curateSoundtrack(
         source,
         sourceUrl: source.url,
         previewUrl: attributes.previews?.[0]?.url,
+        artwork: appleArtwork(attributes.artwork),
+        albumName: attributes.albumName,
         releaseContext,
         sequence: index + 1,
       };
