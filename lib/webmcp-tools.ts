@@ -227,6 +227,7 @@ const commit = async (
 const planSources = (plan: PartyPlan) => {
   const sources = [
     plan.theme.source,
+    ...(plan.theme.bookBriefing?.sources ?? []),
     ...plan.courses.map((course) => course.source),
     ...plan.pairings.map((pairing) => pairing.source),
     ...plan.soundtrack.flatMap((track) => [

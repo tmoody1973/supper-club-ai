@@ -804,6 +804,41 @@ html[data-theme="dark"] .mobile-receipts-jump {
   line-height: 1.45;
 }
 
+.book-briefing-peek {
+  margin: 18px 0 0;
+  border-top: 1px dotted var(--rule-strong);
+  border-bottom: 1px dotted var(--rule-strong);
+}
+
+.book-briefing-peek summary {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 11px 0;
+  color: var(--signal-dark);
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.book-briefing-peek summary::marker { color: var(--signal); }
+
+.book-briefing-peek summary span {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 8px;
+}
+
+.book-briefing-peek p {
+  margin: 0 0 13px;
+  font-family: var(--serif);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 .host-facts {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1255,6 +1290,196 @@ html[data-theme="dark"] .mobile-receipts-jump {
   font-family: var(--serif);
   font-size: 14px;
   line-height: 1.5;
+}
+
+.cultural-plate--reading {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+  padding: 0;
+  border: 0;
+}
+
+.book-dossier {
+  border: 1px solid var(--rule-strong);
+  background: color-mix(in srgb, var(--paper) 94%, var(--seed) 6%);
+}
+
+.book-dossier__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 26px 19px;
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+.book-dossier__header h2 {
+  max-width: 760px;
+  margin: 7px 0 0;
+  font-size: clamp(31px, 4vw, 54px);
+  line-height: 0.98;
+}
+
+.book-dossier__header h2 em { font-weight: 400; }
+
+.book-byline {
+  margin: 11px 0 0;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.book-dossier__stamp {
+  flex: 0 0 auto;
+  padding: 7px 9px;
+  border: 1px solid var(--signal);
+  color: var(--signal-dark);
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transform: rotate(1.5deg);
+}
+
+.book-dossier__summary {
+  max-width: 940px;
+  margin: 0;
+  padding: 25px 26px 28px;
+  font-family: var(--serif);
+  font-size: clamp(19px, 2.1vw, 27px);
+  line-height: 1.42;
+}
+
+.book-dossier__facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.book-dossier__facts section {
+  min-width: 0;
+  padding: 17px 26px 19px;
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.book-dossier__facts section:nth-child(2n) { border-right: 0; }
+.book-dossier__facts section:nth-last-child(-n + 2) { border-bottom: 0; }
+
+.book-dossier__facts span,
+.book-sources > span {
+  color: var(--signal);
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.book-dossier__facts p {
+  margin: 8px 0 0;
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.book-dossier__themes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding: 18px 26px 0;
+}
+
+.book-dossier__themes span {
+  padding: 6px 8px;
+  background: var(--seed);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 9px;
+  text-transform: uppercase;
+}
+
+.book-dossier__notes {
+  display: flex;
+  gap: 10px;
+  margin: 18px 26px 0;
+  padding: 11px 13px;
+  border: 1px solid var(--signal);
+  color: var(--signal-dark);
+  font-family: var(--serif);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.book-dossier__notes svg { flex: 0 0 auto; }
+.book-dossier__notes strong { display: block; font-family: var(--mono); font-size: 9px; text-transform: uppercase; }
+
+.book-prompts {
+  margin: 24px 26px 0;
+  padding-top: 18px;
+  border-top: 1px dotted var(--rule-strong);
+}
+
+.book-prompts ol {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 28px;
+  margin: 13px 0 0;
+  padding: 0;
+  counter-reset: book-prompt;
+  list-style: none;
+}
+
+.book-prompts li {
+  position: relative;
+  padding: 12px 0 12px 32px;
+  border-top: 1px solid var(--rule);
+  font-family: var(--serif);
+  font-size: 14px;
+  line-height: 1.45;
+  counter-increment: book-prompt;
+}
+
+.book-prompts li::before {
+  position: absolute;
+  top: 13px;
+  left: 0;
+  color: var(--signal);
+  content: counter(book-prompt, decimal-leading-zero);
+  font-family: var(--mono);
+  font-size: 10px;
+}
+
+.book-sources {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 15px;
+  margin-top: 18px;
+  padding: 15px 26px;
+  border-top: 1px solid var(--rule-strong);
+  background: color-mix(in srgb, var(--paper-deep) 78%, transparent);
+}
+
+.book-sources a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 9px;
+  text-decoration-color: var(--signal);
+  text-underline-offset: 3px;
+}
+
+.book-sources small {
+  margin-left: auto;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 8px;
+  text-transform: uppercase;
 }
 
 .theme-grid {
@@ -3591,6 +3816,34 @@ html[data-theme="dark"] .mobile-receipts-jump {
     border-left: 0;
     border-right: 0;
   }
+
+  .book-dossier__header {
+    display: grid;
+    padding: 20px 18px 16px;
+  }
+
+  .book-dossier__stamp { justify-self: start; }
+  .book-dossier__summary { padding: 20px 18px; }
+
+  .book-dossier__facts,
+  .book-prompts ol {
+    grid-template-columns: 1fr;
+  }
+
+  .book-dossier__facts section,
+  .book-dossier__facts section:nth-child(2n),
+  .book-dossier__facts section:nth-last-child(-n + 2) {
+    padding: 15px 18px;
+    border-right: 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .book-dossier__facts section:last-child { border-bottom: 0; }
+  .book-dossier__themes { padding: 16px 18px 0; }
+  .book-dossier__notes { margin: 16px 18px 0; }
+  .book-prompts { margin: 20px 18px 0; }
+  .book-sources { align-items: flex-start; padding: 14px 18px; }
+  .book-sources small { width: 100%; margin-left: 0; }
 
   .support-view,
   .packet-view {

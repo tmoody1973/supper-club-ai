@@ -235,6 +235,7 @@ export async function buildDynamicPartyPlan(
       ideas: themeResult.data.ideas,
       source: themeResult.data.source,
       creativeBrief: themeResult.data.creativeBrief,
+      bookBriefing: themeResult.data.bookBriefing,
       copyrightNotice:
         "This plan uses original thematic interpretation and bibliographic metadata. It does not reproduce the source work or imply endorsement by its creator or estate.",
     },

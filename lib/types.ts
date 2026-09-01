@@ -244,6 +244,20 @@ export type Movement = {
   status: "SET" | "EDITING" | "DRAFT";
 };
 
+export type BookBriefing = {
+  spoilerLevel: "LIGHT";
+  summary: string;
+  authorNote: string;
+  publicationDetails: string;
+  setting: string;
+  themes: string[];
+  hostingConnection: string;
+  contentNotes: string[];
+  conversationPrompts: string[];
+  sources: SourceRef[];
+  provider: "Perplexity Agent API" | "Reviewed book catalog";
+};
+
 export type ShoppingItem = {
   itemId: string;
   label: string;
@@ -294,6 +308,7 @@ export type PartyPlan = {
     source: SourceRef;
     copyrightNotice: string;
     creativeBrief?: CreativeBrief;
+    bookBriefing?: BookBriefing;
   };
   movements: Movement[];
   courses: MenuCourse[];

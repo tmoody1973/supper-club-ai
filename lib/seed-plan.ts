@@ -280,6 +280,23 @@ export const makeSeedPlan = (): PartyPlan => {
         tone: "HOPEFUL",
         provenance: "REVIEWED_CATALOG",
       }),
+      bookBriefing: {
+        spoilerLevel: "LIGHT",
+        summary: book.summary,
+        authorNote: "Octavia E. Butler is the credited author of Parable of the Sower.",
+        publicationDetails: `First published in ${book.publicationYear}. ${book.subjects.slice(0, 3).join(" · ")}`,
+        setting: "A near-future California strained by ecological disruption and social breakdown.",
+        themes: book.themes.slice(0, 6).map((theme) => theme.theme),
+        hostingConnection: "Seeds, shared provisions, and adaptable dishes turn the novel’s concerns with change and mutual care into hospitable prompts—not a reenactment of the story.",
+        contentNotes: ["Climate crisis", "Community violence", "Displacement and survival"],
+        conversationPrompts: [
+          "What makes a community resilient without making it closed to others?",
+          "Which everyday practice helps people adapt to change with care?",
+          "What would you want a hopeful future to preserve from the present?",
+        ],
+        sources: [source(book.sourceRefs[0])],
+        provider: "Reviewed book catalog",
+      },
     },
     movements: [
       {

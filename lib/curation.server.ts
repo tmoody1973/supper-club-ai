@@ -9,6 +9,7 @@ import {
 } from "@/lib/creative-brief";
 import { curatePairingsWithFallback } from "@/lib/pairing-engine.server";
 import { discoverMenuCoursesWithPerplexity } from "@/lib/perplexity-recipes.server";
+import { researchBookBriefingWithPerplexity } from "@/lib/perplexity-book.server";
 import {
   discoverSoundtrackWithPerplexity,
   type PerplexitySoundtrackCandidate,
@@ -27,6 +28,7 @@ import type {
 } from "@/lib/curation-contracts";
 import type {
   CreativeBrief,
+  BookBriefing,
   MenuCourse,
   SourceRef,
   ThemeIdea,
@@ -39,6 +41,7 @@ import type {
 type BookRecord = {
   title: string;
   authors: string[];
+  publicationYear?: number;
   summary?: string;
   subjects?: string[];
   themes: Array<{
@@ -50,6 +53,30 @@ type BookRecord = {
   sourceRefs: SourceRef[];
   isbns?: { isbn13?: string };
   externalIds?: { openLibraryWorkId?: string };
+};
+
+const reviewedBookBriefing = (book: BookRecord): BookBriefing | undefined => {
+  const source = book.sourceRefs[0];
+  if (!source || !book.summary) return undefined;
+  const prompts = book.themes
+    .flatMap((theme) => theme.experienceIdeas)
+    .filter(Boolean)
+    .slice(0, 4);
+  return {
+    spoilerLevel: "LIGHT",
+    summary: book.summary,
+    authorNote: `${book.authors.join(", ")} is the credited author of ${book.title}.`,
+    publicationDetails: [book.publicationYear ? `First published in ${book.publicationYear}.` : "", book.subjects?.slice(0, 3).join(" · ")]
+      .filter(Boolean)
+      .join(" "),
+    setting: book.summary.split(/(?<=[.!?])\s/)[0] ?? book.summary,
+    themes: book.themes.map((theme) => theme.theme).slice(0, 6),
+    hostingConnection: `The dinner uses ${book.themes.slice(0, 3).map((theme) => theme.theme.toLowerCase()).join(", ")} as prompts for atmosphere, hospitality, and conversation rather than reenacting the story.`,
+    contentNotes: [],
+    conversationPrompts: prompts.length >= 3 ? prompts : book.themes.slice(0, 3).map((theme) => `Where do you notice ${theme.theme.toLowerCase()} shaping everyday community life?`),
+    sources: [source],
+    provider: "Reviewed book catalog",
+  };
 };
 
 type RecipeRecord = {
@@ -439,7 +466,21 @@ async function researchTheme(
       sourceUrl: localBook.sourceRefs[0]?.url ?? editorialSource.url,
       isbn13: localBook.isbns?.isbn13,
     }) : undefined,
+    bookBriefing: localBook ? reviewedBookBriefing(localBook) : undefined,
   };
+
+  let bookBriefing = base.bookBriefing;
+  let bookBriefingWarning: ToolWarning | undefined;
+  try {
+    bookBriefing = await researchBookBriefingWithPerplexity({
+      title: request.inspiration.title,
+      author: request.inspiration.author,
+      signal,
+    });
+  } catch (error) {
+    const reason = error instanceof Error ? error.message : "provider unavailable";
+    bookBriefingWarning = fallbackWarning("Perplexity book research", reason);
+  }
 
   try {
     const url = new URL("https://openlibrary.org/search.json");
@@ -462,10 +503,13 @@ async function researchTheme(
     return {
       ok: true,
       mode: "HYBRID",
-      provider: "Open Library + reviewed theme catalog",
+      provider: bookBriefing?.provider === "Perplexity Agent API"
+        ? "Open Library + Perplexity Agent API + reviewed theme catalog"
+        : "Open Library + reviewed theme catalog",
       data: {
         ...base,
         source,
+        bookBriefing,
         bookCover: openLibraryCover({
           title: book.title,
           author: book.author_name?.join(", ") ?? request.inspiration.author,
@@ -474,9 +518,9 @@ async function researchTheme(
           editionKey: book.cover_edition_key,
         }) ?? base.bookCover,
       },
-      sources: [source, ...reviewedThemeSources].filter((item, index, items) =>
+      sources: [source, ...reviewedThemeSources, ...(bookBriefing?.sources ?? [])].filter((item, index, items) =>
         items.findIndex((candidate) => candidate.sourceId === item.sourceId) === index),
-      warnings: [],
+      warnings: bookBriefingWarning ? [bookBriefingWarning] : [],
     };
   } catch (error) {
     const reason = error instanceof Error ? error.message : "provider unavailable";
@@ -484,10 +528,10 @@ async function researchTheme(
       ok: true,
       mode: "LOCAL_FALLBACK",
       provider: "Reviewed book catalog",
-      data: base,
-      sources: [base.source, ...reviewedThemeSources].filter((item, index, items) =>
+      data: { ...base, bookBriefing },
+      sources: [base.source, ...reviewedThemeSources, ...(bookBriefing?.sources ?? [])].filter((item, index, items) =>
         items.findIndex((candidate) => candidate.sourceId === item.sourceId) === index),
-      warnings: [fallbackWarning("Open Library", reason)],
+      warnings: [fallbackWarning("Open Library", reason), ...(bookBriefingWarning ? [bookBriefingWarning] : [])],
     };
   }
 }

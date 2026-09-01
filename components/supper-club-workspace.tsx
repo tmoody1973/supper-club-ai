@@ -1055,6 +1055,12 @@ function RunOfShow({
           <div className="earthseed-seal"><ThemeSeal title={plan.inspiration.title} author={plan.inspiration.author} /></div>
         </div>
         <p>{plan.theme.framing}</p>
+        {plan.theme.bookBriefing ? (
+          <details className="book-briefing-peek">
+            <summary><BookOpen size={14} /> About the book <span>Spoiler-light</span></summary>
+            <p>{plan.theme.bookBriefing.summary}</p>
+          </details>
+        ) : null}
         <dl className="host-facts">
           <div><dt>Guests</dt><dd>{plan.guestCount}</dd></div>
           <div><dt>Starts</dt><dd>{plan.eventTime}</dd></div>
@@ -1160,9 +1166,51 @@ function CulturalPlate({
   refreshingMusic: boolean;
 }) {
   if (movementId === "movement-reading") {
+    const briefing = plan.theme.bookBriefing;
     return (
-      <div className="cultural-plate">
-        <div><span className="field-label">Reading connection</span><h2>{plan.inspiration.title}</h2><p>{plan.theme.framing}</p></div>
+      <div className="cultural-plate cultural-plate--reading">
+        <article className="book-dossier">
+          <header className="book-dossier__header">
+            <div>
+              <span className="field-label">Book briefing · spoiler-light</span>
+              <h2>About <em>{plan.inspiration.title}</em></h2>
+              <p className="book-byline">By {plan.inspiration.author}</p>
+            </div>
+            <span className="book-dossier__stamp">Original summary</span>
+          </header>
+          {briefing ? (
+            <>
+              <p className="book-dossier__summary">{briefing.summary}</p>
+              <div className="book-dossier__facts">
+                <section><span>Setting</span><p>{briefing.setting}</p></section>
+                <section><span>Publication</span><p>{briefing.publicationDetails}</p></section>
+                <section><span>Author note</span><p>{briefing.authorNote}</p></section>
+                <section><span>Why it belongs at the table</span><p>{briefing.hostingConnection}</p></section>
+              </div>
+              <div className="book-dossier__themes" aria-label="Book themes">
+                {briefing.themes.map((theme) => <span key={theme}>{theme}</span>)}
+              </div>
+              {briefing.contentNotes.length ? (
+                <div className="book-dossier__notes"><CircleAlert size={16} /><span><strong>General content notes</strong>{briefing.contentNotes.join(" · ")}</span></div>
+              ) : null}
+              <section className="book-prompts">
+                <span className="field-label">Conversation starters</span>
+                <ol>{briefing.conversationPrompts.map((prompt) => <li key={prompt}>{prompt}</li>)}</ol>
+              </section>
+              <nav className="book-sources" aria-label="Book briefing sources">
+                <span>Research trail</span>
+                {briefing.sources.slice(0, 4).map((source, index) => (
+                  <a key={source.sourceId} href={source.url} target="_blank" rel="noreferrer">
+                    {String(index + 1).padStart(2, "0")} / {source.title} <ExternalLink size={11} aria-hidden="true" />
+                  </a>
+                ))}
+                <small>{briefing.provider}</small>
+              </nav>
+            </>
+          ) : (
+            <p className="book-dossier__summary">{plan.theme.framing}</p>
+          )}
+        </article>
         <div className="theme-grid">{plan.theme.ideas.map((idea) => <article key={idea.themeId}><strong>{idea.name}</strong><p>{idea.interpretation}</p></article>)}</div>
         <div className="rights-banner"><CircleAlert size={17} /> No copyrighted passage is stored or displayed. The host supplies any reading they have the right to use.</div>
       </div>
@@ -1456,6 +1504,7 @@ function HostPacketReview({
 }) {
   const checks = [
     { label: "Theme framing", ready: plan.theme.ideas.length > 0, detail: `${plan.theme.ideas.length} interpreted themes` },
+    { label: "Book briefing", ready: Boolean(plan.theme.bookBriefing?.summary), detail: plan.theme.bookBriefing ? `Spoiler-light · ${plan.theme.bookBriefing.sources.length} research sources` : "Summary and context not researched yet" },
     { label: "Menu", ready: plan.courses.length === 3, detail: `${plan.courses.length} food courses` },
     { label: "Drink pairings", ready: plan.pairings.length >= 6, detail: `${plan.pairings.length} wine + zero-proof options` },
     { label: "Soundtrack", ready: plan.soundtrack.length >= 4, detail: `${plan.soundtrack.length} listening anchors` },
@@ -1467,7 +1516,7 @@ function HostPacketReview({
       <div className="packet-grid">
         <section className="packet-preview">
           <div className="packet-cover"><span>Supper Club AI · Issue 0052</span><SalonMark size={35} /><h2>{plan.title}</h2><p>A dinner in six movements inspired by <em>{plan.inspiration.title}</em>.</p><dl><div><dt>Date</dt><dd>{formatDate(plan.eventDate)}</dd></div><div><dt>Guests</dt><dd>{plan.guestCount}</dd></div><div><dt>Starts</dt><dd>{plan.eventTime}</dd></div></dl></div>
-          <div className="packet-pages"><span>01</span><span>02</span><span>03</span><span>04</span><p>Overview · run of show · menu and pairings · shopping · prep · safety notes</p></div>
+          <div className="packet-pages"><span>01</span><span>02</span><span>03</span><span>04</span><p>Overview · book briefing · run of show · menu and pairings · shopping · prep · safety notes</p></div>
         </section>
         <section className="review-ledger">
           <div className="sheet-title"><ListChecks size={20} /><h2>Preflight</h2><span>v{plan.planVersion}</span></div>

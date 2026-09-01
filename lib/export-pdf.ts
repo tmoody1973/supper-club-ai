@@ -62,6 +62,19 @@ export async function downloadHostPacket(plan: PartyPlan) {
   rule();
   body(plan.theme.framing);
 
+  if (plan.theme.bookBriefing) {
+    const briefing = plan.theme.bookBriefing;
+    heading("About the book · spoiler-light");
+    body(briefing.summary);
+    body(`Setting: ${briefing.setting}`);
+    body(`Publication: ${briefing.publicationDetails}`);
+    body(`Why it belongs at the table: ${briefing.hostingConnection}`);
+    if (briefing.contentNotes.length) body(`General content notes: ${briefing.contentNotes.join(" · ")}`);
+    heading("Conversation starters", 12);
+    briefing.conversationPrompts.forEach((prompt, index) => body(`${index + 1}. ${prompt}`, { indent: 12 }));
+    body(`Research sources: ${briefing.sources.map((source) => source.title).join(" · ")}`, { color: [90, 89, 78] });
+  }
+
   heading("The evening in six movements");
   plan.movements.forEach((movement) => {
     ensureSpace(40);

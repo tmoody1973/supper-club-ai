@@ -1,6 +1,7 @@
 import type {
   CreativeBrief,
   BookCover,
+  BookBriefing,
   MenuCourse,
   Pairing,
   SourceRef,
@@ -20,6 +21,7 @@ export type ThemeCurationData = {
   source: SourceRef;
   creativeBrief: CreativeBrief;
   bookCover?: BookCover;
+  bookBriefing?: BookBriefing;
 };
 
 export type MenuCurationData = {
