@@ -25,6 +25,7 @@ import {
   Wine,
   X,
 } from "lucide-react";
+import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { downloadHostPacket } from "@/lib/export-pdf";
 import {
@@ -470,6 +471,7 @@ export function SupperClubWorkspace() {
           <span className="brand-context">Creative Host Workspace</span>
         </div>
         <div className="topbar-meta">
+          <Link className="about-link" href="/about">About / how to use</Link>
           <span className="issue-label">Issue 0052</span>
           <span className="plan-state">{plan.status === "FINALIZED" ? "Finalized" : "Plan editing"}</span>
           <span className="last-saved"><small>Last saved</small><strong>Today {formatLastSaved(plan.updatedAt)}</strong></span>
