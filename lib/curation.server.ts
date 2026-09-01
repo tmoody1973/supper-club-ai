@@ -6,7 +6,7 @@ import {
   buildCreativeBrief,
   themeIdeaFromVocabulary,
 } from "@/lib/creative-brief";
-import { curatePairingsFromCatalog } from "@/lib/pairing-engine.server";
+import { curatePairingsWithFallback } from "@/lib/pairing-engine.server";
 import { courseFromRecipe } from "@/lib/seed-plan";
 import type {
   CurationRequest,
@@ -523,8 +523,9 @@ async function curateMenu(
 
 async function curatePairings(
   request: Extract<CurationRequest, { action: "CURATE_PAIRINGS" }>,
+  signal: AbortSignal,
 ): Promise<CurationResponse<PairingCurationData>> {
-  return curatePairingsFromCatalog(request);
+  return curatePairingsWithFallback(request, signal);
 }
 
 type SoundtrackSeed = { title: string; artist: string; moment: string };
@@ -744,6 +745,7 @@ export function providerStatus(): ProviderStatus[] {
   return [
     { provider: "Open Library", configured: true, mode: "LIVE" },
     { provider: "Spoonacular", configured: Boolean(process.env.SPOONACULAR_API_KEY), mode: "LIVE" },
+    { provider: "GrapeMinds", configured: Boolean(process.env.GRAPEMINDS_API_KEY), mode: "LIVE" },
     { provider: "X-Wines", configured: true, mode: "LOCAL" },
     { provider: "Reviewed zero-proof catalog", configured: true, mode: "LOCAL" },
     { provider: "Apple Music", configured: Boolean(process.env.APPLE_MUSIC_DEVELOPER_TOKEN), mode: "LIVE" },
@@ -761,7 +763,7 @@ export async function curate(
     case "CURATE_MENU":
       return curateMenu(request, signal);
     case "CURATE_PAIRINGS":
-      return curatePairings(request);
+      return curatePairings(request, signal);
     case "CURATE_SOUNDTRACK":
       return curateSoundtrack(request, signal);
   }

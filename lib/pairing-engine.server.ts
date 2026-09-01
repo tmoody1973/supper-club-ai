@@ -2,6 +2,11 @@ import "server-only";
 
 import reviewedCatalog from "@/data/catalogs/wines.json";
 import xwinesCatalog from "@/data/catalogs/xwines-test.json";
+import {
+  listGrapeMindsWines,
+  type GrapeMindsWine,
+  type GrapeMindsWineQuery,
+} from "@/lib/grapeminds.server";
 import { pairingFromBeverage } from "@/lib/seed-plan";
 import type { CurationRequest, CurationResponse, PairingCurationData } from "@/lib/curation-contracts";
 import type { CreativeBrief, MenuCourse, Pairing, SourceRef } from "@/lib/types";
@@ -134,6 +139,77 @@ const zeroProofScore = (
   return score;
 };
 
+const grapeMindsPreference = (
+  course: PairingRequest["courses"][number],
+  brief?: CreativeBrief,
+): GrapeMindsWineQuery => {
+  const text = `${course.title} ${(course.ingredients ?? []).join(" ")}`.toLowerCase();
+  if (course.role === "DESSERT") return { color: "white", perPage: 30 };
+  if (course.role === "STARTER") {
+    return {
+      color: brief?.themes.includes("IMAGINED_FUTURES") ? "rose" : "white",
+      perPage: 30,
+    };
+  }
+  return {
+    color: /mushroom|tomato|pepper|smok|char|bean|lentil/.test(text) ? "red" : "white",
+    perPage: 30,
+  };
+};
+
+const grapeMindsScore = (
+  wine: GrapeMindsWine,
+  course: PairingRequest["courses"][number],
+  brief?: CreativeBrief,
+) => {
+  const sugar = wine.residualSugar?.toLowerCase() ?? "";
+  let score = 1;
+  if (course.role === "STARTER" && wine.subType === "sparkling") score += 8;
+  if (course.role === "MAIN" && wine.subType === "still") score += 4;
+  if (course.role === "DESSERT") {
+    if (/sweet|dessert|lieblich|sü|doux|dolce|moelleux|medium/.test(sugar)) score += 12;
+    if (/dry|trocken|brut|secco/.test(sugar)) score -= 6;
+  } else if (/dry|trocken|brut|secco/.test(sugar)) {
+    score += 4;
+  }
+  if (brief?.themes.includes("IMAGINED_FUTURES") && wine.subType === "sparkling") score += 3;
+  return score;
+};
+
+const grapeMindsPairing = (
+  wine: GrapeMindsWine,
+  course: PairingRequest["courses"][number],
+  brief?: CreativeBrief,
+): Pairing => {
+  const signals = [...courseSignals(course, brief)].slice(0, 3);
+  const place = [wine.regionName, wine.country].filter(Boolean).join(", ");
+  const style = [wine.residualSugar, wine.color, wine.subType, place].filter(Boolean).join(" · ");
+  const source: SourceRef = {
+    sourceId: `src-grapeminds-${wine.id}`,
+    provider: "GrapeMinds",
+    title: wine.displayName,
+    url: "https://grapeminds.eu/wine-api",
+    accessedAt: new Date().toISOString(),
+    attribution: "Live producer, region, color, style, and sweetness metadata supplied by GrapeMinds; pairing rationale is original Supper Club AI analysis.",
+    licenseNote: "Used for live discovery without building a persistent local dataset. No price, inventory, vintage availability, review, or endorsement is claimed.",
+  };
+  return {
+    pairingId: `pair-${course.courseId}-grapeminds-${wine.id}`,
+    courseId: course.courseId,
+    kind: "WINE",
+    name: wine.displayName,
+    style: style || `${wine.color} wine`,
+    tastingNotes: [
+      wine.residualSugar ? `${wine.residualSugar} style` : `${wine.color} wine`,
+      wine.subType,
+      place ? `from ${place}` : "origin not supplied",
+    ],
+    pairingReason: `${wine.color} ${wine.subType} structure was selected for ${signals.join(", ") || course.title.toLowerCase()}; confirm the exact bottle and vintage before serving.`,
+    sourceId: source.sourceId,
+    source,
+  };
+};
+
 export function curatePairingsFromCatalog(
   request: PairingRequest,
 ): CurationResponse<PairingCurationData> {
@@ -178,4 +254,78 @@ export function curatePairingsFromCatalog(
       message: "Wine candidates come from the 100-record CC0 X-Wines test subset. Confirm the bottle, vintage, price, and availability before serving.",
     }],
   };
+}
+
+export async function curatePairingsWithFallback(
+  request: PairingRequest,
+  signal: AbortSignal,
+): Promise<CurationResponse<PairingCurationData>> {
+  if (!request.includeWine || !process.env.GRAPEMINDS_API_KEY) {
+    const fallback = curatePairingsFromCatalog(request);
+    if (request.includeWine && !process.env.GRAPEMINDS_API_KEY) {
+      fallback.warnings.unshift({
+        code: "PROVIDER_FALLBACK",
+        message: "GrapeMinds was not used (GRAPEMINDS_API_KEY is not configured). Supper Club AI used X-Wines instead.",
+      });
+    }
+    return fallback;
+  }
+
+  try {
+    const preferences = request.courses
+      .filter((course) => course.role !== "DESSERT")
+      .map((course) => ({
+        course,
+        query: grapeMindsPreference(course, request.creativeBrief),
+      }));
+    const uniqueQueries = new Map<string, GrapeMindsWineQuery>();
+    preferences.forEach(({ query }) => uniqueQueries.set(`${query.color}:${query.subType ?? "any"}`, query));
+    const lists = new Map<string, GrapeMindsWine[]>();
+    await Promise.all([...uniqueQueries.entries()].map(async ([key, query]) => {
+      lists.set(key, await listGrapeMindsWines(query, signal));
+    }));
+
+    const used = new Set<number>();
+    const liveWines = new Map<string, Pairing>();
+    for (const { course, query } of preferences) {
+      const key = `${query.color}:${query.subType ?? "any"}`;
+      const candidate = [...(lists.get(key) ?? [])]
+        .filter((wine) => !used.has(wine.id))
+        .sort((left, right) =>
+          grapeMindsScore(right, course, request.creativeBrief) -
+          grapeMindsScore(left, course, request.creativeBrief))[0];
+      if (!candidate) throw new Error(`No usable ${course.role.toLowerCase()} wine was returned.`);
+      used.add(candidate.id);
+      liveWines.set(course.courseId, grapeMindsPairing(candidate, course, request.creativeBrief));
+    }
+
+    const localFallback = curatePairingsFromCatalog(request);
+    const pairings = request.courses.flatMap((course) => [
+      liveWines.get(course.courseId) ?? localFallback.data.pairings.find((pairing) =>
+        pairing.courseId === course.courseId && pairing.kind === "WINE"),
+      ...localFallback.data.pairings.filter((pairing) =>
+        pairing.courseId === course.courseId && pairing.kind === "ZERO_PROOF"),
+    ].filter((pairing): pairing is Pairing => Boolean(pairing)));
+    return {
+      ok: true,
+      mode: "HYBRID",
+      provider: request.includeZeroProof
+        ? "GrapeMinds + X-Wines + reviewed zero-proof catalog"
+        : "GrapeMinds + X-Wines",
+      data: { pairings },
+      sources: pairings.map((pairing) => pairing.source),
+      warnings: [{
+        code: "GRAPEMINDS_LIVE_REVIEW",
+        message: "Starter and main-course wine metadata was retrieved live from GrapeMinds. Dessert wine uses X-Wines because the live list did not supply verifiable sweetness. Confirm every bottle, vintage, allergen, price, and availability before serving.",
+      }],
+    };
+  } catch (error) {
+    const fallback = curatePairingsFromCatalog(request);
+    const reason = error instanceof Error ? error.message : "provider unavailable";
+    fallback.warnings.unshift({
+      code: "PROVIDER_FALLBACK",
+      message: `GrapeMinds was not used (${reason}). Supper Club AI used X-Wines instead.`,
+    });
+    return fallback;
+  }
 }

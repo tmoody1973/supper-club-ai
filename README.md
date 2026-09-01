@@ -16,10 +16,13 @@ Open `http://localhost:3000`.
 
 Provider credentials are optional during development. Open Library and the reviewed local catalogs work without keys; missing recipe or music credentials produce explicit local-fallback receipts.
 
+Wine pairing uses live GrapeMinds metadata when `GRAPEMINDS_API_KEY` is configured, the CC0 X-Wines subset as an automatic fallback, and a reviewed local catalog for zero-proof drinks. GrapeMinds records are used for live discovery and are not copied into a persistent local dataset.
+
 ## Provider configuration
 
 ```env
 SPOONACULAR_API_KEY=
+GRAPEMINDS_API_KEY=
 APPLE_MUSIC_DEVELOPER_TOKEN=
 DISCOGS_TOKEN=
 DISCOGS_USER_AGENT=SupperClubAI/0.1

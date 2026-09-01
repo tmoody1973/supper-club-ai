@@ -89,7 +89,7 @@ export type CurationErrorResponse = {
 };
 
 export type ProviderStatus = {
-  provider: "Open Library" | "Spoonacular" | "X-Wines" | "Reviewed zero-proof catalog" | "Apple Music" | "Discogs";
+  provider: "Open Library" | "Spoonacular" | "GrapeMinds" | "X-Wines" | "Reviewed zero-proof catalog" | "Apple Music" | "Discogs";
   configured: boolean;
   mode: "LIVE" | "LOCAL" | "OPTIONAL_ENRICHMENT";
 };
