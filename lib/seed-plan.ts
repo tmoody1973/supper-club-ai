@@ -25,19 +25,23 @@ type RecipeRecord = {
   id: string;
   title: string;
   summary: string;
+  courseRoles: MenuCourse["role"][];
+  culturalTraditions: string[];
   servings: number;
   times: { prepMinutes: number; cookMinutes: number; totalMinutes: number };
   ingredients: Array<{
     ingredientId: string;
     name: string;
+    canonicalName?: string;
     quantityText: string;
+    normalizedQuantity?: { value: number; unit: string };
     category: string;
     isOptional: boolean;
   }>;
   instructions: { sourceUrl: string };
   dietaryTags: string[];
   allergens: string[];
-  themeConnections: Array<{ explanation: string; sourceIds: string[] }>;
+  themeConnections: Array<{ theme?: string; explanation: string; sourceIds: string[] }>;
   sourceRefs: CatalogSource[];
 };
 
@@ -238,6 +242,12 @@ export const makeSeedPlan = (): PartyPlan => {
       type: "BOOK",
       title: "Parable of the Sower",
       author: "Octavia E. Butler",
+      cover: {
+        imageUrl: "https://covers.openlibrary.org/b/isbn/9780941423991-L.jpg?default=false",
+        sourceUrl: "https://openlibrary.org/works/OL35623W/Parable_of_the_Sower",
+        alt: "Cover of Parable of the Sower by Octavia E. Butler",
+        attribution: "Cover image delivered by Open Library; rights remain with the respective rights holder.",
+      },
     },
     hostName: "Creative Host",
     location: "Milwaukee, WI",

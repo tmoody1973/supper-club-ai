@@ -26,7 +26,9 @@ import type { WebMCPTool } from "@/types/webmcp";
 type ToolRuntime = {
   getPlan: () => PartyPlan;
   setPlan: (plan: PartyPlan) => Promise<void> | void;
+  syncPlan: (plan: PartyPlan) => void;
   exportHostPacket: (plan: PartyPlan) => Promise<{ filename: string }>;
+  showToolData?: (operation: string, data: unknown) => void;
 };
 
 type RegisteredTools = {
@@ -103,6 +105,42 @@ const checkVersion = (plan: PartyPlan, input: Record<string, unknown>) => {
     );
   }
   return null;
+};
+
+type PlanToolResponse = {
+  ok?: boolean;
+  plan?: PartyPlan;
+  planId?: string;
+  planVersion?: number;
+  data?: unknown;
+  error?: { code?: ToolFailure["error"]["code"]; message?: string; details?: Record<string, unknown> };
+};
+
+const requestPlanTool = async (
+  plan: PartyPlan,
+  operation: string,
+  input: Record<string, unknown>,
+  signal: AbortSignal,
+) => {
+  const response = await fetch(`/api/plans/${encodeURIComponent(plan.planId)}/tools`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ operation, ...input }),
+    signal,
+  });
+  const payload = await response.json() as PlanToolResponse;
+  if (!response.ok || !payload.ok) {
+    return {
+      result: failure(
+        plan,
+        payload.error?.code ?? "SOURCE_UNAVAILABLE",
+        payload.error?.message ?? `The plan tool returned ${response.status}.`,
+        response.status >= 500,
+        payload.error?.details,
+      ),
+    };
+  }
+  return { payload };
 };
 
 const mergeWarnings = (...groups: ToolWarning[][]) => [
@@ -186,6 +224,37 @@ export async function registerSupperClubTools(
   controller = new AbortController(),
 ): Promise<RegisteredTools | null> {
   if (!document.modelContext) return null;
+  const runReadOperation = async (
+    operation: string,
+    input: Record<string, unknown>,
+    signal: AbortSignal,
+    sections: PartySection[],
+    summary: string,
+  ) => {
+    const plan = runtime.getPlan();
+    if (input.planId !== plan.planId) return failure(plan, "PLAN_NOT_FOUND", "That plan is not open.");
+    const response = await requestPlanTool(plan, operation, input, signal);
+    if (response.result) return response.result;
+    runtime.showToolData?.(operation, response.payload?.data);
+    return success(plan, sections, response.payload?.data, summary, { updated: false });
+  };
+  const runMutationOperation = async (
+    operation: string,
+    input: Record<string, unknown>,
+    signal: AbortSignal,
+    sections: PartySection[],
+    summary: string,
+  ) => {
+    const plan = runtime.getPlan();
+    if (input.planId !== plan.planId) return failure(plan, "PLAN_NOT_FOUND", "That plan is not open.");
+    const versionError = checkVersion(plan, input);
+    if (versionError) return versionError;
+    const response = await requestPlanTool(plan, operation, input, signal);
+    if (response.result) return response.result;
+    if (!response.payload?.plan) return failure(plan, "SOURCE_UNAVAILABLE", "The plan tool did not return the updated plan.", true);
+    runtime.syncPlan(response.payload.plan);
+    return success(response.payload.plan, sections, response.payload.data, summary);
+  };
   const tools: WebMCPTool[] = [
     tool({
       name: "get_party_plan",
@@ -377,10 +446,12 @@ export async function registerSupperClubTools(
         if (currentVersionError) return currentVersionError;
         const next = structuredClone(current);
         next.tone = input.tone as PartyPlan["tone"];
+        const { bookCover, ...themeData } = curation.data;
         next.theme = {
           ...current.theme,
-          ...curation.data,
+          ...themeData,
         };
+        if (bookCover) next.inspiration.cover = bookCover;
         const committed = await commit(
           runtime,
           current,
@@ -756,6 +827,218 @@ export async function registerSupperClubTools(
           },
         );
       },
+    }),
+    tool({
+      name: "find_grocery_stores",
+      title: "Find grocery stores",
+      description: "Find nearby Kroger-family stores by ZIP code so the host can choose which location's prices to use.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          planId: { type: "string" },
+          zipCode: { type: "string", pattern: "^\\d{5}$" },
+          radiusInMiles: { type: "integer", minimum: 1, maximum: 25 },
+          limit: { type: "integer", minimum: 1, maximum: 5 },
+        },
+        required: ["planId", "zipCode"],
+        additionalProperties: false,
+      },
+      annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true, untrustedContentHint: true },
+      execute: (input, options) => runReadOperation("FIND_GROCERY_STORES", input, options.signal, ["SHOPPING_LIST"], "Returned nearby Kroger-family stores for host selection."),
+    }),
+    tool({
+      name: "price_shopping_list",
+      title: "Price the shopping list",
+      description: "Estimate the current plan's grocery subtotal from location-specific Kroger package prices, with coverage, stock, confidence, and unpriced lines. Does not add items to a cart.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          planId: { type: "string" },
+          locationId: { type: "string", pattern: "^\\d{5,12}$" },
+          page: { type: "integer", minimum: 1, maximum: 20 },
+          pageSize: { type: "integer", minimum: 1, maximum: 5 },
+        },
+        required: ["planId", "locationId"],
+        additionalProperties: false,
+      },
+      annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true, untrustedContentHint: true },
+      execute: (input, options) => runReadOperation("PRICE_SHOPPING_LIST", input, options.signal, ["SHOPPING_LIST"], "Returned a location-specific Kroger basket estimate with explicit coverage and confidence."),
+    }),
+    tool({
+      name: "search_recipes",
+      title: "Search reviewed recipes",
+      description: "Find reviewed recipe alternatives for one course by theme, diet, preparation time, and budget preference without changing the plan.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          planId: { type: "string" },
+          role: { type: "string", enum: ["STARTER", "MAIN", "DESSERT"] },
+          query: { type: "string", maxLength: 160 },
+          dietaryRequirements: { type: "array", items: { type: "string" }, maxItems: 20 },
+          preparationMinutesMax: { type: "integer", minimum: 5, maximum: 720 },
+          courseBudgetCap: { type: "number", minimum: 0 },
+          limit: { type: "integer", minimum: 1, maximum: 3 },
+        },
+        required: ["planId", "role"],
+        additionalProperties: false,
+      },
+      annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+      execute: (input, options) => runReadOperation("SEARCH_RECIPES", input, options.signal, ["MENU"], "Returned reviewed recipe choices; current local prices remain unverified."),
+    }),
+    tool({
+      name: "set_menu_course",
+      title: "Select a menu course",
+      description: "Choose a specific reviewed recipe for one existing course; preserve all other courses and rebuild shopping and prep.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          planId: { type: "string" },
+          expectedPlanVersion: { type: "integer", minimum: 1 },
+          courseId: { type: "string" },
+          recipeId: { type: "string" },
+        },
+        required: ["planId", "expectedPlanVersion", "courseId", "recipeId"],
+        additionalProperties: false,
+      },
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
+      execute: (input, options) => runMutationOperation("SET_MENU_COURSE", input, options.signal, ["MENU", "PAIRINGS", "SHOPPING_LIST"], "Selected the requested course, reconciled shopping and prep, and marked its pairings for review."),
+    }),
+    tool({
+      name: "replace_menu_course",
+      title: "Replace one menu course",
+      description: "Replace only one course with a different reviewed recipe matching diet, theme, time, and budget preferences.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          planId: { type: "string" },
+          expectedPlanVersion: { type: "integer", minimum: 1 },
+          courseId: { type: "string" },
+          query: { type: "string", maxLength: 160 },
+          dietaryRequirements: { type: "array", items: { type: "string" }, maxItems: 20 },
+          preparationMinutesMax: { type: "integer", minimum: 5, maximum: 720 },
+          courseBudgetCap: { type: "number", minimum: 0 },
+        },
+        required: ["planId", "expectedPlanVersion", "courseId"],
+        additionalProperties: false,
+      },
+      annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: false },
+      execute: (input, options) => runMutationOperation("REPLACE_MENU_COURSE", input, options.signal, ["MENU", "PAIRINGS", "SHOPPING_LIST"], "Replaced only the requested course; other courses were preserved and dependent shopping and prep data were rebuilt."),
+    }),
+    tool({
+      name: "suggest_ingredient_substitutions",
+      title: "Suggest ingredient substitutions",
+      description: "Suggest host-reviewed ingredient swaps for allergies, diets, availability, or cost without changing the plan.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          planId: { type: "string" },
+          courseId: { type: "string" },
+          ingredientName: { type: "string" },
+          reason: { type: "string", enum: ["ALLERGY", "GLUTEN_FREE", "DAIRY_FREE", "VEGAN", "VEGETARIAN", "NUT_FREE", "AVAILABILITY", "COST"] },
+        },
+        required: ["planId"],
+        additionalProperties: false,
+      },
+      annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
+      execute: (input, options) => runReadOperation("SUGGEST_INGREDIENT_SUBSTITUTIONS", input, options.signal, ["MENU", "SHOPPING_LIST"], "Returned substitution ideas for host review; no ingredient was changed automatically."),
+    }),
+    tool({
+      name: "create_prep_timeline",
+      title: "Create a prep timeline",
+      description: "Turn the current recipes into a practical cooking schedule and save it to the shared plan.",
+      inputSchema: {
+        type: "object",
+        properties: { planId: { type: "string" }, expectedPlanVersion: { type: "integer", minimum: 1 } },
+        required: ["planId", "expectedPlanVersion"],
+        additionalProperties: false,
+      },
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
+      execute: (input, options) => runMutationOperation("CREATE_PREP_TIMELINE", input, options.signal, ["SHOPPING_LIST"], "Rebuilt the practical prep timeline from the current menu."),
+    }),
+    tool({
+      name: "search_wines",
+      title: "Search wine pairings",
+      description: "Find wine candidates for one course from reviewed catalogs and GrapeMinds when configured; exact bottles, prices, and stock require verification.",
+      inputSchema: {
+        type: "object",
+        properties: { planId: { type: "string" }, courseId: { type: "string" }, limit: { type: "integer", minimum: 1, maximum: 3 } },
+        required: ["planId", "courseId"],
+        additionalProperties: false,
+      },
+      annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true, untrustedContentHint: true },
+      execute: (input, options) => runReadOperation("SEARCH_WINES", input, options.signal, ["PAIRINGS"], "Returned wine candidates for host review; verify bottle, vintage, price, stock, and legal eligibility."),
+    }),
+    tool({
+      name: "set_wine_pairing",
+      title: "Select a wine pairing",
+      description: "Choose one searched wine candidate for a course and save it to the shared plan.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          planId: { type: "string" },
+          expectedPlanVersion: { type: "integer", minimum: 1 },
+          courseId: { type: "string" },
+          pairingId: { type: "string" },
+        },
+        required: ["planId", "expectedPlanVersion", "courseId", "pairingId"],
+        additionalProperties: false,
+      },
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: true, untrustedContentHint: true },
+      execute: (input, options) => runMutationOperation("SET_WINE_PAIRING", input, options.signal, ["PAIRINGS"], "Saved the selected wine pairing; verify bottle, vintage, price, and stock before serving."),
+    }),
+    tool({
+      name: "create_zero_proof_pairings",
+      title: "Create zero-proof pairings",
+      description: "Create and save a substantial non-alcoholic pairing for every current course.",
+      inputSchema: {
+        type: "object",
+        properties: { planId: { type: "string" }, expectedPlanVersion: { type: "integer", minimum: 1 } },
+        required: ["planId", "expectedPlanVersion"],
+        additionalProperties: false,
+      },
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
+      execute: (input, options) => runMutationOperation("CREATE_ZERO_PROOF_PAIRINGS", input, options.signal, ["PAIRINGS"], "Created a substantial zero-proof choice for each current course."),
+    }),
+    tool({
+      name: "search_music",
+      title: "Search Apple Music",
+      description: "Find live Apple Music track candidates with available artwork and audio previews without changing the plan.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          planId: { type: "string" },
+          query: { type: "string", minLength: 1, maxLength: 180 },
+          storefront: { type: "string", pattern: "^[A-Za-z]{2}$", default: "us" },
+          limit: { type: "integer", minimum: 1, maximum: 3 },
+        },
+        required: ["planId", "query", "storefront"],
+        additionalProperties: false,
+      },
+      annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true, untrustedContentHint: true },
+      execute: (input, options) => runReadOperation("SEARCH_MUSIC", input, options.signal, ["SOUNDTRACK"], "Returned live Apple Music candidates; previews vary by storefront and rights, and nothing was added automatically."),
+    }),
+    tool({
+      name: "refresh_music_metadata",
+      title: "Refresh music metadata",
+      description: "Refresh the current soundtrack track by track with Apple Music album, artwork, preview, and source metadata while preserving the host's selected tracks and successful matches.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          planId: { type: "string" },
+          expectedPlanVersion: { type: "integer", minimum: 1 },
+          storefront: { type: "string", pattern: "^[A-Za-z]{2}$", default: "us" },
+        },
+        required: ["planId", "expectedPlanVersion"],
+        additionalProperties: false,
+      },
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: true, untrustedContentHint: true },
+      execute: (input, options) => runMutationOperation(
+        "REFRESH_MUSIC_METADATA",
+        { storefront: "us", ...input },
+        options.signal,
+        ["SOUNDTRACK"],
+        "Refreshed each soundtrack track independently; live Apple Music matches were saved and unmatched selections remain reviewed seeds.",
+      ),
     }),
     tool({
       name: "create_shopping_list",

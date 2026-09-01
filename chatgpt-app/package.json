@@ -4,9 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build:widget": "esbuild web/src/main.tsx --bundle --format=esm --outfile=web/dist/widget.js",
+    "build:widget": "esbuild web/src/main.tsx --bundle --platform=browser --format=iife --minify --define:process.env.NODE_ENV='\"production\"' --outfile=web/dist/widget.txt",
     "build:server": "esbuild server.ts --bundle --platform=node --format=esm --outfile=dist/server.js",
     "build": "npm run build:widget && npm run build:server",
+    "build:cloudflare": "npm run build:widget && wrangler deploy --dry-run --outdir dist/cloudflare",
+    "deploy:cloudflare": "npm run build:widget && wrangler deploy",
+    "dev:cloudflare": "npm run build:widget && wrangler dev",
     "dev": "tsx server.ts",
     "start": "node dist/server.js",
     "typecheck": "tsc --noEmit"
@@ -24,6 +27,7 @@
     "@types/react-dom": "latest",
     "esbuild": "latest",
     "tsx": "latest",
-    "typescript": "latest"
+    "typescript": "latest",
+    "wrangler": "^4.77.0"
   }
 }

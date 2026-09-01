@@ -52,8 +52,19 @@ export const planError = (
   );
 
 export const planStoreErrorResponse = (error: unknown) => {
-  if (error instanceof PlanStoreError) {
-    return planError(error.code, error.message, error.status, error.details);
+  const knownStoreError =
+    error instanceof PlanStoreError ||
+    (Boolean(error) &&
+      typeof error === "object" &&
+      ["PLAN_NOT_FOUND", "PLAN_ALREADY_EXISTS", "VERSION_CONFLICT", "VALIDATION_ERROR"].includes(
+        String((error as { code?: unknown }).code),
+      ) &&
+      typeof (error as { status?: unknown }).status === "number" &&
+      typeof (error as { message?: unknown }).message === "string");
+
+  if (knownStoreError) {
+    const storeError = error as PlanStoreError;
+    return planError(storeError.code, storeError.message, storeError.status, storeError.details);
   }
   return planError(
     "STORE_UNAVAILABLE",

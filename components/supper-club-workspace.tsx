@@ -7,6 +7,7 @@ import {
   ChevronDown,
   ChevronRight,
   CircleAlert,
+  Compass,
   Clock3,
   Download,
   ExternalLink,
@@ -14,12 +15,16 @@ import {
   Grape,
   Leaf,
   ListChecks,
+  MapPin,
   Menu as MenuIcon,
   Music2,
   PenLine,
   ReceiptText,
+  RefreshCw,
   RotateCcw,
+  Search,
   ShoppingBasket,
+  Store,
   Users,
   UtensilsCrossed,
   Wine,
@@ -27,6 +32,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { WorkspaceTour } from "@/components/workspace-tour";
 import { downloadHostPacket } from "@/lib/export-pdf";
 import {
   createSharedPlan,
@@ -45,6 +52,64 @@ import { registerSupperClubTools } from "@/lib/webmcp-tools";
 
 type ActiveView = "RUN_OF_SHOW" | "SHOPPING" | "HOST_PACKET";
 type PlanStoreMode = "BOOTING" | "SHARED" | "LOCAL";
+
+type GroceryStore = {
+  locationId: string;
+  name: string;
+  chain?: string;
+  address: string;
+};
+
+type GroceryStoresData = {
+  stores: GroceryStore[];
+  provider: string;
+  zipCode: string;
+  retrievedAt: string;
+};
+
+type GroceryPriceLine = {
+  itemId: string;
+  ingredient: string;
+  quantity: string;
+  status: "PRICED" | "UNPRICED";
+  sourceCourses: Array<{ courseId: string; title: string }>;
+  product?: string;
+  brand?: string;
+  packageSize?: string;
+  packages?: number;
+  unitPrice?: number;
+  regularPrice?: number;
+  promoPrice?: number;
+  stockLevel?: string;
+  lineTotal?: number;
+  confidence?: "LOW" | "MEDIUM";
+  rationale?: string;
+  reason?: string;
+  productUrl?: string;
+};
+
+type GroceryPricingData = {
+  provider: string;
+  store: GroceryStore;
+  estimate: {
+    subtotal: number;
+    currency: "USD";
+    pricedItems: number;
+    totalItems: number;
+    coveragePercent: number;
+    status: "COMPLETE" | "PARTIAL";
+    confidence: "LOW" | "MEDIUM";
+    mediumConfidenceItems: number;
+    lowConfidenceItems: number;
+    planBudget: number;
+    remainingPlanBudget: number;
+    isWithinPlanBudget: boolean;
+    note: string;
+  };
+  lines: GroceryPriceLine[];
+  page: { number: number; pageSize: number; totalPages: number; totalItems: number };
+  retrievedAt: string;
+};
 
 const navItems = [
   { number: "01", label: "Overview", detail: "Seed & Stars", view: "RUN_OF_SHOW" as const, movementId: "movement-arrival" },
@@ -125,6 +190,10 @@ export function SupperClubWorkspace() {
   const [webmcpToolCount, setWebmcpToolCount] = useState(0);
   const [planStoreMode, setPlanStoreMode] = useState<PlanStoreMode>("BOOTING");
   const [toast, setToast] = useState<string | null>(null);
+  const [groceryStores, setGroceryStores] = useState<GroceryStoresData | null>(null);
+  const [groceryPricing, setGroceryPricing] = useState<GroceryPricingData | null>(null);
+  const [tourStartRequest, setTourStartRequest] = useState(0);
+  const [refreshingMusic, setRefreshingMusic] = useState(false);
 
   const updatePlan = useCallback((next: PartyPlan) => {
     planRef.current = next;
@@ -140,6 +209,19 @@ export function SupperClubWorkspace() {
     setToast(message);
     window.setTimeout(() => setToast(null), 3200);
   }, []);
+
+  const showGroceryToolData = useCallback((operation: string, data: unknown) => {
+    if (operation === "FIND_GROCERY_STORES") {
+      setGroceryStores(data as GroceryStoresData);
+      setActiveView("SHOPPING");
+      announce("Nearby stores are ready for review");
+    }
+    if (operation === "PRICE_SHOPPING_LIST") {
+      setGroceryPricing(data as GroceryPricingData);
+      setActiveView("SHOPPING");
+      announce("The grocery estimate is visible in Shopping & prep");
+    }
+  }, [announce]);
 
   useEffect(() => {
     let active = true;
@@ -214,11 +296,16 @@ export function SupperClubWorkspace() {
     let active = true;
     registerSupperClubTools({
       getPlan: () => planRef.current,
+      syncPlan: (next) => {
+        updatePlan(next);
+        announce(`${next.receipts[0]?.title ?? "Plan updated"} · v${next.planVersion}`);
+      },
       setPlan: async (next) => {
         const saved = await persistPlan(next, next.planVersion - 1);
         announce(`${saved.receipts[0]?.title ?? "Plan updated"} · v${saved.planVersion}`);
       },
       exportHostPacket: downloadHostPacket,
+      showToolData: showGroceryToolData,
     }, controller)
       .then((registration) => {
         if (!active) {
@@ -240,7 +327,11 @@ export function SupperClubWorkspace() {
       active = false;
       controller.abort();
     };
-  }, [announce, persistPlan, planStoreMode]);
+  }, [announce, persistPlan, planStoreMode, showGroceryToolData]);
+
+  useEffect(() => {
+    setGroceryPricing(null);
+  }, [plan.planId, plan.planVersion]);
 
   const selectedMovement =
     plan.movements.find((movement) => movement.movementId === selectedMovementId) ?? plan.movements[2];
@@ -360,6 +451,41 @@ export function SupperClubWorkspace() {
     );
   };
 
+  const refreshMusicMetadata = useCallback(async () => {
+    const current = planRef.current;
+    if (planStoreMode !== "SHARED") {
+      announce("Music refresh needs the shared plan service. Try again when the connection is restored.");
+      return;
+    }
+    setRefreshingMusic(true);
+    try {
+      const response = await fetch(`/api/plans/${encodeURIComponent(current.planId)}/tools`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          operation: "REFRESH_MUSIC_METADATA",
+          expectedPlanVersion: current.planVersion,
+          storefront: "us",
+        }),
+      });
+      const payload = await response.json() as {
+        ok?: boolean;
+        plan?: PartyPlan;
+        data?: { matchedCount?: number; preservedCount?: number; reviewedSeedCount?: number };
+        error?: { message?: string };
+      };
+      if (!response.ok || !payload.plan) throw new Error(payload.error?.message ?? "Music metadata could not be refreshed.");
+      updatePlan(payload.plan);
+      const counts = payload.data;
+      announce(`${counts?.matchedCount ?? 0} live Apple Music matches · ${counts?.reviewedSeedCount ?? 0} reviewed seeds`);
+    } catch (error) {
+      console.error("[Supper Club AI] Music metadata refresh failed", error);
+      announce(error instanceof Error ? error.message : "Music metadata could not be refreshed.");
+    } finally {
+      setRefreshingMusic(false);
+    }
+  }, [announce, planStoreMode, updatePlan]);
+
   const toggleShopping = (itemId: string) => {
     const item = plan.shopping.find((entry) => entry.itemId === itemId);
     if (!item) return;
@@ -459,6 +585,31 @@ export function SupperClubWorkspace() {
     setUtilityMenuOpen(false);
   };
 
+  const startTableTour = () => {
+    setUtilityMenuOpen(false);
+    setTourStartRequest((request) => request + 1);
+  };
+
+  const prepareTourStep = useCallback(async (stepIndex: number) => {
+    setMobileNavOpen(false);
+    if (stepIndex !== 2) setMobileReceiptsOpen(false);
+
+    if (stepIndex <= 2) {
+      setActiveView("RUN_OF_SHOW");
+      setSelectedMovementId("movement-main");
+    } else if (stepIndex === 3) {
+      setActiveView("SHOPPING");
+    } else if (stepIndex === 4) {
+      setActiveView("HOST_PACKET");
+    } else {
+      setActiveView("RUN_OF_SHOW");
+    }
+
+    if (stepIndex === 2 && window.matchMedia("(max-width: 680px)").matches) {
+      setMobileReceiptsOpen(true);
+    }
+  }, []);
+
   return (
     <main className="app-shell">
       <a className="skip-link" href="#workspace-main">Skip to the plan</a>
@@ -474,10 +625,11 @@ export function SupperClubWorkspace() {
         </div>
         <div className="topbar-meta">
           <Link className="about-link" href="/about" prefetch={false}>About / how to use</Link>
+          <ThemeToggle />
           <span className="issue-label">Issue 0052</span>
           <span className="plan-state">{plan.status === "FINALIZED" ? "Finalized" : "Plan editing"}</span>
           <span className="last-saved"><small>Last saved</small><strong>Today {formatLastSaved(plan.updatedAt)}</strong></span>
-          <span className={`tool-status tool-status--${webmcpStatus.toLowerCase()}`} title="WebMCP connection status">
+          <span data-tour="shared-plan" className={`tool-status tool-status--${webmcpStatus.toLowerCase()}`} title="WebMCP connection status">
             <span className="tool-status-dot" />
             {webmcpStatus === "READY" ? `${webmcpToolCount} tools live` : webmcpStatus === "PREVIEW" ? "Preview mode" : webmcpStatus === "ERROR" ? "Tool error" : "Connecting"}
           </span>
@@ -493,6 +645,7 @@ export function SupperClubWorkspace() {
       {utilityMenuOpen ? (
         <div className="utility-menu" role="menu">
           <span>Workspace menu</span>
+          <button type="button" role="menuitem" onClick={startTableTour}><Compass size={15} /> Take the 90-second table tour</button>
           <button type="button" role="menuitem" onClick={resetDemo}><RotateCcw size={15} /> Restore reviewed demo plan</button>
         </div>
       ) : null}
@@ -516,6 +669,10 @@ export function SupperClubWorkspace() {
               </li>
             ))}
           </ol>
+          <Link className="folio-guide-link" href="/about" prefetch={false}>
+            <BookOpen size={15} aria-hidden="true" />
+            <span>About / guide</span>
+          </Link>
         </nav>
 
         <section className="paper-surface" id="workspace-main" aria-label={`${activeView.toLowerCase().replaceAll("_", " ")} workspace`}>
@@ -537,6 +694,8 @@ export function SupperClubWorkspace() {
               selectedPairings={selectedPairings}
               onConfirmCourse={confirmCourse}
               onReplaceCourse={replaceCourse}
+              onRefreshMusic={refreshMusicMetadata}
+              refreshingMusic={refreshingMusic}
             />
           ) : null}
 
@@ -545,6 +704,10 @@ export function SupperClubWorkspace() {
               plan={plan}
               onToggleShopping={toggleShopping}
               onTogglePrep={togglePrep}
+              groceryStores={groceryStores}
+              groceryPricing={groceryPricing}
+              onGroceryStores={setGroceryStores}
+              onGroceryPricing={setGroceryPricing}
             />
           ) : null}
 
@@ -604,6 +767,8 @@ export function SupperClubWorkspace() {
         </div>
       ) : null}
 
+      <WorkspaceTour startRequest={tourStartRequest} prepareStep={prepareTourStep} />
+
       <div className="sr-status" aria-live="polite">{toast}</div>
       {toast ? <div className="toast" role="status"><CheckCircle2 size={17} />{toast}</div> : null}
     </main>
@@ -618,6 +783,8 @@ function RunOfShow({
   selectedPairings,
   onConfirmCourse,
   onReplaceCourse,
+  onRefreshMusic,
+  refreshingMusic,
 }: {
   plan: PartyPlan;
   selectedMovementId: string;
@@ -626,14 +793,31 @@ function RunOfShow({
   selectedPairings: PartyPlan["pairings"];
   onConfirmCourse: (courseId: string) => void;
   onReplaceCourse: (course: MenuCourse) => void;
+  onRefreshMusic: () => void;
+  refreshingMusic: boolean;
 }) {
   return (
-    <div className="run-layout">
+    <div className="run-layout" data-tour="run-of-show">
       <aside className="plan-intro">
         <span className="eyebrow">{formatDate(plan.eventDate)}</span>
         <strong className="intro-title">{plan.title}</strong>
         <span className="intro-location">{plan.location}</span>
-        <div className="earthseed-seal"><EarthseedSeal /></div>
+        <div className={plan.inspiration.cover ? "inspiration-visuals inspiration-visuals--with-cover" : "inspiration-visuals"}>
+          {plan.inspiration.cover ? (
+            <figure className="book-cover-card">
+              <a href={plan.inspiration.cover.sourceUrl} target="_blank" rel="noreferrer" title="View the Open Library record">
+                <img
+                  src={plan.inspiration.cover.imageUrl}
+                  alt={plan.inspiration.cover.alt}
+                  loading="eager"
+                  referrerPolicy="no-referrer"
+                />
+              </a>
+              <figcaption>Cover via Open Library</figcaption>
+            </figure>
+          ) : null}
+          <div className="earthseed-seal"><EarthseedSeal /></div>
+        </div>
         <p>{plan.theme.framing}</p>
         <dl className="host-facts">
           <div><dt>Guests</dt><dd>{plan.guestCount}</dd></div>
@@ -657,7 +841,7 @@ function RunOfShow({
         {plan.movements.map((movement) => {
           const selected = movement.movementId === selectedMovementId;
           return (
-            <article className={selected ? "movement movement--selected" : "movement"} key={movement.movementId}>
+            <article data-tour={selected ? "selected-movement" : undefined} className={selected ? "movement movement--selected" : "movement"} key={movement.movementId}>
               <button className="movement-row" type="button" onClick={() => onSelectMovement(movement.movementId)} aria-expanded={selected}>
                 <span className="movement-node" aria-hidden="true" />
                 <time>{movement.time}</time>
@@ -673,7 +857,7 @@ function RunOfShow({
                 selectedCourse ? (
                   <CoursePlate course={selectedCourse} pairings={selectedPairings} onConfirm={() => onConfirmCourse(selectedCourse.courseId)} onReplace={() => onReplaceCourse(selectedCourse)} />
                 ) : (
-                  <CulturalPlate movementId={movement.movementId} plan={plan} />
+                  <CulturalPlate movementId={movement.movementId} plan={plan} onRefreshMusic={onRefreshMusic} refreshingMusic={refreshingMusic} />
                 )
               ) : null}
             </article>
@@ -719,7 +903,17 @@ function CoursePlate({ course, pairings, onConfirm, onReplace }: { course: MenuC
   );
 }
 
-function CulturalPlate({ movementId, plan }: { movementId: string; plan: PartyPlan }) {
+function CulturalPlate({
+  movementId,
+  plan,
+  onRefreshMusic,
+  refreshingMusic,
+}: {
+  movementId: string;
+  plan: PartyPlan;
+  onRefreshMusic: () => void;
+  refreshingMusic: boolean;
+}) {
   if (movementId === "movement-reading") {
     return (
       <div className="cultural-plate">
@@ -732,9 +926,17 @@ function CulturalPlate({ movementId, plan }: { movementId: string; plan: PartyPl
   if (movementId === "movement-listening") {
     return (
       <div className="cultural-plate">
-        <div><span className="field-label">Listening interval</span><h2>Music for the long view</h2><p>A draft sequence supports arrival, focus, conversation, and reflection without saving anything to the host’s library.</p></div>
+        <div className="listening-intro">
+          <div><span className="field-label">Listening interval</span><h2>Music for the long view</h2><p>A draft sequence supports arrival, focus, conversation, and reflection without saving anything to the host’s library.</p></div>
+          <button className="music-refresh-button" type="button" onClick={onRefreshMusic} disabled={refreshingMusic}>
+            <RefreshCw size={15} className={refreshingMusic ? "is-spinning" : undefined} aria-hidden="true" />
+            {refreshingMusic ? "Matching each track…" : "Refresh music metadata"}
+          </button>
+        </div>
         <div className="track-list">
-          {plan.soundtrack.map((track) => (
+          {plan.soundtrack.map((track) => {
+            const isLiveMatch = track.metadataStatus === "LIVE_APPLE_MUSIC_MATCH" || Boolean(track.providerId);
+            return (
             <article key={track.trackId}>
               <div className="track-art" style={{ backgroundColor: track.artwork?.backgroundColor }}>
                 {track.artwork ? (
@@ -775,18 +977,26 @@ function CulturalPlate({ movementId, plan }: { movementId: string; plan: PartyPl
                   <audio controls preload="none" src={track.previewUrl} aria-label={`Preview ${track.title} by ${track.artist}`}>
                     Your browser does not support Apple Music audio previews.
                   </audio>
-                ) : <span className="track-preview-unavailable">Preview unavailable</span>}
+                ) : (
+                  <span className="track-preview-unavailable">
+                    Preview unavailable for this storefront.
+                    {track.sourceUrl ? <a href={track.sourceUrl} target="_blank" rel="noreferrer">Open in Apple Music <ExternalLink size={11} aria-hidden="true" /></a> : null}
+                  </span>
+                )}
               </div>
               <div className="track-actions">
                 <em>{track.status}</em>
-                {track.sourceUrl ? (
+                <span className={isLiveMatch ? "track-match track-match--live" : "track-match track-match--seed"}>
+                  {isLiveMatch ? "Live Apple Music match" : "Reviewed seed"}
+                </span>
+                {track.previewUrl && track.sourceUrl ? (
                   <a href={track.sourceUrl} target="_blank" rel="noreferrer">
-                    Apple Music <ExternalLink size={12} aria-hidden="true" />
+                    Open in Apple Music <ExternalLink size={12} aria-hidden="true" />
                   </a>
                 ) : null}
               </div>
             </article>
-          ))}
+          )})}
         </div>
       </div>
     );
@@ -799,11 +1009,124 @@ function CulturalPlate({ movementId, plan }: { movementId: string; plan: PartyPl
   );
 }
 
-function ShoppingAndPrep({ plan, onToggleShopping, onTogglePrep }: { plan: PartyPlan; onToggleShopping: (id: string) => void; onTogglePrep: (id: string) => void }) {
+function ShoppingAndPrep({
+  plan,
+  onToggleShopping,
+  onTogglePrep,
+  groceryStores,
+  groceryPricing,
+  onGroceryStores,
+  onGroceryPricing,
+}: {
+  plan: PartyPlan;
+  onToggleShopping: (id: string) => void;
+  onTogglePrep: (id: string) => void;
+  groceryStores: GroceryStoresData | null;
+  groceryPricing: GroceryPricingData | null;
+  onGroceryStores: (data: GroceryStoresData | null) => void;
+  onGroceryPricing: (data: GroceryPricingData | null) => void;
+}) {
   const categories = [...new Set(plan.shopping.map((item) => item.category))];
+  const [zipCode, setZipCode] = useState(() => plan.location.toLowerCase().includes("milwaukee") ? "53202" : "");
+  const [groceryState, setGroceryState] = useState<"IDLE" | "LOCATING" | "PRICING">("IDLE");
+  const [groceryError, setGroceryError] = useState<string | null>(null);
+
+  const runGroceryOperation = async <T,>(operation: string, input: Record<string, unknown>) => {
+    const response = await fetch(`/api/plans/${encodeURIComponent(plan.planId)}/tools`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ operation, ...input }),
+    });
+    const payload = await response.json() as { ok?: boolean; data?: T; error?: { message?: string } };
+    if (!response.ok || !payload.ok || !payload.data) {
+      throw new Error(payload.error?.message ?? "The grocery service could not complete that request.");
+    }
+    return payload.data;
+  };
+
+  const findStores = async () => {
+    if (!/^\d{5}$/.test(zipCode)) {
+      setGroceryError("Enter a five-digit ZIP code.");
+      return;
+    }
+    setGroceryState("LOCATING");
+    setGroceryError(null);
+    onGroceryPricing(null);
+    try {
+      const data = await runGroceryOperation<GroceryStoresData>("FIND_GROCERY_STORES", { zipCode, radiusInMiles: 10, limit: 3 });
+      onGroceryStores(data);
+      if (!data.stores.length) setGroceryError("No Kroger-family stores were found within 10 miles.");
+    } catch (error) {
+      setGroceryError(error instanceof Error ? error.message : "Nearby stores could not be loaded.");
+    } finally {
+      setGroceryState("IDLE");
+    }
+  };
+
+  const priceAtStore = async (locationId: string, page = 1) => {
+    setGroceryState("PRICING");
+    setGroceryError(null);
+    try {
+      const data = await runGroceryOperation<GroceryPricingData>("PRICE_SHOPPING_LIST", { locationId, page, pageSize: 5 });
+      onGroceryPricing(data);
+    } catch (error) {
+      setGroceryError(error instanceof Error ? error.message : "This shopping list could not be priced.");
+    } finally {
+      setGroceryState("IDLE");
+    }
+  };
+
+  const priceGroups = groceryPricing?.lines.reduce<Record<string, GroceryPriceLine[]>>((groups, line) => {
+    const key = line.sourceCourses.length === 1 ? line.sourceCourses[0].title : "Shared pantry";
+    (groups[key] ??= []).push(line);
+    return groups;
+  }, {}) ?? {};
+
   return (
-    <div className="support-view">
+    <div className="support-view" data-tour="shopping-prep">
       <header className="view-heading"><div><span className="eyebrow">Folio 06 · kitchen operations</span><h1>Shopping & prep</h1><p>Every line stays linked to the course that created it.</p></div><div className="view-progress"><strong>{plan.shopping.filter((item) => item.checked).length}/{plan.shopping.length}</strong><span>items ready</span></div></header>
+      <section className="grocery-quote" aria-labelledby="grocery-quote-title">
+        <div className="grocery-quote__masthead">
+          <div><span className="eyebrow">Live retailer estimate · optional</span><h2 id="grocery-quote-title">Price the provisions</h2><p>Choose the store you would actually visit. We will match the plan to current package prices without placing an order.</p></div>
+          <Store size={34} aria-hidden="true" />
+        </div>
+        <div className="store-locator">
+          <label htmlFor="grocery-zip"><span>Shopping ZIP</span><input id="grocery-zip" inputMode="numeric" autoComplete="postal-code" maxLength={5} value={zipCode} onChange={(event) => setZipCode(event.target.value.replace(/\D/g, "").slice(0, 5))} placeholder="53202" /></label>
+          <button type="button" onClick={findStores} disabled={groceryState !== "IDLE"}><Search size={16} />{groceryState === "LOCATING" ? "Finding stores…" : "Find nearby stores"}</button>
+          <small>Location affects price and stock. No cart or purchase is created.</small>
+        </div>
+        {groceryError ? <div className="grocery-error" role="alert"><CircleAlert size={16} />{groceryError}</div> : null}
+        {groceryStores?.stores.length ? (
+          <div className="store-choices" aria-label="Nearby stores">
+            {groceryStores.stores.map((store) => {
+              const active = groceryPricing?.store.locationId === store.locationId;
+              return <button type="button" className={active ? "store-choice store-choice--active" : "store-choice"} key={store.locationId} onClick={() => priceAtStore(store.locationId)} disabled={groceryState !== "IDLE"}><MapPin size={16} /><span><strong>{store.name}</strong><small>{store.address}</small></span><em>{active ? "PRICED" : "USE STORE"}</em></button>;
+            })}
+          </div>
+        ) : null}
+        {groceryState === "PRICING" ? <div className="pricing-working"><span />Matching {plan.shopping.length} ingredients to store packages…</div> : null}
+        {groceryPricing ? (
+          <div className="price-ledger">
+            <div className="price-ledger__store"><div><span className="field-label">Selected market</span><strong>{groceryPricing.store.name}</strong><small>{groceryPricing.store.address}</small></div><div><span className="field-label">Quoted</span><strong>{new Date(groceryPricing.retrievedAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}</strong><small>prices can change</small></div></div>
+            <dl className="price-summary">
+              <div><dt>Estimated subtotal</dt><dd>${groceryPricing.estimate.subtotal.toFixed(2)}</dd></div>
+              <div><dt>Plan budget left</dt><dd className={groceryPricing.estimate.isWithinPlanBudget ? "" : "price-over"}>${groceryPricing.estimate.remainingPlanBudget.toFixed(2)}</dd></div>
+              <div><dt>Matched</dt><dd>{groceryPricing.estimate.pricedItems}/{groceryPricing.estimate.totalItems}</dd><small>{groceryPricing.estimate.coveragePercent}% coverage</small></div>
+              <div><dt>Estimate confidence</dt><dd>{groceryPricing.estimate.confidence}</dd><small>{groceryPricing.estimate.lowConfidenceItems} lines need review</small></div>
+            </dl>
+            <div className="dish-price-groups">
+              {Object.entries(priceGroups).map(([dish, lines]) => (
+                <section className="dish-price-group" key={dish}>
+                  <h3>{dish}</h3>
+                  {lines.map((line) => <div className={`price-line price-line--${line.status.toLowerCase()}`} key={line.itemId}><div><strong>{line.ingredient}</strong><small>{line.status === "PRICED" ? `${line.product}${line.packageSize ? ` · ${line.packageSize}` : ""}` : line.reason}</small><em>{line.sourceCourses.map((course) => course.title).join(" · ")}</em></div><div>{line.status === "PRICED" ? <><strong>${line.lineTotal?.toFixed(2)}</strong><small>{line.packages} × ${line.unitPrice?.toFixed(2)}{line.promoPrice ? " promo" : ""}</small><em>{line.stockLevel?.replaceAll("_", " ") ?? "stock unknown"} · {line.confidence} confidence</em></> : <span>UNPRICED</span>}</div></div>)}
+                </section>
+              ))}
+            </div>
+            <div className="price-pagination"><button type="button" disabled={groceryPricing.page.number <= 1 || groceryState !== "IDLE"} onClick={() => priceAtStore(groceryPricing.store.locationId, groceryPricing.page.number - 1)}>Previous</button><span>Lines {(groceryPricing.page.number - 1) * groceryPricing.page.pageSize + 1}–{Math.min(groceryPricing.page.number * groceryPricing.page.pageSize, groceryPricing.page.totalItems)} of {groceryPricing.page.totalItems}</span><button type="button" disabled={groceryPricing.page.number >= groceryPricing.page.totalPages || groceryState !== "IDLE"} onClick={() => priceAtStore(groceryPricing.store.locationId, groceryPricing.page.number + 1)}>Next</button></div>
+            <div className="pricing-caveat"><CircleAlert size={17} /><p><strong>Estimate, not checkout.</strong> {groceryPricing.estimate.note} Review low-confidence matches and quantities before shopping.</p></div>
+          </div>
+        ) : null}
+      </section>
       <div className="support-columns">
         <section className="shopping-sheet">
           <div className="sheet-title"><ShoppingBasket size={20} /><h2>Shopping ledger</h2><span>{plan.shopping.length} lines</span></div>
@@ -841,7 +1164,7 @@ function HostPacketReview({ plan, onFinalize, onExport }: { plan: PartyPlan; onF
     { label: "Shopping + prep", ready: plan.shopping.length > 0 && plan.prep.length > 0, detail: `${plan.shopping.length} items · ${plan.prep.length} tasks` },
   ];
   return (
-    <div className="packet-view">
+    <div className="packet-view" data-tour="host-packet">
       <header className="view-heading"><div><span className="eyebrow">Folio 09 · final review</span><h1>Host packet</h1><p>One useful artifact for the kitchen, the table, and the evening’s cultural arc.</p></div><span className={`final-stamp final-stamp--${plan.status.toLowerCase()}`}>{plan.status}</span></header>
       <div className="packet-grid">
         <section className="packet-preview">
@@ -865,7 +1188,7 @@ function HostPacketReview({ plan, onFinalize, onExport }: { plan: PartyPlan; onF
 
 function AgentMarginalia({ receipts, warnings, planVersion }: { receipts: Receipt[]; warnings: PartyPlan["warnings"]; planVersion: number }) {
   return (
-    <aside className="agent-rail" aria-label="Agent marginalia and WebMCP receipts">
+    <aside className="agent-rail" data-tour="agent-marginalia" aria-label="Agent marginalia and WebMCP receipts">
       <div className="rail-head"><div><span>Agent marginalia</span><small>Visible changes, not another chat</small></div><span className="live-signal"><i /> LIVE</span></div>
       <div className="receipt-list">
         {receipts.slice(0, 6).map((receipt) => {

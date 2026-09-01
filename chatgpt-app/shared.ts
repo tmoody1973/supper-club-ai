@@ -36,7 +36,7 @@ export type PartyPlan = {
 };
 
 export type StorageMetadata = {
-  storage: "MEMORY";
+  storage: "MEMORY" | "REDIS";
   durable: boolean;
   expiresAt: string;
 };
@@ -56,4 +56,8 @@ export type PartyConfiguration = {
   dietaryRequirements?: string[];
   tone?: "HOPEFUL" | "BALANCED" | "SURVIVALIST";
   eventDate?: string;
+  requestedThemes?: string[];
+  includeWine?: boolean;
+  includeZeroProof?: boolean;
+  musicStorefront?: string;
 };

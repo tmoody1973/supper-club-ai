@@ -18,6 +18,13 @@ export type SourceRef = {
   licenseNote?: string;
 };
 
+export type BookCover = {
+  imageUrl: string;
+  sourceUrl: string;
+  alt: string;
+  attribution: string;
+};
+
 export type ToolWarning = {
   code: string;
   message: string;
@@ -104,7 +111,12 @@ export type MenuCourse = {
   ingredients: Array<{
     ingredientId: string;
     name: string;
+    canonicalName?: string;
     quantityText: string;
+    normalizedQuantity?: {
+      value: number;
+      unit: string;
+    };
     category: string;
     isOptional: boolean;
   }>;
@@ -159,6 +171,7 @@ export type Track = {
     backgroundColor?: string;
   };
   albumName?: string;
+  metadataStatus?: "LIVE_APPLE_MUSIC_MATCH" | "REVIEWED_SEED";
   releaseContext?: {
     year?: number;
     genres: string[];
@@ -214,7 +227,7 @@ export type PartyPlan = {
   planId: string;
   planVersion: number;
   title: string;
-  inspiration: { type: "BOOK"; title: string; author: string };
+  inspiration: { type: "BOOK"; title: string; author: string; cover?: BookCover };
   hostName: string;
   location: string;
   eventDate: string;

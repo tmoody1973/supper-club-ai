@@ -246,14 +246,76 @@ export function curatePairingsFromCatalog(
   return {
     ok: true,
     mode: "LOCAL_FALLBACK",
-    provider: "X-Wines + reviewed zero-proof catalog",
+    provider: request.includeWine
+      ? request.includeZeroProof ? "X-Wines + reviewed zero-proof catalog" : "X-Wines"
+      : "Reviewed zero-proof catalog",
     data: { pairings },
     sources: pairings.map((pairing) => pairing.source),
-    warnings: [{
+    warnings: request.includeWine ? [{
       code: "XWINES_TEST_CATALOG",
       message: "Wine candidates come from the 100-record CC0 X-Wines test subset. Confirm the bottle, vintage, price, and availability before serving.",
-    }],
+    }] : [],
   };
+}
+
+export function curateZeroProofPairings(courses: MenuCourse[], creativeBrief?: CreativeBrief): Pairing[] {
+  return curatePairingsFromCatalog({
+    action: "CURATE_PAIRINGS",
+    courses: courses.map((course) => ({
+      courseId: course.courseId,
+      role: course.role,
+      title: course.title,
+      ingredients: course.ingredients.map((ingredient) => ingredient.name),
+      dietaryTags: course.dietaryTags,
+    })),
+    includeWine: false,
+    includeZeroProof: true,
+    creativeBrief,
+  }).data.pairings;
+}
+
+export async function searchWinePairingCandidates(input: {
+  course: PairingRequest["courses"][number];
+  creativeBrief?: CreativeBrief;
+  limit: number;
+  signal: AbortSignal;
+}) {
+  const limit = Math.min(8, Math.max(1, input.limit));
+  const local = [...xwines]
+    .sort((left, right) =>
+      scoreWine(right, input.course, input.creativeBrief) -
+      scoreWine(left, input.course, input.creativeBrief))
+    .slice(0, limit)
+    .map((wine) => winePairing(wine, input.course, input.creativeBrief));
+  const warnings: CurationResponse<PairingCurationData>["warnings"] = [{
+    code: "PRICE_INVENTORY_UNVERIFIED",
+    message: "Wine search results do not claim current price, inventory, or vintage availability. Confirm the exact bottle before purchase.",
+    affectedIds: [input.course.courseId],
+  }];
+
+  if (!process.env.GRAPEMINDS_API_KEY) {
+    return { candidates: local, providers: ["X-Wines"], warnings };
+  }
+  try {
+    const query = grapeMindsPreference(input.course, input.creativeBrief);
+    const live = (await listGrapeMindsWines({ ...query, perPage: Math.max(20, limit * 3) }, input.signal))
+      .sort((left, right) =>
+        grapeMindsScore(right, input.course, input.creativeBrief) -
+        grapeMindsScore(left, input.course, input.creativeBrief))
+      .slice(0, limit)
+      .map((wine) => grapeMindsPairing(wine, input.course, input.creativeBrief));
+    const candidates = [...live, ...local]
+      .filter((pairing, index, items) => items.findIndex((item) => item.name.toLowerCase() === pairing.name.toLowerCase()) === index)
+      .slice(0, limit);
+    return { candidates, providers: ["GrapeMinds", "X-Wines"], warnings };
+  } catch (error) {
+    warnings.unshift({
+      code: "PROVIDER_FALLBACK",
+      message: `GrapeMinds was not used (${error instanceof Error ? error.message : "provider unavailable"}). Supper Club AI used X-Wines instead.`,
+      affectedIds: [input.course.courseId],
+    });
+    return { candidates: local, providers: ["X-Wines"], warnings };
+  }
 }
 
 export async function curatePairingsWithFallback(

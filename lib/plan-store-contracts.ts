@@ -26,7 +26,7 @@ export class PlanStoreError extends Error {
 }
 
 export type PlanStoreMetadata = {
-  storage: "MEMORY";
+  storage: "MEMORY" | "REDIS";
   durable: boolean;
   expiresAt: string;
 };
@@ -49,7 +49,7 @@ export interface PlanStore {
 export type PlanApiError = {
   ok: false;
   error: {
-    code: PlanStoreErrorCode | "BAD_REQUEST" | "FORBIDDEN" | "STORE_UNAVAILABLE";
+    code: PlanStoreErrorCode | "BAD_REQUEST" | "FORBIDDEN" | "STORE_UNAVAILABLE" | "SOURCE_UNAVAILABLE";
     message: string;
     retryable: boolean;
     details?: Record<string, unknown>;

@@ -19,6 +19,21 @@ import "@fontsource/ibm-plex-mono/600.css";
 import { DirectionContractMarker } from "@/components/direction-contract";
 import "./globals.css";
 
+const themeInitializationScript = `
+  (() => {
+    try {
+      const saved = window.localStorage.getItem("supper-club-theme");
+      const theme = saved === "light" || saved === "dark"
+        ? saved
+        : window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.style.colorScheme = theme;
+    } catch (_) {
+      document.documentElement.dataset.theme = "light";
+    }
+  })();
+`;
+
 export const metadata: Metadata = {
   title: "Supper Club AI · Creative Host Workspace",
   description: "Turn a cultural idea into one editable dinner-party plan with WebMCP.",
@@ -26,7 +41,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitializationScript }} />
+      </head>
       <body>
         <DirectionContractMarker />
         {children}

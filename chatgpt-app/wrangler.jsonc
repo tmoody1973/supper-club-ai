@@ -1,0 +1,20 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "supper-club-ai-mcp",
+  "main": "worker.ts",
+  "compatibility_date": "2026-08-31",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "keep_vars": true,
+  "rules": [
+    {
+      "type": "Text",
+      "globs": ["**/web/widget.html", "**/web/dist/widget.css", "**/web/dist/widget.txt"],
+      "fallthrough": true
+    }
+  ],
+  "vars": {
+    "SUPPER_CLUB_API_BASE_URL": "https://supper-club-ai.vercel.app",
+    "SUPPER_CLUB_WEBSITE_URL": "https://supper-club-ai.vercel.app"
+  }
+}

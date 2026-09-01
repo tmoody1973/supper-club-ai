@@ -2,6 +2,7 @@ import "server-only";
 
 import booksCatalog from "@/data/catalogs/books.json";
 import recipesCatalog from "@/data/catalogs/recipes.json";
+import { findAppleMusicMatch } from "@/lib/apple-music.server";
 import {
   buildCreativeBrief,
   themeIdeaFromVocabulary,
@@ -40,6 +41,8 @@ type BookRecord = {
     sourceIds: string[];
   }>;
   sourceRefs: SourceRef[];
+  isbns?: { isbn13?: string };
+  externalIds?: { openLibraryWorkId?: string };
 };
 
 type RecipeRecord = {
@@ -61,6 +64,8 @@ type OpenLibrarySearch = {
     author_name?: string[];
     first_publish_year?: number;
     subject?: string[];
+    cover_i?: number;
+    cover_edition_key?: string;
   }>;
 };
 
@@ -89,33 +94,6 @@ type SpoonacularRecipe = {
 };
 
 type SpoonacularSearch = { results?: SpoonacularRecipe[] };
-
-type AppleMusicArtwork = {
-  width?: number;
-  height?: number;
-  url?: string;
-  bgColor?: string;
-};
-
-type AppleMusicSong = {
-  id?: string;
-  attributes?: {
-    name?: string;
-    artistName?: string;
-    albumName?: string;
-    url?: string;
-    previews?: Array<{ url?: string }>;
-    artwork?: AppleMusicArtwork;
-  };
-};
-
-type AppleMusicSearch = {
-  results?: {
-    songs?: {
-      data?: AppleMusicSong[];
-    };
-  };
-};
 
 type DiscogsSearch = {
   results?: Array<{
@@ -197,6 +175,29 @@ const slug = (value: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "")
     .slice(0, 54);
+
+const openLibraryCover = (input: {
+  title: string;
+  author: string;
+  sourceUrl: string;
+  coverId?: number;
+  editionKey?: string;
+  isbn13?: string;
+}) => {
+  const imageUrl = input.coverId
+    ? `https://covers.openlibrary.org/b/id/${input.coverId}-L.jpg?default=false`
+    : input.editionKey
+      ? `https://covers.openlibrary.org/b/olid/${encodeURIComponent(input.editionKey)}-L.jpg?default=false`
+      : input.isbn13
+        ? `https://covers.openlibrary.org/b/isbn/${encodeURIComponent(input.isbn13)}-L.jpg?default=false`
+        : undefined;
+  return imageUrl ? {
+    imageUrl,
+    sourceUrl: input.sourceUrl,
+    alt: `Cover of ${input.title} by ${input.author}`,
+    attribution: "Cover image delivered by Open Library; rights remain with the respective rights holder.",
+  } : undefined;
+};
 
 const tokens = (values: string[]) =>
   new Set(values.join(" ").toLowerCase().replace(/[^a-z0-9]+/g, " ").split(/\s+/).filter(Boolean));
@@ -426,6 +427,12 @@ async function researchTheme(
     ideas: fallbackIdeas,
     source: localBook?.sourceRefs[0] ?? editorialSource,
     creativeBrief,
+    bookCover: localBook ? openLibraryCover({
+      title: request.inspiration.title,
+      author: request.inspiration.author,
+      sourceUrl: localBook.sourceRefs[0]?.url ?? editorialSource.url,
+      isbn13: localBook.isbns?.isbn13,
+    }) : undefined,
   };
 
   try {
@@ -433,7 +440,7 @@ async function researchTheme(
     url.searchParams.set("title", request.inspiration.title);
     url.searchParams.set("author", request.inspiration.author);
     url.searchParams.set("limit", "1");
-    url.searchParams.set("fields", "key,title,author_name,first_publish_year,subject");
+    url.searchParams.set("fields", "key,title,author_name,first_publish_year,subject,cover_i,cover_edition_key");
     const payload = await fetchJson<OpenLibrarySearch>(url, { signal });
     const book = payload.docs?.[0];
     if (!book?.key || !book.title) throw new Error("No matching work was returned.");
@@ -450,7 +457,17 @@ async function researchTheme(
       ok: true,
       mode: "HYBRID",
       provider: "Open Library + reviewed theme catalog",
-      data: { ...base, source },
+      data: {
+        ...base,
+        source,
+        bookCover: openLibraryCover({
+          title: book.title,
+          author: book.author_name?.join(", ") ?? request.inspiration.author,
+          sourceUrl: source.url,
+          coverId: book.cover_i,
+          editionKey: book.cover_edition_key,
+        }) ?? base.bookCover,
+      },
       sources: [source],
       warnings: [],
     };
@@ -631,42 +648,12 @@ const soundtrackSeedsForBrief = (brief?: CreativeBrief, customNotes?: string): S
   }).slice(0, 4);
 };
 
-const normalizedCatalogText = (value: string) =>
-  value.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, " ").trim();
-
-const appleArtwork = (artwork?: AppleMusicArtwork): Track["artwork"] => {
-  if (!artwork?.url || !artwork.width || !artwork.height) return undefined;
-  const size = Math.min(320, artwork.width, artwork.height);
-  return {
-    url: artwork.url.replaceAll("{w}", String(size)).replaceAll("{h}", String(size)),
-    width: size,
-    height: size,
-    backgroundColor: artwork.bgColor ? `#${artwork.bgColor.replace(/^#/, "")}` : undefined,
-  };
-};
-
-const appleMatchScore = (
-  item: AppleMusicSong,
-  seed: SoundtrackSeed,
-) => {
-  const title = normalizedCatalogText(item.attributes?.name ?? "");
-  const artist = normalizedCatalogText(item.attributes?.artistName ?? "");
-  const wantedTitle = normalizedCatalogText(seed.title);
-  const wantedArtist = normalizedCatalogText(seed.artist);
-  let score = 0;
-  if (title === wantedTitle) score += 20;
-  else if (title.startsWith(wantedTitle)) score += 8;
-  if (artist === wantedArtist) score += 20;
-  else if (artist.includes(wantedArtist) || wantedArtist.includes(artist)) score += 8;
-  if (/remix|karaoke|tribute|cover/.test(title) && !/remix|cover/.test(wantedTitle)) score -= 10;
-  return score;
-};
-
 const localSoundtrack = (seeds: SoundtrackSeed[]): Track[] => seeds.map((track, index) => ({
   trackId: `track-${index + 1}`,
   ...track,
   provider: "Apple Music",
   status: "DRAFT",
+  metadataStatus: "REVIEWED_SEED",
 }));
 
 async function discogsContext(
@@ -721,76 +708,59 @@ async function curateSoundtrack(
       warnings: [fallbackWarning("Apple Music", "APPLE_MUSIC_DEVELOPER_TOKEN is not configured")],
     };
   }
-  try {
-    const tracks = await Promise.all(soundtrackSeeds.map(async (seed, index) => {
-      const url = new URL(`https://api.music.apple.com/v1/catalog/${encodeURIComponent(request.storefront)}/search`);
-      url.searchParams.set("term", `${seed.artist} ${seed.title}`);
-      url.searchParams.set("types", "songs");
-      url.searchParams.set("limit", "10");
-      const payload = await fetchJson<AppleMusicSearch>(url, {
-        signal,
-        headers: { authorization: `Bearer ${token}` },
-      });
-      const item = [...(payload.results?.songs?.data ?? [])]
-        .sort((left, right) => appleMatchScore(right, seed) - appleMatchScore(left, seed))[0];
-      const attributes = item?.attributes;
-      if (!item?.id || !attributes?.name || !attributes.artistName) {
-        throw new Error(`No Apple Music match for ${seed.artist} — ${seed.title}.`);
-      }
-      const source: SourceRef = {
-        sourceId: `src-apple-music-${item.id}`,
-        provider: "Apple Music",
-        title: `${attributes.artistName} — ${attributes.name}`,
-        url: attributes.url ?? "https://music.apple.com/",
-        accessedAt: accessedAt(),
-        attribution: "Catalog metadata supplied by Apple Music.",
-      };
+  const warnings: ToolWarning[] = [];
+  const tracks = await Promise.all(soundtrackSeeds.map(async (seed, index): Promise<Track> => {
+    try {
+      const match = await findAppleMusicMatch(seed, request.storefront, signal);
+      if (!match) throw new Error("no confident catalog match");
       let releaseContext: Track["releaseContext"];
       try {
-        releaseContext = await discogsContext(attributes.name, attributes.artistName, signal);
+        releaseContext = await discogsContext(match.title, match.artist, signal);
       } catch {
         releaseContext = undefined;
       }
       return {
-        trackId: `apple-${item.id}`,
-        providerId: item.id,
-        title: attributes.name,
-        artist: attributes.artistName,
+        trackId: `apple-${match.providerId}`,
+        providerId: match.providerId,
+        title: match.title,
+        artist: match.artist,
         moment: seed.moment,
-        provider: "Apple Music" as const,
-        status: "DRAFT" as const,
-        source,
-        sourceUrl: source.url,
-        previewUrl: attributes.previews?.[0]?.url,
-        artwork: appleArtwork(attributes.artwork),
-        albumName: attributes.albumName,
+        provider: "Apple Music",
+        status: "DRAFT",
+        source: match.source,
+        sourceUrl: match.sourceUrl,
+        previewUrl: match.previewUrl,
+        artwork: match.artwork,
+        albumName: match.albumName,
+        metadataStatus: "LIVE_APPLE_MUSIC_MATCH",
         releaseContext,
         sequence: index + 1,
       };
-    }));
-    const sources = tracks.flatMap((track) => [track.source, track.releaseContext?.source].filter((item): item is SourceRef => Boolean(item)));
-    return {
-      ok: true,
-      mode: process.env.DISCOGS_TOKEN ? "HYBRID" : "LIVE",
-      provider: process.env.DISCOGS_TOKEN ? "Apple Music + Discogs" : "Apple Music",
-      data: { soundtrack: tracks, savedToLibrary: false },
-      sources,
-      warnings: process.env.DISCOGS_TOKEN ? [] : [{
-        code: "DISCOGS_NOT_CONFIGURED",
-        message: "Apple Music catalog matches are live; Discogs historical enrichment is not configured.",
-      }],
-    };
-  } catch (error) {
-    const reason = error instanceof Error ? error.message : "provider unavailable";
-    return {
-      ok: true,
-      mode: "LOCAL_FALLBACK",
-      provider: "Reviewed soundtrack anchors",
-      data: { soundtrack: fallback, savedToLibrary: false },
-      sources: [],
-      warnings: [fallbackWarning("Apple Music", reason)],
-    };
+    } catch (error) {
+      warnings.push({
+        code: "APPLE_MUSIC_TRACK_FALLBACK",
+        message: `${seed.artist} — ${seed.title} remains a reviewed seed because its Apple Music lookup did not complete.`,
+        affectedIds: [fallback[index].trackId],
+      });
+      return fallback[index];
+    }
+  }));
+  const liveCount = tracks.filter((track) => track.metadataStatus === "LIVE_APPLE_MUSIC_MATCH").length;
+  const sources = tracks.flatMap((track) => [track.source, track.releaseContext?.source].filter((item): item is SourceRef => Boolean(item)));
+  if (!process.env.DISCOGS_TOKEN && liveCount) {
+    warnings.push({
+      code: "DISCOGS_NOT_CONFIGURED",
+      message: "Apple Music catalog matches are live; Discogs historical enrichment is not configured.",
+    });
   }
+  return {
+    ok: true,
+    mode: liveCount ? (process.env.DISCOGS_TOKEN ? "HYBRID" : "LIVE") : "LOCAL_FALLBACK",
+    provider: liveCount ? (process.env.DISCOGS_TOKEN ? "Apple Music + Discogs" : "Apple Music") : "Reviewed soundtrack anchors",
+    data: { soundtrack: tracks, savedToLibrary: false },
+    sources,
+    warnings,
+  };
 }
 
 const perplexityOutputText = (payload: PerplexityAgentResponse) => {

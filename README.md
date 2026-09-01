@@ -2,14 +2,14 @@
 
 Supper Club AI is a culturally literate planning workspace for Creative Hosts. Its featured demo, **Seed & Stars**, turns an Afrofuturist dinner inspired by Octavia E. Butler's *Parable of the Sower* into a sourced run of show: theme, menu, pairings, soundtrack, shopping list, prep timeline, and downloadable host packet.
 
-The website exposes ten typed WebMCP tools so an agent can read and update the same structured plan the host sees in the browser. The repository also includes an MCP App for ChatGPT with an interactive host-brief form.
+The website exposes twenty-two typed WebMCP tools so an agent can read and update the same structured plan the host sees in the browser. The repository also includes an MCP App for ChatGPT with sixteen focused tools and an interactive host-brief form.
 
 - **Live application:** [supper-club-ai.vercel.app](https://supper-club-ai.vercel.app/)
 - **License:** [MIT](./LICENSE)
 
 ## WebMCP implementation
 
-The ten tool definitions live in [`lib/webmcp-tools.ts`](./lib/webmcp-tools.ts). Each tool declares a name, description, JSON input schema, annotations, and an `execute` function. The application registers every definition with the browser's model context:
+The twenty-two website tool definitions live in [`lib/webmcp-tools.ts`](./lib/webmcp-tools.ts). Each tool declares a name, description, JSON input schema, annotations, and an `execute` function. The application registers every definition with the browser's model context:
 
 ```ts
 const tools: WebMCPTool[] = [
@@ -29,6 +29,10 @@ const tools: WebMCPTool[] = [
   },
   // configure_party, research_theme, curate_menu, curate_pairings,
   // curate_soundtrack, enrich_soundtrack_context, create_shopping_list,
+  // search_recipes, set_menu_course, replace_menu_course,
+  // suggest_ingredient_substitutions, create_prep_timeline,
+  // search_wines, set_wine_pairing, create_zero_proof_pairings,
+  // search_music, refresh_music_metadata, find_grocery_stores, price_shopping_list,
   // finalize_party_plan, and export_host_packet
 ];
 
@@ -47,7 +51,10 @@ The executable implementation includes version-conflict protection, structured s
 - `app/api/plans/` — anonymous, versioned PlanStore HTTP boundary shared by the website and MCP app.
 - `chatgpt-app/` — MCP server and self-contained interactive ChatGPT App.
 - `components/` — the Creative Host workspace and shared WebMCP-driven interface.
-- `lib/webmcp-tools.ts` — all ten WebMCP tool definitions and registration.
+- `lib/webmcp-tools.ts` — all twenty-two WebMCP tool definitions and registration.
+- `lib/apple-music.server.ts` — validated Apple Music search, per-track matching, artwork, previews, and source metadata.
+- `lib/plan-tools.server.ts` — shared recipe, substitution, prep, wine, zero-proof, and music tool logic.
+- `lib/kroger.server.ts` — server-only Kroger OAuth, store lookup, product matching, package estimates, and basket totals.
 - `lib/curation.server.ts` — normalized book, recipe, and music provider gateway.
 - `lib/pairing-engine.server.ts` — GrapeMinds, X-Wines, and local pairing logic.
 - `data/` — reviewed fallback catalogs, schemas, and permitted vendor data.
@@ -82,7 +89,7 @@ When `PERPLEXITY_API_KEY` is configured, `enrich_soundtrack_context` uses the Pe
 
 Every plan receives an unguessable `plan-<uuid>` identifier. The website adds that identifier to its URL, while both the website and the MCP app read and replace the plan through `app/api/plans`. Writes use optimistic concurrency: a replacement must include the current `expectedPlanVersion`, preserve the plan ID, and advance exactly one version. Stale writes return a structured `VERSION_CONFLICT` instead of silently overwriting another change.
 
-This first adapter is intentionally zero-credential and stores anonymous plans in server memory for up to 24 hours. It is suitable for local development and a single-process prototype, but is not durable across deploys, cold starts, or multiple server instances. The `PlanStore` interface isolates that limitation so a Redis or Postgres adapter can replace it without changing the website, WebMCP tools, or ChatGPT App contracts.
+Production stores anonymous plans in Redis for up to 24 hours so the website and Cloudflare-hosted MCP app share durable, versioned state across instances. Local development falls back to an in-process memory adapter when Redis is not configured. The `PlanStore` interface keeps those storage choices out of the website, WebMCP tools, and ChatGPT App contracts.
 
 If the MCP server and website run as separate deployed services, set the same high-entropy `SUPPER_CLUB_SERVICE_TOKEN` in both environments. The website uses same-origin browser access; the MCP server uses that bearer token for server-to-server plan calls. This is service authentication, not a user account system. Anonymous plan IDs currently act as bearer-style access links, so they should not contain private information.
 
@@ -108,6 +115,9 @@ GRAPEMINDS_API_KEY=
 APPLE_MUSIC_DEVELOPER_TOKEN=
 DISCOGS_TOKEN=
 DISCOGS_USER_AGENT=SupperClubAI/0.1
+PERPLEXITY_API_KEY=
+KROGER_CLIENT_ID=
+KROGER_CLIENT_SECRET=
 SUPPER_CLUB_SERVICE_TOKEN=
 ```
 

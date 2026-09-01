@@ -10,7 +10,11 @@ node_modules/
 *.tsbuildinfo
 .vercel
 
+# Local hackathon workflow progress; not part of the public application source.
+.devpost-hackathon-state.json
+
 # ChatGPT app build output and package installation.
 chatgpt-app/node_modules/
 chatgpt-app/dist/
 chatgpt-app/web/dist/
+chatgpt-app/.wrangler/
