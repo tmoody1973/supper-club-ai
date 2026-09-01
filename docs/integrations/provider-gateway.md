@@ -14,7 +14,8 @@ Private credentials remain on the server. Provider-specific response shapes neve
 | --- | --- | --- | --- |
 | Book metadata | Open Library | Reviewed book catalog | None |
 | Recipes | Spoonacular | Reviewed recipe catalog | `SPOONACULAR_API_KEY` |
-| Wine and zero-proof | Reviewed local catalog | Same catalog | None |
+| Wine pairing | GrapeMinds | CC0 X-Wines subset, then reviewed local catalog | `GRAPEMINDS_API_KEY` |
+| Zero-proof pairing | Reviewed local catalog | Same catalog | None |
 | Music catalog | Apple Music | Reviewed soundtrack anchors | `APPLE_MUSIC_DEVELOPER_TOKEN` |
 | Release context | Discogs | Omitted | `DISCOGS_TOKEN` |
 
@@ -27,6 +28,7 @@ Copy `.env.example` to `.env.local` and add credentials there. Never prefix prov
 - Open Library contributes bibliographic metadata; thematic interpretation remains original reviewed catalog writing.
 - Spoonacular results remain unconfirmed until the host reviews the source, ingredients, allergen labels, and cultural framing.
 - Recipe instructions and images remain at their original source unless separate storage rights are confirmed.
-- The local wine catalog makes no current bottle, vintage, price, or availability claim.
+- GrapeMinds records support live wine discovery and are not copied into a persistent local dataset.
+- X-Wines and reviewed local wine records provide fallbacks; no provider result is presented as a current retail price or availability claim.
 - Apple Music search creates draft selections only. Saving a playlist remains a future confirmation-required action.
 - Discogs supplies optional release metadata and does not replace Apple Music catalog identity.
