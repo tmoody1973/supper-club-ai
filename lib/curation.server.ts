@@ -1,14 +1,13 @@
 import "server-only";
 
 import booksCatalog from "@/data/catalogs/books.json";
+import recipesCatalog from "@/data/catalogs/recipes.json";
 import {
   buildCreativeBrief,
   themeIdeaFromVocabulary,
 } from "@/lib/creative-brief";
-import {
-  courseFromRecipe,
-  pairingFromBeverage,
-} from "@/lib/seed-plan";
+import { curatePairingsFromCatalog } from "@/lib/pairing-engine.server";
+import { courseFromRecipe } from "@/lib/seed-plan";
 import type {
   CurationRequest,
   CurationResponse,
@@ -19,6 +18,7 @@ import type {
   ThemeCurationData,
 } from "@/lib/curation-contracts";
 import type {
+  CreativeBrief,
   MenuCourse,
   SourceRef,
   ThemeIdea,
@@ -38,6 +38,18 @@ type BookRecord = {
     sourceIds: string[];
   }>;
   sourceRefs: SourceRef[];
+};
+
+type RecipeRecord = {
+  id: string;
+  title: string;
+  summary: string;
+  courseRoles: string[];
+  times: { prepMinutes: number; cookMinutes: number; totalMinutes: number };
+  dietaryTags: string[];
+  allergens: string[];
+  ingredients: Array<{ name: string; canonicalName?: string }>;
+  themeConnections: Array<{ theme: string; explanation: string }>;
 };
 
 type OpenLibrarySearch = {
@@ -76,18 +88,20 @@ type SpoonacularRecipe = {
 
 type SpoonacularSearch = { results?: SpoonacularRecipe[] };
 
+type AppleMusicSong = {
+  id?: string;
+  attributes?: {
+    name?: string;
+    artistName?: string;
+    url?: string;
+    previews?: Array<{ url?: string }>;
+  };
+};
+
 type AppleMusicSearch = {
   results?: {
     songs?: {
-      data?: Array<{
-        id?: string;
-        attributes?: {
-          name?: string;
-          artistName?: string;
-          url?: string;
-          previews?: Array<{ url?: string }>;
-        };
-      }>;
+      data?: AppleMusicSong[];
     };
   };
 };
@@ -145,6 +159,21 @@ const slug = (value: string) =>
     .replace(/^-|-$/g, "")
     .slice(0, 54);
 
+const tokens = (values: string[]) =>
+  new Set(values.join(" ").toLowerCase().replace(/[^a-z0-9]+/g, " ").split(/\s+/).filter(Boolean));
+
+const normalizedDietaryRequirements = (requirements: string[]) => {
+  const joined = requirements.join(" ").toUpperCase().replace(/[^A-Z0-9]+/g, "_");
+  return ["VEGAN", "VEGETARIAN", "GLUTEN_FREE", "DAIRY_FREE", "NUT_FREE"]
+    .filter((tag) => joined.includes(tag));
+};
+
+const briefFoodWords = (brief?: CreativeBrief) => tokens([
+  ...(brief?.themes ?? []),
+  ...(brief?.ingredientMotifs ?? []),
+  ...(brief?.flavorDirections ?? []),
+]);
+
 const sourceUrl = (recipe: SpoonacularRecipe) =>
   recipe.sourceUrl ?? recipe.spoonacularSourceUrl ??
   `https://spoonacular.com/recipes/${slug(recipe.title ?? "recipe")}-${recipe.id ?? ""}`;
@@ -189,6 +218,7 @@ const recipeToCourse = (
   courseId: string,
   role: MenuCourse["role"],
   servings: number,
+  brief?: CreativeBrief,
 ): MenuCourse => {
   if (!recipe.id || !recipe.title) throw new Error("Recipe result is missing an id or title.");
   const ingredients = recipe.extendedIngredients ?? [];
@@ -225,19 +255,80 @@ const recipeToCourse = (
     cookMinutes: cook,
     dietaryTags: dietaryTags(recipe),
     allergens: inferAllergens(ingredients),
-    themeConnection: "A live candidate chosen to support a generous shared meal; cultural and thematic framing remains with the host.",
+    themeConnection: brief?.themes.length
+      ? `Chosen to carry ${brief.themes.slice(0, 2).map((theme) => theme.toLowerCase().replaceAll("_", " ")).join(" and ")} through flavor and shared service; cultural framing remains with the host.`
+      : "A live candidate chosen to support a generous shared meal; cultural and thematic framing remains with the host.",
     sourceId: source.sourceId,
     source,
     confirmed: false,
   };
 };
 
-const localCourses = (servings: number): MenuCourse[] => {
-  const courses = [
-    courseFromRecipe("recipe-black-eyed-pea-fritters", "course-first", "STARTER", "Seeds become a first offering"),
-    courseFromRecipe("recipe-yassa-style-mushrooms-and-onions", "course-main", "MAIN", "Adaptation through brightness and patience"),
-    courseFromRecipe("recipe-hibiscus-poached-pears", "course-dessert", "DESSERT", "A bright future held in common"),
+const recipes = recipesCatalog.items as RecipeRecord[];
+
+const recipeScore = (
+  recipe: RecipeRecord,
+  role: MenuCourse["role"],
+  brief?: CreativeBrief,
+  dietaryRequirements: string[] = [],
+  preparationMinutesMax?: number,
+) => {
+  if (!recipe.courseRoles.includes(role)) return Number.NEGATIVE_INFINITY;
+  const required = normalizedDietaryRequirements(dietaryRequirements);
+  if (required.some((tag) => !recipe.dietaryTags.includes(tag))) return Number.NEGATIVE_INFINITY;
+  let score = 10;
+  const briefWords = briefFoodWords(brief);
+  const recipeWords = tokens([
+    recipe.title,
+    recipe.summary,
+    ...recipe.ingredients.flatMap((ingredient) => [ingredient.name, ingredient.canonicalName ?? ""]),
+  ]);
+  briefWords.forEach((word) => { if (recipeWords.has(word)) score += 2; });
+  const themes = new Set(brief?.themes ?? []);
+  recipe.themeConnections.forEach((connection) => {
+    if (themes.has(connection.theme)) score += 12;
+  });
+  if (preparationMinutesMax !== undefined) {
+    score += recipe.times.totalMinutes <= preparationMinutesMax ? 5 : -Math.ceil((recipe.times.totalMinutes - preparationMinutesMax) / 15);
+  }
+  return score;
+};
+
+const courseSubtitle = (recipe: RecipeRecord, brief?: CreativeBrief) => {
+  const matchedTheme = recipe.themeConnections.find((connection) => brief?.themes.includes(connection.theme));
+  if (matchedTheme) return `${matchedTheme.theme.toLowerCase().replaceAll("_", " ")} at the table`;
+  const motif = brief?.ingredientMotifs[0];
+  return motif ? `${motif} as a shared gesture` : "A generous shared course";
+};
+
+const localCourses = (
+  servings: number,
+  brief?: CreativeBrief,
+  dietaryRequirements: string[] = [],
+  preparationMinutesMax?: number,
+): MenuCourse[] => {
+  const roles: Array<{ role: MenuCourse["role"]; courseId: string }> = [
+    { role: "STARTER", courseId: "course-first" },
+    { role: "MAIN", courseId: "course-main" },
+    { role: "DESSERT", courseId: "course-dessert" },
   ];
+  const courses = roles.map(({ role, courseId }) => {
+    const candidates = recipes
+      .map((recipe) => ({
+        recipe,
+        score: recipeScore(recipe, role, brief, dietaryRequirements, preparationMinutesMax),
+      }))
+      .filter((candidate) => Number.isFinite(candidate.score))
+      .sort((left, right) => right.score - left.score);
+    const candidate = candidates[0]?.recipe;
+    if (!candidate) {
+      throw new Error(`No reviewed ${role.toLowerCase()} satisfies the dietary requirements.`);
+    }
+    const course = courseFromRecipe(candidate.id, courseId, role, courseSubtitle(candidate, brief));
+    const themeConnection = candidate.themeConnections.find((connection) => brief?.themes.includes(connection.theme));
+    if (themeConnection) course.themeConnection = themeConnection.explanation;
+    return course;
+  });
   courses.forEach((course) => { course.servings = servings; });
   return courses;
 };
@@ -342,7 +433,12 @@ async function curateMenu(
   signal: AbortSignal,
 ): Promise<CurationResponse<MenuCurationData>> {
   const key = process.env.SPOONACULAR_API_KEY;
-  const fallback = localCourses(request.servings);
+  const fallback = localCourses(
+    request.servings,
+    request.creativeBrief,
+    request.dietaryRequirements,
+    request.preparationMinutesMax,
+  );
   if (!key) {
     return {
       ok: true,
@@ -354,27 +450,51 @@ async function curateMenu(
     };
   }
 
+  const motifs = request.creativeBrief?.ingredientMotifs ?? [];
   const searches: Array<{ role: MenuCourse["role"]; type: string; query: string; courseId: string }> = [
-    { role: "STARTER", type: "appetizer", query: "vegan gluten free appetizer", courseId: "course-first" },
-    { role: "MAIN", type: "main course", query: "vegan gluten free dinner", courseId: "course-main" },
-    { role: "DESSERT", type: "dessert", query: "vegan gluten free fruit dessert", courseId: "course-dessert" },
+    { role: "STARTER", type: "appetizer", query: motifs.slice(0, 2).join(" ") || "seasonal vegetable", courseId: "course-first" },
+    { role: "MAIN", type: "main course", query: motifs.slice(1, 4).join(" ") || "shared vegetable dinner", courseId: "course-main" },
+    { role: "DESSERT", type: "dessert", query: motifs.slice(-2).join(" ") || "fruit dessert", courseId: "course-dessert" },
   ];
+  const requiredDiet = normalizedDietaryRequirements(request.dietaryRequirements);
+  const diet = requiredDiet.includes("VEGAN") ? "vegan" : requiredDiet.includes("VEGETARIAN") ? "vegetarian" : undefined;
+  const intolerances = [
+    requiredDiet.includes("GLUTEN_FREE") ? "gluten" : undefined,
+    requiredDiet.includes("DAIRY_FREE") ? "dairy" : undefined,
+    requiredDiet.includes("NUT_FREE") ? "peanut" : undefined,
+    requiredDiet.includes("NUT_FREE") ? "tree nut" : undefined,
+  ].filter((item): item is string => Boolean(item));
   try {
     const results = await Promise.all(searches.map(async (search) => {
       const url = new URL("https://api.spoonacular.com/recipes/complexSearch");
       url.searchParams.set("query", search.query);
       url.searchParams.set("type", search.type);
-      url.searchParams.set("number", "1");
+      url.searchParams.set("number", "4");
       url.searchParams.set("addRecipeInformation", "true");
       url.searchParams.set("fillIngredients", "true");
       url.searchParams.set("instructionsRequired", "false");
+      if (diet) url.searchParams.set("diet", diet);
+      if (intolerances.length) url.searchParams.set("intolerances", intolerances.join(","));
+      if (request.preparationMinutesMax) url.searchParams.set("maxReadyTime", String(request.preparationMinutesMax));
       const payload = await fetchJson<SpoonacularSearch>(url, {
         signal,
         headers: { "x-api-key": key },
       });
-      const recipe = payload.results?.[0];
+      const briefWords = briefFoodWords(request.creativeBrief);
+      const recipe = [...(payload.results ?? [])].sort((left, right) => {
+        const score = (candidate: SpoonacularRecipe) => {
+          const candidateWords = tokens([
+            candidate.title ?? "",
+            ...(candidate.extendedIngredients ?? []).flatMap((ingredient) => [ingredient.name ?? "", ingredient.original ?? ""]),
+          ]);
+          let value = 0;
+          briefWords.forEach((word) => { if (candidateWords.has(word)) value += 1; });
+          return value;
+        };
+        return score(right) - score(left);
+      })[0];
       if (!recipe) throw new Error(`No ${search.role.toLowerCase()} candidate was returned.`);
-      return recipeToCourse(recipe, search.courseId, search.role, request.servings);
+      return recipeToCourse(recipe, search.courseId, search.role, request.servings, request.creativeBrief);
     }));
     return {
       ok: true,
@@ -404,48 +524,94 @@ async function curateMenu(
 async function curatePairings(
   request: Extract<CurationRequest, { action: "CURATE_PAIRINGS" }>,
 ): Promise<CurationResponse<PairingCurationData>> {
-  const map: Record<MenuCourse["role"], { wine: string; zero: string }> = {
-    STARTER: { wine: "wine-cremant-dalsace-brut", zero: "zero-proof-sparkling-verjus-orange" },
-    MAIN: { wine: "wine-south-african-chenin-blanc", zero: "zero-proof-ginger-lemon-soda" },
-    DESSERT: { wine: "wine-late-harvest-chenin-blanc", zero: "zero-proof-coconut-water-lime" },
-  };
-  const pairings = request.courses.flatMap((course) => {
-    const values = [];
-    if (request.includeWine) values.push(pairingFromBeverage(
-      map[course.role].wine,
-      course.courseId,
-      `pair-${course.courseId}-wine`,
-      `Selected for the ${course.role.toLowerCase()} course's spice, texture, and acidity.`,
-    ));
-    if (request.includeZeroProof) values.push(pairingFromBeverage(
-      map[course.role].zero,
-      course.courseId,
-      `pair-${course.courseId}-zero`,
-      "A complete alcohol-free pairing with equal attention to structure and finish.",
-    ));
-    return values;
-  });
-  return {
-    ok: true,
-    mode: "LOCAL_FALLBACK",
-    provider: "Reviewed local wine catalog",
-    data: { pairings },
-    sources: pairings.map((pairing) => pairing.source),
-    warnings: [{
-      code: "LOCAL_WINE_CATALOG",
-      message: "Pairings use reviewed style records, not current bottle, vintage, price, or retail availability claims.",
-    }],
-  };
+  return curatePairingsFromCatalog(request);
 }
 
-const soundtrackSeeds = [
+type SoundtrackSeed = { title: string; artist: string; moment: string };
+
+const soundtrackAnchors: SoundtrackSeed[] = [
   { title: "Cellophane", artist: "FKA twigs", moment: "Arrival" },
   { title: "Suite for Max Brown", artist: "Jeff Parker", moment: "First course" },
   { title: "The Precision of Infinity", artist: "Jlin", moment: "Main table" },
-  { title: "Space 1.8", artist: "Nala Sinephro", moment: "Listening interval" },
+  { title: "Space 1", artist: "Nala Sinephro", moment: "Listening interval" },
 ];
 
-const localSoundtrack = (): Track[] => soundtrackSeeds.map((track, index) => ({
+const musicSeedsByTheme: Record<string, SoundtrackSeed[]> = {
+  CLIMATE: [
+    { title: "Space 1", artist: "Nala Sinephro", moment: "Arrival" },
+    { title: "Black Origami", artist: "Jlin", moment: "Main table" },
+  ],
+  RESILIENCE: [
+    { title: "Rise", artist: "Solange", moment: "Arrival" },
+    { title: "Optimistic", artist: "Sounds of Blackness", moment: "Closing" },
+  ],
+  COMMUNITY: [
+    { title: "Free", artist: "SAULT", moment: "First course" },
+    { title: "People Everywhere (Still Alive)", artist: "Khruangbin", moment: "Main table" },
+  ],
+  CHANGE: [
+    { title: "Q.U.E.E.N.", artist: "Janelle Monáe", moment: "Main table" },
+    { title: "Plastic 100°C", artist: "Sampha", moment: "Reflection" },
+  ],
+  IMAGINED_FUTURES: [
+    { title: "Space Is the Place", artist: "Sun Ra", moment: "Arrival" },
+    { title: "Many Moons", artist: "Janelle Monáe", moment: "Main table" },
+  ],
+  ANCESTRY: [
+    { title: "Journey in Satchidananda", artist: "Alice Coltrane", moment: "Arrival" },
+    { title: "My Queen Is Harriet Tubman", artist: "Sons of Kemet", moment: "Main table" },
+  ],
+  ADAPTATION: [
+    { title: "The Precision of Infinity", artist: "Jlin", moment: "Main table" },
+    { title: "Suite for Max Brown", artist: "Jeff Parker", moment: "Reflection" },
+  ],
+};
+
+const soundtrackSeedsForBrief = (brief?: CreativeBrief, customNotes?: string): SoundtrackSeed[] => {
+  const themedSeeds = brief?.themes.flatMap((theme, themeIndex, themes) => {
+    const seeds = musicSeedsByTheme[theme] ?? [];
+    return seeds.map((seed, seedIndex) => ({ seed, order: seedIndex * themes.length + themeIndex }));
+  }).sort((left, right) => left.order - right.order).map(({ seed }) => seed) ?? [];
+  const candidates = [
+    ...themedSeeds,
+    ...soundtrackAnchors,
+  ];
+  if (/quiet|meditative|ambient/i.test(customNotes ?? "")) {
+    candidates.unshift(
+      { title: "Space 1", artist: "Nala Sinephro", moment: "Arrival" },
+      { title: "Journey in Satchidananda", artist: "Alice Coltrane", moment: "Reflection" },
+    );
+  }
+  const seen = new Set<string>();
+  return candidates.filter((seed) => {
+    const key = `${seed.artist}-${seed.title}`.toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  }).slice(0, 4);
+};
+
+const normalizedCatalogText = (value: string) =>
+  value.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g, " ").trim();
+
+const appleMatchScore = (
+  item: AppleMusicSong,
+  seed: SoundtrackSeed,
+) => {
+  const title = normalizedCatalogText(item.attributes?.name ?? "");
+  const artist = normalizedCatalogText(item.attributes?.artistName ?? "");
+  const wantedTitle = normalizedCatalogText(seed.title);
+  const wantedArtist = normalizedCatalogText(seed.artist);
+  let score = 0;
+  if (title === wantedTitle) score += 20;
+  else if (title.startsWith(wantedTitle)) score += 8;
+  if (artist === wantedArtist) score += 20;
+  else if (artist.includes(wantedArtist) || wantedArtist.includes(artist)) score += 8;
+  if (/remix|karaoke|tribute|cover/.test(title) && !/remix|cover/.test(wantedTitle)) score -= 10;
+  return score;
+};
+
+const localSoundtrack = (seeds: SoundtrackSeed[]): Track[] => seeds.map((track, index) => ({
   trackId: `track-${index + 1}`,
   ...track,
   provider: "Apple Music",
@@ -492,7 +658,8 @@ async function curateSoundtrack(
   signal: AbortSignal,
 ): Promise<CurationResponse<SoundtrackCurationData>> {
   const token = process.env.APPLE_MUSIC_DEVELOPER_TOKEN;
-  const fallback = localSoundtrack();
+  const soundtrackSeeds = soundtrackSeedsForBrief(request.creativeBrief, request.customEnergyNotes);
+  const fallback = localSoundtrack(soundtrackSeeds);
   if (!token) {
     return {
       ok: true,
@@ -508,12 +675,13 @@ async function curateSoundtrack(
       const url = new URL(`https://api.music.apple.com/v1/catalog/${encodeURIComponent(request.storefront)}/search`);
       url.searchParams.set("term", `${seed.artist} ${seed.title}`);
       url.searchParams.set("types", "songs");
-      url.searchParams.set("limit", "1");
+      url.searchParams.set("limit", "10");
       const payload = await fetchJson<AppleMusicSearch>(url, {
         signal,
         headers: { authorization: `Bearer ${token}` },
       });
-      const item = payload.results?.songs?.data?.[0];
+      const item = [...(payload.results?.songs?.data ?? [])]
+        .sort((left, right) => appleMatchScore(right, seed) - appleMatchScore(left, seed))[0];
       const attributes = item?.attributes;
       if (!item?.id || !attributes?.name || !attributes.artistName) {
         throw new Error(`No Apple Music match for ${seed.artist} — ${seed.title}.`);
@@ -576,7 +744,8 @@ export function providerStatus(): ProviderStatus[] {
   return [
     { provider: "Open Library", configured: true, mode: "LIVE" },
     { provider: "Spoonacular", configured: Boolean(process.env.SPOONACULAR_API_KEY), mode: "LIVE" },
-    { provider: "Local wine catalog", configured: true, mode: "LOCAL" },
+    { provider: "X-Wines", configured: true, mode: "LOCAL" },
+    { provider: "Reviewed zero-proof catalog", configured: true, mode: "LOCAL" },
     { provider: "Apple Music", configured: Boolean(process.env.APPLE_MUSIC_DEVELOPER_TOKEN), mode: "LIVE" },
     { provider: "Discogs", configured: Boolean(process.env.DISCOGS_TOKEN), mode: "OPTIONAL_ENRICHMENT" },
   ];
