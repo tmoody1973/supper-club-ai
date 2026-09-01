@@ -73,6 +73,26 @@ export type ThemeIdea = {
   sourceIds: string[];
 };
 
+export type CreativeBrief = {
+  schemaVersion: "1.0";
+  inspirationLabel: string;
+  themes: string[];
+  emotionalArc: string[];
+  visualLanguage: string[];
+  hospitalityPrinciples: string[];
+  flavorDirections: string[];
+  ingredientMotifs: string[];
+  serviceStyle: "SHARED_TABLE" | "PLATED" | "FLEXIBLE";
+  musicDirections: {
+    arrival: string[];
+    table: string[];
+    reflection: string[];
+    closing: string[];
+  };
+  avoid: string[];
+  provenance: "REVIEWED_CATALOG" | "BIBLIOGRAPHIC_METADATA";
+};
+
 export type MenuCourse = {
   courseId: string;
   recipeId: string;
@@ -194,6 +214,7 @@ export type PartyPlan = {
     ideas: ThemeIdea[];
     source: SourceRef;
     copyrightNotice: string;
+    creativeBrief?: CreativeBrief;
   };
   movements: Movement[];
   courses: MenuCourse[];

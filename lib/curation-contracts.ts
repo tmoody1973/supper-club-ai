@@ -1,4 +1,5 @@
 import type {
+  CreativeBrief,
   MenuCourse,
   Pairing,
   SourceRef,
@@ -14,6 +15,7 @@ export type ThemeCurationData = {
   framing: string;
   ideas: ThemeIdea[];
   source: SourceRef;
+  creativeBrief: CreativeBrief;
 };
 
 export type MenuCurationData = {
@@ -45,6 +47,7 @@ export type CurationRequest =
       dietaryRequirements: string[];
       preparationMinutesMax?: number;
       menuBudgetCap: { amount: number; currency: "USD" };
+      creativeBrief?: CreativeBrief;
     }
   | {
       action: "CURATE_PAIRINGS";
@@ -52,9 +55,12 @@ export type CurationRequest =
         courseId: string;
         role: MenuCourse["role"];
         title: string;
+        ingredients?: string[];
+        dietaryTags?: string[];
       }>;
       includeWine: boolean;
       includeZeroProof: boolean;
+      creativeBrief?: CreativeBrief;
     }
   | {
       action: "CURATE_SOUNDTRACK";
@@ -62,6 +68,7 @@ export type CurationRequest =
       durationMinutes: number;
       energyArc: "ARRIVAL_TO_ASCENT" | "STEADY_GLOW" | "CUSTOM";
       customEnergyNotes?: string;
+      creativeBrief?: CreativeBrief;
     };
 
 export type CurationResponse<T> = {

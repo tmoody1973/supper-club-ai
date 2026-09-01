@@ -9,6 +9,7 @@ import type {
   ShoppingItem,
   SourceRef,
 } from "@/lib/types";
+import { buildCreativeBrief } from "@/lib/creative-brief";
 
 type CatalogSource = {
   sourceId: string;
@@ -262,6 +263,13 @@ export const makeSeedPlan = (): PartyPlan => {
       source: source(book.sourceRefs[0]),
       copyrightNotice:
         "This plan uses original thematic interpretation and bibliographic metadata. It does not reproduce text from the novel or imply endorsement by the author’s estate.",
+      creativeBrief: buildCreativeBrief({
+        title: "Parable of the Sower",
+        author: "Octavia E. Butler",
+        themes: book.themes.map((theme) => theme.theme),
+        tone: "HOPEFUL",
+        provenance: "REVIEWED_CATALOG",
+      }),
     },
     movements: [
       {

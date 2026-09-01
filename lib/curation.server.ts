@@ -2,6 +2,10 @@ import "server-only";
 
 import booksCatalog from "@/data/catalogs/books.json";
 import {
+  buildCreativeBrief,
+  themeIdeaFromVocabulary,
+} from "@/lib/creative-brief";
+import {
   courseFromRecipe,
   pairingFromBeverage,
 } from "@/lib/seed-plan";
@@ -25,6 +29,8 @@ import type {
 type BookRecord = {
   title: string;
   authors: string[];
+  summary?: string;
+  subjects?: string[];
   themes: Array<{
     theme: string;
     explanation: string;
@@ -242,29 +248,54 @@ async function researchTheme(
 ): Promise<CurationResponse<ThemeCurationData>> {
   const localBook = (booksCatalog.items as BookRecord[]).find(
     (book) => book.title.toLowerCase() === request.inspiration.title.toLowerCase(),
-  ) ?? (booksCatalog.items as BookRecord[])[0];
+  );
+  const editorialSource: SourceRef = {
+    sourceId: "src-supper-club-theme-framework",
+    provider: "Supper Club AI",
+    title: "Original cultural-host theme framework",
+    url: "https://github.com/tmoody1973/supper-club-ai",
+    accessedAt: accessedAt(),
+    attribution: "Original theme vocabulary and hosting interpretation by Supper Club AI.",
+    licenseNote: "Does not reproduce book text or imply author or estate endorsement.",
+  };
   const requested = new Set(request.requestedThemes.map((item) => item.toLowerCase()));
-  const ideas: ThemeIdea[] = localBook.themes
-    .filter((item) => requested.size === 0 || requested.has(item.theme.toLowerCase()))
-    .map((item) => ({
-      themeId: `theme-${item.theme.toLowerCase()}`,
-      name: item.theme,
-      interpretation: item.explanation,
-      experienceIdeas: item.experienceIdeas,
-      sourceIds: item.sourceIds,
-    }));
-  const fallbackIdeas = ideas.length ? ideas : localBook.themes.slice(0, 4).map((item) => ({
+  const catalogIdeas: ThemeIdea[] = localBook?.themes.map((item) => ({
     themeId: `theme-${item.theme.toLowerCase()}`,
     name: item.theme,
     interpretation: item.explanation,
     experienceIdeas: item.experienceIdeas,
     sourceIds: item.sourceIds,
-  }));
+  })) ?? [];
+  const requestedIdeas = request.requestedThemes.map((theme) =>
+    themeIdeaFromVocabulary(theme, editorialSource.sourceId));
+  const filteredIdeas = catalogIdeas.filter(
+    (item) => requested.size === 0 || requested.has(item.name.toLowerCase()),
+  );
+  const fallbackIdeas = filteredIdeas.length
+    ? filteredIdeas
+    : requestedIdeas.length
+      ? requestedIdeas
+      : catalogIdeas.length
+        ? catalogIdeas.slice(0, 4)
+        : ["COMMUNITY", "CHANGE", "RESILIENCE"].map((theme) =>
+          themeIdeaFromVocabulary(theme, editorialSource.sourceId));
+  const creativeBrief = buildCreativeBrief({
+    title: request.inspiration.title,
+    author: request.inspiration.author,
+    themes: fallbackIdeas.map((idea) => idea.name),
+    tone: request.tone,
+    provenance: localBook ? "REVIEWED_CATALOG" : "BIBLIOGRAPHIC_METADATA",
+  });
+  const themePhrase = creativeBrief.themes
+    .slice(0, 3)
+    .map((theme) => theme.toLowerCase().replaceAll("_", " "))
+    .join(", ");
   const base: ThemeCurationData = {
-    headline: "Change is a practice we tend together",
-    framing: `${request.inspiration.title} becomes a hospitable lens for change, mutual care, climate awareness, and practical resilience.`,
+    headline: `${request.inspiration.title}: a table for ${themePhrase}`,
+    framing: `${request.inspiration.title} becomes a hospitable lens for ${themePhrase}. The interpretation guides atmosphere, flavor, service, and music without reproducing the book.`,
     ideas: fallbackIdeas,
-    source: localBook.sourceRefs[0],
+    source: localBook?.sourceRefs[0] ?? editorialSource,
+    creativeBrief,
   };
 
   try {

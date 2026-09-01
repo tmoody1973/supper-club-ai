@@ -2,6 +2,7 @@ import {
   buildPrepTasks,
   buildShoppingList,
 } from "@/lib/seed-plan";
+import { briefFromPlanTheme } from "@/lib/creative-brief";
 import { requestCuration } from "@/lib/curation-client";
 import type {
   MenuCurationData,
@@ -442,6 +443,13 @@ export async function registerSupperClubTools(
               ? input.preparationMinutesMax
               : undefined,
             menuBudgetCap: input.menuBudgetCap as PartyPlan["budget"],
+            creativeBrief: briefFromPlanTheme({
+              title: plan.inspiration.title,
+              author: plan.inspiration.author,
+              tone: plan.tone,
+              ideas: plan.theme.ideas,
+              existing: plan.theme.creativeBrief,
+            }),
           }, options.signal);
         } catch (error) {
           return curationFailure(plan, error, options.signal);
@@ -523,9 +531,22 @@ export async function registerSupperClubTools(
         try {
           curation = await requestCuration<PairingCurationData>({
             action: "CURATE_PAIRINGS",
-            courses: targetCourses.map(({ courseId, role, title }) => ({ courseId, role, title })),
+            courses: targetCourses.map(({ courseId, role, title, ingredients, dietaryTags }) => ({
+              courseId,
+              role,
+              title,
+              ingredients: ingredients.map((ingredient) => ingredient.name),
+              dietaryTags,
+            })),
             includeWine: Boolean(input.includeWine),
             includeZeroProof: Boolean(input.includeZeroProof),
+            creativeBrief: briefFromPlanTheme({
+              title: plan.inspiration.title,
+              author: plan.inspiration.author,
+              tone: plan.tone,
+              ideas: plan.theme.ideas,
+              existing: plan.theme.creativeBrief,
+            }),
           }, options.signal);
         } catch (error) {
           return curationFailure(plan, error, options.signal);
@@ -591,6 +612,13 @@ export async function registerSupperClubTools(
             durationMinutes: Number(input.durationMinutes),
             energyArc: input.energyArc as "ARRIVAL_TO_ASCENT" | "STEADY_GLOW" | "CUSTOM",
             customEnergyNotes: typeof input.customEnergyNotes === "string" ? input.customEnergyNotes : undefined,
+            creativeBrief: briefFromPlanTheme({
+              title: plan.inspiration.title,
+              author: plan.inspiration.author,
+              tone: plan.tone,
+              ideas: plan.theme.ideas,
+              existing: plan.theme.creativeBrief,
+            }),
           }, options.signal);
         } catch (error) {
           return curationFailure(plan, error, options.signal);
