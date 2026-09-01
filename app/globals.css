@@ -295,7 +295,7 @@ a:focus-visible {
 .workspace-grid {
   min-height: 0;
   display: grid;
-  grid-template-columns: 154px minmax(680px, 1fr) 310px;
+  grid-template-columns: 154px minmax(680px, 1fr) 370px;
   overflow: hidden;
 }
 
@@ -892,11 +892,12 @@ a:focus-visible {
   padding: 6px 0;
   border-bottom: 1px dotted var(--rule-strong);
   font-family: var(--mono);
-  font-size: 9.5px;
+  font-size: 13px;
+  line-height: 1.35;
 }
 
 .ingredient-list small {
-  color: var(--muted);
+  color: #514d46;
   text-align: right;
 }
 
@@ -906,16 +907,17 @@ a:focus-visible {
   gap: 5px;
   color: var(--ink);
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 700;
   text-decoration-color: var(--signal);
   text-underline-offset: 4px;
 }
 
 .pencil-note {
-  color: var(--marginalia);
+  color: #4f5477;
   font-family: "Bradley Hand", "Segoe Print", cursive !important;
-  font-size: 12px !important;
+  font-size: 16px !important;
+  line-height: 1.45;
   transform: rotate(-1deg);
 }
 
@@ -1020,7 +1022,7 @@ a:focus-visible {
   border: 1px solid var(--signal);
   color: var(--signal-dark);
   font-family: var(--serif);
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.45;
 }
 
@@ -1441,14 +1443,14 @@ a:focus-visible {
 }
 
 .rail-head > div > span {
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.06em;
 }
 
 .rail-head small {
   margin-top: 5px;
-  color: rgba(243, 235, 221, 0.52);
-  font-size: 8.5px;
+  color: rgba(243, 235, 221, 0.72);
+  font-size: 12px;
   text-transform: none;
 }
 
@@ -1457,7 +1459,7 @@ a:focus-visible {
   align-items: center;
   gap: 5px;
   color: var(--seed);
-  font-size: 9px;
+  font-size: 12px;
 }
 
 .live-signal i {
@@ -1507,7 +1509,7 @@ a:focus-visible {
   display: grid;
   grid-template-columns: 28px 1fr;
   gap: 10px;
-  padding: 14px 16px;
+  padding: 17px 16px;
   border-bottom: 1px solid rgba(243, 235, 221, 0.15);
 }
 
@@ -1528,24 +1530,24 @@ a:focus-visible {
   display: flex;
   justify-content: space-between;
   gap: 8px;
-  color: rgba(243, 235, 221, 0.5);
+  color: rgba(243, 235, 221, 0.68);
   font-family: var(--mono);
-  font-size: 8.5px;
+  font-size: 12px;
 }
 
 .receipt h3 {
   margin: 6px 0 4px;
   font-family: var(--mono);
-  font-size: 10.5px;
+  font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 
 .receipt p {
   margin: 0;
-  color: rgba(243, 235, 221, 0.73);
+  color: rgba(243, 235, 221, 0.88);
   font-family: var(--serif);
-  font-size: 12px;
+  font-size: 16px;
   line-height: 1.5;
 }
 
@@ -1582,16 +1584,16 @@ a:focus-visible {
 
 .conflict-note span {
   font-family: var(--mono);
-  font-size: 9.5px;
+  font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
 }
 
 .conflict-note p {
   margin: 5px 0 0;
-  color: rgba(243, 235, 221, 0.76);
+  color: rgba(243, 235, 221, 0.9);
   font-family: var(--serif);
-  font-size: 11px;
+  font-size: 15px;
   line-height: 1.45;
 }
 
@@ -1603,9 +1605,9 @@ a:focus-visible {
   margin-top: auto;
   padding: 11px 16px;
   border-top: 1px solid rgba(243, 235, 221, 0.15);
-  color: rgba(243, 235, 221, 0.48);
+  color: rgba(243, 235, 221, 0.7);
   font-family: var(--mono);
-  font-size: 8.5px;
+  font-size: 12px;
 }
 
 .rail-foot span {
@@ -1915,7 +1917,7 @@ a:focus-visible {
 
 @media (max-width: 1220px) {
   .workspace-grid {
-    grid-template-columns: 136px minmax(650px, 1fr) 270px;
+    grid-template-columns: 136px minmax(650px, 1fr) 300px;
   }
 
   .brand-context,
@@ -2198,6 +2200,26 @@ a:focus-visible {
   .conflict-note p,
   .pencil-note {
     line-height: 1.45;
+  }
+
+  .ingredient-list li,
+  .ingredient-list small {
+    font-size: 13px;
+  }
+
+  .source-link,
+  .receipt h3 {
+    font-size: 14px;
+  }
+
+  .plate-field p,
+  .receipt p,
+  .pencil-note {
+    font-size: 16px !important;
+  }
+
+  .conflict-note p {
+    font-size: 15px;
   }
 
   .course-plate {
