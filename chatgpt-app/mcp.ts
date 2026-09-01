@@ -528,10 +528,10 @@ export const createSupperClubMcpServer = async (config: SupperClubMcpConfig) => 
     "create_zero_proof_pairings",
     {
       title: "Create zero-proof pairings",
-      description: "Create and save a substantial non-alcoholic pairing for every current course.",
+      description: "Create and save a substantial zero-proof choice for every current course, including sourced recipes when Perplexity Agent discovery succeeds and reviewed local pairings as fallback.",
       inputSchema: { planId: planIdSchema, expectedPlanVersion: expectedVersionSchema },
       _meta: uiMeta,
-      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: true },
     },
     async ({ planId, expectedPlanVersion }) => {
       try {

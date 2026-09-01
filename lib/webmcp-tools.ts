@@ -16,6 +16,11 @@ import type {
   ThemeCurationData,
 } from "@/lib/curation-contracts";
 import type {
+  PlanApiSuccess,
+  PlanCreationConfiguration,
+  PlanCreationProviderReceipt,
+} from "@/lib/plan-store-contracts";
+import type {
   NextAction,
   PartyPlan,
   PartySection,
@@ -29,6 +34,10 @@ import type { WebMCPTool } from "@/types/webmcp";
 
 type ToolRuntime = {
   getPlan: () => PartyPlan;
+  createPartyPlan: (
+    configuration: PlanCreationConfiguration,
+    signal: AbortSignal,
+  ) => Promise<PlanApiSuccess>;
   setPlan: (plan: PartyPlan) => Promise<void> | void;
   syncPlan: (plan: PartyPlan) => void;
   exportHostPacket: (plan: PartyPlan) => Promise<{ filename: string }>;
@@ -180,6 +189,9 @@ const curationFailure = (
   );
 };
 
+const toolSignal = (options?: { signal?: AbortSignal }) =>
+  options?.signal ?? new AbortController().signal;
+
 const makeReceipt = (
   tool: string,
   title: string,
@@ -217,9 +229,17 @@ const planSources = (plan: PartyPlan) => {
     plan.theme.source,
     ...plan.courses.map((course) => course.source),
     ...plan.pairings.map((pairing) => pairing.source),
+    ...plan.soundtrack.flatMap((track) => [
+      track.source,
+      track.releaseContext?.source,
+      ...(track.editorialContext?.sources ?? []),
+    ].filter((source): source is SourceRef => Boolean(source))),
   ];
   return [...new Map(sources.map((item) => [item.sourceId, item])).values()];
 };
+
+const creationSources = (receipts: PlanCreationProviderReceipt[]) =>
+  mergeSources(...receipts.map((receipt) => receipt.sources));
 
 const tool = (
   value: Omit<WebMCPTool, "annotations"> & {
@@ -260,10 +280,185 @@ export async function registerSupperClubTools(
     const response = await requestPlanTool(plan, operation, input, signal);
     if (response.result) return response.result;
     if (!response.payload?.plan) return failure(plan, "SOURCE_UNAVAILABLE", "The plan tool did not return the updated plan.", true);
+    const activePlan = runtime.getPlan();
+    if (activePlan.planId !== plan.planId) {
+      return failure(
+        activePlan,
+        "VERSION_CONFLICT",
+        "The active workspace changed while that tool was running. The older response was not applied.",
+        true,
+        { requestedPlanId: plan.planId, activePlanId: activePlan.planId },
+      );
+    }
     runtime.syncPlan(response.payload.plan);
     return success(response.payload.plan, sections, response.payload.data, summary);
   };
   const tools: WebMCPTool[] = [
+    tool({
+      name: "create_party_plan",
+      title: "Create a new supper club plan",
+      description:
+        "Create and open a fresh anonymous plan using live theme, recipe, wine, zero-proof, and music providers with reviewed fallbacks and explicit provider receipts.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          title: { type: "string", minLength: 1, maxLength: 100 },
+          inspiration: {
+            type: "object",
+            properties: {
+              type: { type: "string", enum: ["BOOK"] },
+              title: { type: "string", minLength: 1, maxLength: 120 },
+              author: { type: "string", minLength: 1, maxLength: 100 },
+            },
+            required: ["type", "title", "author"],
+            additionalProperties: false,
+          },
+          guestCount: { type: "integer", minimum: 1, maximum: 30 },
+          budget: {
+            type: "object",
+            properties: {
+              amount: { type: "number", minimum: 1, maximum: 10000 },
+              currency: { type: "string", enum: ["USD"] },
+            },
+            required: ["amount", "currency"],
+            additionalProperties: false,
+          },
+          dietaryRequirements: {
+            type: "array",
+            items: { type: "string", minLength: 1, maxLength: 60 },
+            maxItems: 20,
+          },
+          tone: { type: "string", enum: ["HOPEFUL", "BALANCED", "SURVIVALIST"] },
+          eventDate: { type: "string", description: "Optional ISO date in YYYY-MM-DD format." },
+          requestedThemes: {
+            type: "array",
+            items: { type: "string", minLength: 1, maxLength: 40 },
+            maxItems: 8,
+          },
+          includeWine: { type: "boolean" },
+          includeZeroProof: { type: "boolean" },
+          musicStorefront: {
+            type: "string",
+            pattern: "^[A-Za-z]{2}$",
+            default: "us",
+          },
+        },
+        required: [
+          "inspiration",
+          "guestCount",
+          "budget",
+          "dietaryRequirements",
+          "tone",
+          "includeWine",
+          "includeZeroProof",
+        ],
+        additionalProperties: false,
+      },
+      annotations: {
+        readOnlyHint: false,
+        destructiveHint: false,
+        idempotentHint: false,
+        openWorldHint: true,
+        untrustedContentHint: true,
+      },
+      execute: async (input, options) => {
+        const current = runtime.getPlan();
+        const signal = toolSignal(options);
+        const inspiration = input.inspiration as Record<string, unknown>;
+        const budget = input.budget as Record<string, unknown>;
+        const configuration: PlanCreationConfiguration = {
+          ...(typeof input.title === "string" ? { title: input.title } : {}),
+          inspirationTitle: String(inspiration.title),
+          inspirationAuthor: String(inspiration.author),
+          guestCount: Number(input.guestCount),
+          budgetAmount: Number(budget.amount),
+          dietaryRequirements: Array.isArray(input.dietaryRequirements)
+            ? input.dietaryRequirements.map(String)
+            : [],
+          tone: input.tone as PartyPlan["tone"],
+          ...(typeof input.eventDate === "string" ? { eventDate: input.eventDate } : {}),
+          ...(Array.isArray(input.requestedThemes)
+            ? { requestedThemes: input.requestedThemes.map(String) }
+            : {}),
+          includeWine: input.includeWine === true,
+          includeZeroProof: input.includeZeroProof === true,
+          musicStorefront: typeof input.musicStorefront === "string"
+            ? input.musicStorefront.toLowerCase()
+            : "us",
+        };
+        try {
+          const created = await runtime.createPartyPlan(configuration, signal);
+          const providerReceipts = created.creation?.providerReceipts ?? [];
+          const sources = providerReceipts.length
+            ? creationSources(providerReceipts)
+            : planSources(created.plan);
+          return success(
+            created.plan,
+            ["CONFIGURATION", "THEME", "MENU", "PAIRINGS", "SOUNDTRACK", "SHOPPING_LIST"],
+            {
+              created: true,
+              previousPlanId: current.planId,
+              plan: {
+                planId: created.plan.planId,
+                planVersion: created.plan.planVersion,
+                title: created.plan.title,
+                status: created.plan.status,
+                guestCount: created.plan.guestCount,
+                budget: created.plan.budget,
+                courseCount: created.plan.courses.length,
+                pairingCount: created.plan.pairings.length,
+                trackCount: created.plan.soundtrack.length,
+                shoppingItemCount: created.plan.shopping.length,
+              },
+              providerReceipts,
+              workspaceUrl: `${window.location.origin}/?plan=${encodeURIComponent(created.plan.planId)}`,
+            },
+            `Created and opened ${created.plan.title} as a fresh plan using ${providerReceipts.length} provider-stage receipts.`,
+            {
+              warnings: mergeWarnings(
+                created.plan.warnings,
+                ...providerReceipts.map((receipt) => receipt.warnings),
+              ),
+              sources,
+              nextActions: [
+                {
+                  tool: "get_party_plan",
+                  label: "Review the new plan",
+                  reason: "Confirm the newly selected theme, menu, pairings, soundtrack, and warnings.",
+                  requiresConfirmation: false,
+                },
+                {
+                  tool: "enrich_soundtrack_context",
+                  label: "Research the soundtrack",
+                  reason: "Add source-backed artist, album, and hosting context through Perplexity.",
+                  requiresConfirmation: false,
+                },
+              ],
+            },
+          );
+        } catch (error) {
+          if (signal.aborted || (error instanceof Error && error.name === "AbortError")) throw error;
+          if (error && typeof error === "object" && "code" in error) {
+            const apiError = error as {
+              code?: string;
+              message?: string;
+              status?: number;
+              details?: Record<string, unknown>;
+            };
+            return failure(
+              current,
+              apiError.code === "BAD_REQUEST" || apiError.code === "VALIDATION_ERROR"
+                ? "VALIDATION_ERROR"
+                : "SOURCE_UNAVAILABLE",
+              apiError.message ?? "The new plan could not be created.",
+              Number(apiError.status ?? 500) >= 500,
+              apiError.details,
+            );
+          }
+          return curationFailure(current, error, signal);
+        }
+      },
+    }),
     tool({
       name: "get_party_plan",
       title: "Read the supper club plan",
@@ -444,9 +639,9 @@ export async function registerSupperClubTools(
             inspiration: plan.inspiration,
             requestedThemes: requested,
             tone: input.tone as PartyPlan["tone"],
-          }, options.signal);
+          }, toolSignal(options));
         } catch (error) {
-          return curationFailure(plan, error, options.signal);
+          return curationFailure(plan, error, toolSignal(options));
         }
         const current = runtime.getPlan();
         if (input.planId !== current.planId) return failure(current, "PLAN_NOT_FOUND", "That plan is not open.");
@@ -483,7 +678,7 @@ export async function registerSupperClubTools(
       name: "curate_menu",
       title: "Curate a three-course menu",
       description:
-        "Select a complete three-course menu through the normalized recipe gateway, using live Spoonacular results when configured and reviewed local recipes as fallback.",
+        "Select a complete three-course menu through the normalized recipe gateway, using Spoonacular first, Perplexity Agent web discovery as the live fallback, and reviewed local recipes as the final fallback.",
       inputSchema: {
         type: "object",
         properties: {
@@ -530,9 +725,9 @@ export async function registerSupperClubTools(
               ideas: plan.theme.ideas,
               existing: plan.theme.creativeBrief,
             }),
-          }, options.signal);
+          }, toolSignal(options));
         } catch (error) {
-          return curationFailure(plan, error, options.signal);
+          return curationFailure(plan, error, toolSignal(options));
         }
         const current = runtime.getPlan();
         if (input.planId !== current.planId) return failure(current, "PLAN_NOT_FOUND", "That plan is not open.");
@@ -556,6 +751,7 @@ export async function registerSupperClubTools(
         });
         next.status = "BUILDING";
         next.completion = Math.max(current.completion, 62);
+        next.warnings = mergeWarnings(current.warnings, curation.warnings);
         const committed = await commit(
           runtime,
           current,
@@ -579,7 +775,7 @@ export async function registerSupperClubTools(
       name: "curate_pairings",
       title: "Curate drink pairings",
       description:
-        "Pair selected courses with catalog wine and substantial zero-proof alternatives. It never claims current retail price or availability.",
+        "Pair selected courses with live or catalog wine and sourced zero-proof recipes. It never claims current retail price or availability.",
       inputSchema: {
         type: "object",
         properties: {
@@ -596,7 +792,7 @@ export async function registerSupperClubTools(
         required: ["planId", "expectedPlanVersion", "includeWine", "includeZeroProof"],
         additionalProperties: false,
       },
-      annotations: { readOnlyHint: false, idempotentHint: false, openWorldHint: false },
+      annotations: { readOnlyHint: false, idempotentHint: false, openWorldHint: true, untrustedContentHint: true },
       execute: async (input, options) => {
         const plan = runtime.getPlan();
         if (input.planId !== plan.planId) return failure(plan, "PLAN_NOT_FOUND", "That plan is not open.");
@@ -620,6 +816,8 @@ export async function registerSupperClubTools(
             })),
             includeWine: Boolean(input.includeWine),
             includeZeroProof: Boolean(input.includeZeroProof),
+            servings: plan.guestCount,
+            dietaryRequirements: plan.dietaryRequirements,
             creativeBrief: briefFromPlanTheme({
               title: plan.inspiration.title,
               author: plan.inspiration.author,
@@ -627,9 +825,9 @@ export async function registerSupperClubTools(
               ideas: plan.theme.ideas,
               existing: plan.theme.creativeBrief,
             }),
-          }, options.signal);
+          }, toolSignal(options));
         } catch (error) {
-          return curationFailure(plan, error, options.signal);
+          return curationFailure(plan, error, toolSignal(options));
         }
         const current = runtime.getPlan();
         if (input.planId !== current.planId) return failure(current, "PLAN_NOT_FOUND", "That plan is not open.");
@@ -641,6 +839,7 @@ export async function registerSupperClubTools(
           ? [...current.pairings.filter((pairing) => !ids.has(pairing.courseId)), ...pairings]
           : pairings;
         next.completion = Math.max(current.completion, 70);
+        next.warnings = mergeWarnings(current.warnings, curation.warnings);
         const committed = await commit(
           runtime,
           current,
@@ -699,9 +898,9 @@ export async function registerSupperClubTools(
               ideas: plan.theme.ideas,
               existing: plan.theme.creativeBrief,
             }),
-          }, options.signal);
+          }, toolSignal(options));
         } catch (error) {
-          return curationFailure(plan, error, options.signal);
+          return curationFailure(plan, error, toolSignal(options));
         }
         const current = runtime.getPlan();
         if (input.planId !== current.planId) return failure(current, "PLAN_NOT_FOUND", "That plan is not open.");
@@ -785,9 +984,9 @@ export async function registerSupperClubTools(
               title: `${plan.inspiration.title} by ${plan.inspiration.author}`,
               framing: plan.theme.framing,
             },
-          }, options.signal);
+          }, toolSignal(options));
         } catch (error) {
-          return curationFailure(plan, error, options.signal);
+          return curationFailure(plan, error, toolSignal(options));
         }
 
         const current = runtime.getPlan();
@@ -852,7 +1051,7 @@ export async function registerSupperClubTools(
         additionalProperties: false,
       },
       annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true, untrustedContentHint: true },
-      execute: (input, options) => runReadOperation("FIND_GROCERY_STORES", input, options.signal, ["SHOPPING_LIST"], "Returned nearby Kroger-family stores for host selection."),
+      execute: (input, options) => runReadOperation("FIND_GROCERY_STORES", input, toolSignal(options), ["SHOPPING_LIST"], "Returned nearby Kroger-family stores for host selection."),
     }),
     tool({
       name: "price_shopping_list",
@@ -870,7 +1069,7 @@ export async function registerSupperClubTools(
         additionalProperties: false,
       },
       annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true, untrustedContentHint: true },
-      execute: (input, options) => runReadOperation("PRICE_SHOPPING_LIST", input, options.signal, ["SHOPPING_LIST"], "Returned a location-specific Kroger basket estimate with explicit coverage and confidence."),
+      execute: (input, options) => runReadOperation("PRICE_SHOPPING_LIST", input, toolSignal(options), ["SHOPPING_LIST"], "Returned a location-specific Kroger basket estimate with explicit coverage and confidence."),
     }),
     tool({
       name: "search_recipes",
@@ -891,7 +1090,7 @@ export async function registerSupperClubTools(
         additionalProperties: false,
       },
       annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
-      execute: (input, options) => runReadOperation("SEARCH_RECIPES", input, options.signal, ["MENU"], "Returned reviewed recipe choices; current local prices remain unverified."),
+      execute: (input, options) => runReadOperation("SEARCH_RECIPES", input, toolSignal(options), ["MENU"], "Returned reviewed recipe choices; current local prices remain unverified."),
     }),
     tool({
       name: "set_menu_course",
@@ -909,7 +1108,7 @@ export async function registerSupperClubTools(
         additionalProperties: false,
       },
       annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
-      execute: (input, options) => runMutationOperation("SET_MENU_COURSE", input, options.signal, ["MENU", "PAIRINGS", "SHOPPING_LIST"], "Selected the requested course, reconciled shopping and prep, and marked its pairings for review."),
+      execute: (input, options) => runMutationOperation("SET_MENU_COURSE", input, toolSignal(options), ["MENU", "PAIRINGS", "SHOPPING_LIST"], "Selected the requested course, reconciled shopping and prep, and marked its pairings for review."),
     }),
     tool({
       name: "replace_menu_course",
@@ -930,7 +1129,7 @@ export async function registerSupperClubTools(
         additionalProperties: false,
       },
       annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: false },
-      execute: (input, options) => runMutationOperation("REPLACE_MENU_COURSE", input, options.signal, ["MENU", "PAIRINGS", "SHOPPING_LIST"], "Replaced only the requested course; other courses were preserved and dependent shopping and prep data were rebuilt."),
+      execute: (input, options) => runMutationOperation("REPLACE_MENU_COURSE", input, toolSignal(options), ["MENU", "PAIRINGS", "SHOPPING_LIST"], "Replaced only the requested course; other courses were preserved and dependent shopping and prep data were rebuilt."),
     }),
     tool({
       name: "suggest_ingredient_substitutions",
@@ -948,7 +1147,7 @@ export async function registerSupperClubTools(
         additionalProperties: false,
       },
       annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
-      execute: (input, options) => runReadOperation("SUGGEST_INGREDIENT_SUBSTITUTIONS", input, options.signal, ["MENU", "SHOPPING_LIST"], "Returned substitution ideas for host review; no ingredient was changed automatically."),
+      execute: (input, options) => runReadOperation("SUGGEST_INGREDIENT_SUBSTITUTIONS", input, toolSignal(options), ["MENU", "SHOPPING_LIST"], "Returned substitution ideas for host review; no ingredient was changed automatically."),
     }),
     tool({
       name: "create_prep_timeline",
@@ -961,7 +1160,7 @@ export async function registerSupperClubTools(
         additionalProperties: false,
       },
       annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
-      execute: (input, options) => runMutationOperation("CREATE_PREP_TIMELINE", input, options.signal, ["SHOPPING_LIST"], "Rebuilt the practical prep timeline from the current menu."),
+      execute: (input, options) => runMutationOperation("CREATE_PREP_TIMELINE", input, toolSignal(options), ["SHOPPING_LIST"], "Rebuilt the practical prep timeline from the current menu."),
     }),
     tool({
       name: "search_wines",
@@ -974,7 +1173,7 @@ export async function registerSupperClubTools(
         additionalProperties: false,
       },
       annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true, untrustedContentHint: true },
-      execute: (input, options) => runReadOperation("SEARCH_WINES", input, options.signal, ["PAIRINGS"], "Returned wine candidates for host review; verify bottle, vintage, price, stock, and legal eligibility."),
+      execute: (input, options) => runReadOperation("SEARCH_WINES", input, toolSignal(options), ["PAIRINGS"], "Returned wine candidates for host review; verify bottle, vintage, price, stock, and legal eligibility."),
     }),
     tool({
       name: "set_wine_pairing",
@@ -992,20 +1191,20 @@ export async function registerSupperClubTools(
         additionalProperties: false,
       },
       annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: true, untrustedContentHint: true },
-      execute: (input, options) => runMutationOperation("SET_WINE_PAIRING", input, options.signal, ["PAIRINGS"], "Saved the selected wine pairing; verify bottle, vintage, price, and stock before serving."),
+      execute: (input, options) => runMutationOperation("SET_WINE_PAIRING", input, toolSignal(options), ["PAIRINGS"], "Saved the selected wine pairing; verify bottle, vintage, price, and stock before serving."),
     }),
     tool({
       name: "create_zero_proof_pairings",
       title: "Create zero-proof pairings",
-      description: "Create and save a substantial non-alcoholic pairing for every current course.",
+      description: "Create and save a substantial zero-proof choice for every current course, including sourced recipes when Perplexity Agent discovery succeeds and reviewed local pairings as fallback.",
       inputSchema: {
         type: "object",
         properties: { planId: { type: "string" }, expectedPlanVersion: { type: "integer", minimum: 1 } },
         required: ["planId", "expectedPlanVersion"],
         additionalProperties: false,
       },
-      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
-      execute: (input, options) => runMutationOperation("CREATE_ZERO_PROOF_PAIRINGS", input, options.signal, ["PAIRINGS"], "Created a substantial zero-proof choice for each current course."),
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: true, untrustedContentHint: true },
+      execute: (input, options) => runMutationOperation("CREATE_ZERO_PROOF_PAIRINGS", input, toolSignal(options), ["PAIRINGS"], "Created a substantial zero-proof choice for each current course."),
     }),
     tool({
       name: "search_music",
@@ -1023,7 +1222,7 @@ export async function registerSupperClubTools(
         additionalProperties: false,
       },
       annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true, untrustedContentHint: true },
-      execute: (input, options) => runReadOperation("SEARCH_MUSIC", input, options.signal, ["SOUNDTRACK"], "Returned live Apple Music candidates; previews vary by storefront and rights, and nothing was added automatically."),
+      execute: (input, options) => runReadOperation("SEARCH_MUSIC", input, toolSignal(options), ["SOUNDTRACK"], "Returned live Apple Music candidates; previews vary by storefront and rights, and nothing was added automatically."),
     }),
     tool({
       name: "refresh_music_metadata",
@@ -1043,7 +1242,7 @@ export async function registerSupperClubTools(
       execute: (input, options) => runMutationOperation(
         "REFRESH_MUSIC_METADATA",
         { storefront: "us", ...input },
-        options.signal,
+        toolSignal(options),
         ["SOUNDTRACK"],
         "Refreshed each soundtrack track independently; live Apple Music matches were saved and unmatched selections remain reviewed seeds.",
       ),

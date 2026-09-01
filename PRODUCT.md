@@ -56,19 +56,29 @@ The featured hackathon demo is **Seed & Stars**, a hopeful Afrofuturist supper i
 8. `finalize_party_plan`
 9. `export_host_packet`
 
-The implemented website inventory contains twenty-four tools: the original twenty-two plus
-`preview_guest_share_kit` and `export_guest_share_kit`. The earlier twenty-two-tool scope is
-documented in `docs/plans/2026-08-31-supper-club-ai-webmcp-design.md`.
+The implemented website inventory contains twenty-five tools: the previous twenty-four plus
+`create_party_plan`. That tool accepts the host's inspiration, guest count, budget, dietary
+requirements, wine preference, and zero-proof preference; creates a fresh plan through the
+dynamic-plan endpoint; switches the website to the returned plan ID; and reports provider
+provenance for every curation stage. The earlier twenty-two-tool scope is documented in
+`docs/plans/2026-08-31-supper-club-ai-webmcp-design.md`.
+
+The website's twenty-five WebMCP tools are distinct from the ChatGPT MCP App's sixteen focused
+tools. Both surfaces can create a plan and operate on the same versioned plan model, while the
+website exposes the broader composition and export toolkit.
 
 ### Data and integrations
 
 - The implemented provider gateway is documented in `docs/integrations/provider-gateway.md`.
-- Spoonacular is the primary structured recipe API for the hackathon.
-- TinyFish Search and Fetch is the fallback for live recipe discovery.
+- Spoonacular is the primary structured recipe API; Perplexity Agent supplies a complete menu
+  when Spoonacular cannot, followed by the reviewed recipe catalog as the final fallback.
 - Open Library is the first prototype book source, with Google Books as a metadata or preview-link fallback.
-- Apple MusicKit supplies catalog search, previews, and approved playlist creation.
+- GrapeMinds supplies live wine discovery, with X-Wines as its local fallback. Perplexity Agent
+  supplies source-backed zero-proof discovery, with the reviewed zero-proof catalog as fallback.
+- Apple MusicKit supplies catalog search and previews, with reviewed soundtrack anchors as fallback.
 - Discogs enriches music with release, genre, style, and historical context.
-- The hackathon wine experience begins with a reviewed local catalog behind a provider-neutral adapter.
+- Dynamic-plan responses identify each provider's selected mode and source count so the host can
+  distinguish live, hybrid, and local-fallback results.
 - All third-party payloads are untrusted and must be validated and normalized on the server.
 - Provider-specific response shapes must not leak into WebMCP contracts or the shared plan model.
 

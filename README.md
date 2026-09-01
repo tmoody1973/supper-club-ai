@@ -4,7 +4,7 @@ Supper Club AI is an **agent-readable cultural hosting workspace** for Creative 
 
 > Supper Club AI turns cultural inspiration into a coordinated, hostable experience by giving people and agents one shared, agent-readable workspace—reducing the fragmented research and manual reconciliation that make ambitious gatherings difficult to produce.
 
-The website exposes twenty-four typed WebMCP tools so an agent can read and update the same structured plan the host sees in the browser. Unlike a chat that leaves the host reconciling disconnected suggestions, Supper Club AI makes each change part of a durable, versioned plan with visible sources, warnings, and tool receipts. The repository also includes an MCP App for ChatGPT with sixteen focused tools and an interactive host-brief form.
+The website exposes twenty-five typed WebMCP tools so an agent can create, read, and update the same structured plan the host sees in the browser. Unlike a chat that leaves the host reconciling disconnected suggestions, Supper Club AI makes each change part of a durable, versioned plan with visible sources, warnings, and tool receipts. The repository also includes a separate MCP App for ChatGPT with sixteen focused tools and an interactive host-brief form.
 
 - **Live application:** [thesupperclub.app](https://www.thesupperclub.app/)
 - **License:** [MIT](./LICENSE)
@@ -27,7 +27,7 @@ This turns the browser from a page the agent merely looks at into a collaborativ
 
 ## WebMCP implementation
 
-The twenty-four website tool definitions live in [`lib/webmcp-tools.ts`](./lib/webmcp-tools.ts). Each tool declares a name, description, JSON input schema, annotations, and an `execute` function. The application registers every definition with the browser's model context:
+The twenty-five website tool definitions live in [`lib/webmcp-tools.ts`](./lib/webmcp-tools.ts). Each tool declares a name, description, JSON input schema, annotations, and an `execute` function. The application registers every definition with the browser's model context:
 
 ```ts
 const tools: WebMCPTool[] = [
@@ -52,7 +52,7 @@ const tools: WebMCPTool[] = [
   // search_wines, set_wine_pairing, create_zero_proof_pairings,
   // search_music, refresh_music_metadata, find_grocery_stores, price_shopping_list,
   // finalize_party_plan, preview_guest_share_kit, export_guest_share_kit,
-  // and export_host_packet
+  // export_host_packet, and create_party_plan
 ];
 
 for (const definition of tools) {
@@ -62,7 +62,7 @@ for (const definition of tools) {
 }
 ```
 
-The executable implementation includes version-conflict protection, structured success and error responses, visible change receipts, source attribution, and explicit confirmation for finalization and PDF download.
+The twenty-fifth website tool, `create_party_plan`, accepts an inspiration, guest count, budget, dietary requirements, and wine and zero-proof preferences. It sends that brief to the dynamic-plan endpoint, activates the returned plan ID in the website, and reports the provider and mode used for each curation stage. A new plan can use Spoonacular with Perplexity Agent and the reviewed recipe catalog as fallbacks, GrapeMinds with X-Wines fallback, Perplexity-backed zero-proof discovery with a reviewed catalog fallback, and Apple Music with reviewed soundtrack anchors. The executable implementation also includes version-conflict protection, structured success and error responses, visible change receipts, source attribution, and explicit confirmation for finalization and PDF download.
 
 ## Project structure
 
@@ -70,7 +70,7 @@ The executable implementation includes version-conflict protection, structured s
 - `app/api/plans/` — anonymous, versioned PlanStore HTTP boundary shared by the website and MCP app.
 - `chatgpt-app/` — MCP server and self-contained interactive ChatGPT App.
 - `components/` — the Creative Host workspace and shared WebMCP-driven interface.
-- `lib/webmcp-tools.ts` — all twenty-four WebMCP tool definitions and registration.
+- `lib/webmcp-tools.ts` — all twenty-five website WebMCP tool definitions and registration.
 - `lib/guest-share-kit.ts` — redacted guest-program PDF, social cards, captions, alt text, and ZIP export.
 - `lib/apple-music.server.ts` — validated Apple Music search, per-track matching, artwork, previews, and source metadata.
 - `lib/plan-tools.server.ts` — shared recipe, substitution, prep, wine, zero-proof, and music tool logic.
@@ -101,9 +101,9 @@ npm run start
 
 Provider credentials are optional during development. Open Library and the reviewed local catalogs work without keys; missing recipe or music credentials produce explicit local-fallback receipts.
 
-Wine pairing uses live GrapeMinds metadata when `GRAPEMINDS_API_KEY` is configured, the CC0 X-Wines subset as an automatic fallback, and a reviewed local catalog for zero-proof drinks. GrapeMinds records are used for live discovery and are not copied into a persistent local dataset.
+Wine pairing uses live GrapeMinds metadata when `GRAPEMINDS_API_KEY` is configured and the CC0 X-Wines subset as an automatic fallback. Zero-proof pairings use source-backed Perplexity recipe discovery when configured and the reviewed local catalog as a safe fallback. GrapeMinds records are used for live discovery and are not copied into a persistent local dataset.
 
-When `PERPLEXITY_API_KEY` is configured, `enrich_soundtrack_context` uses the Perplexity Agent API with web search and structured output to attach concise artist, album, cultural, and hosting notes to soundtrack entries. The normalized plan stores the selected original source links, not Perplexity credentials or raw provider payloads.
+When `PERPLEXITY_API_KEY` is configured, the recipe gateway uses Perplexity Agent after Spoonacular cannot supply a complete menu, zero-proof curation discovers source-backed drink recipes, and `enrich_soundtrack_context` attaches concise artist, album, cultural, and hosting notes to soundtrack entries. Live food and drink candidates are screened but remain unconfirmed. The normalized plan stores selected original source links, not Perplexity credentials or raw provider payloads.
 
 ## Shared PlanStore
 

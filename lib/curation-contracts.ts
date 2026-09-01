@@ -70,6 +70,8 @@ export type CurationRequest =
       }>;
       includeWine: boolean;
       includeZeroProof: boolean;
+      servings?: number;
+      dietaryRequirements?: string[];
       creativeBrief?: CreativeBrief;
     }
   | {

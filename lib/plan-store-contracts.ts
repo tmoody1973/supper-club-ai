@@ -1,4 +1,27 @@
-import type { PartyPlan } from "@/lib/types";
+import type { PartyPlan, SourceRef, ToolWarning } from "@/lib/types";
+
+export type PlanCreationConfiguration = {
+  title?: string;
+  inspirationTitle: string;
+  inspirationAuthor: string;
+  guestCount?: number;
+  budgetAmount?: number;
+  dietaryRequirements?: string[];
+  tone?: PartyPlan["tone"];
+  eventDate?: string;
+  requestedThemes?: string[];
+  includeWine?: boolean;
+  includeZeroProof?: boolean;
+  musicStorefront?: string;
+};
+
+export type PlanCreationProviderReceipt = {
+  stage: "THEME" | "MENU" | "PAIRINGS" | "SOUNDTRACK";
+  provider: string;
+  mode: "LIVE" | "HYBRID" | "LOCAL_FALLBACK";
+  sources: SourceRef[];
+  warnings: ToolWarning[];
+};
 
 export type PlanStoreErrorCode =
   | "PLAN_NOT_FOUND"
@@ -60,6 +83,9 @@ export type PlanApiSuccess = {
   ok: true;
   plan: PartyPlan;
   storage: PlanStoreMetadata;
+  creation?: {
+    providerReceipts: PlanCreationProviderReceipt[];
+  };
 };
 
 export type PlanApiResponse = PlanApiSuccess | PlanApiError;

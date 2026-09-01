@@ -94,7 +94,7 @@ const beginnerPaths = [
     steps: [
       "Ask ChatGPT to open thesupperclub.app in the in-app browser.",
       "Open the plan you want to revise, or begin with the reviewed example already on the page.",
-      "Check the black header for 24 tools live. Preview mode means that browser does not expose WebMCP tools.",
+      "Check the black header for 25 tools live. Preview mode means that browser does not expose WebMCP tools.",
       "Ask ChatGPT to use the tools on the Supper Club AI page and describe one specific change.",
       "Watch the workspace update and read the receipt in Agent Marginalia before making the next change.",
     ],
@@ -170,6 +170,7 @@ const websiteTools = [
   "preview_guest_share_kit",
   "export_guest_share_kit",
   "export_host_packet",
+  "create_party_plan",
 ];
 
 const chatgptTools = [
@@ -274,8 +275,8 @@ export default function AboutPage() {
             <span className={styles.statusLive}>Available now</span>
             <h3>The WebMCP website</h3>
             <p>
-              Open the full visual workspace. The page exposes 24 typed WebMCP tools so an
-              agent can update the board while you watch, review, and edit.
+              Open the full visual workspace. The page exposes 25 typed WebMCP tools so an
+              agent can create a fresh plan or update the board while you watch, review, and edit.
             </p>
             <ul>
               <li>Best for seeing the complete run of show</li>
@@ -387,13 +388,14 @@ export default function AboutPage() {
               <h2 id="tool-ledger-title">Every capability, named in plain sight.</h2>
             </div>
             <p>
-              The website has the broadest composition toolkit. The ChatGPT App keeps a focused
-              set for creating, revising, pricing, and approving the same shared plan.
+              The website has 25 tools for creating, composing, and exporting a plan. The
+              ChatGPT App keeps 16 focused tools for creating, revising, pricing, and approving
+              the same versioned plan.
             </p>
           </div>
           <div className={styles.toolColumns}>
             <article className={styles.toolColumn}>
-              <header><span>Website / WebMCP</span><strong>24 tools</strong></header>
+              <header><span>Website / WebMCP</span><strong>25 tools</strong></header>
               <ol className={styles.toolList}>
                 {websiteTools.map((name, index) => <li key={name}><span>{String(index + 1).padStart(2, "0")}</span><code>{name}</code></li>)}
               </ol>
@@ -406,8 +408,11 @@ export default function AboutPage() {
             </article>
           </div>
           <p className={styles.toolLedgerNote}>
-            Search, lookup, and guest-share preview tools are read-only. Plan changes use version
-            checks; finalization and artifact downloads wait for explicit host approval.
+            Website tool 25, <code>create_party_plan</code>, starts a fresh plan, activates its new
+            plan ID, and reports whether Spoonacular or Perplexity, GrapeMinds or X-Wines, Apple
+            Music, or a reviewed fallback supplied each section. Search, lookup, and guest-share
+            preview tools are read-only. Plan changes use version checks; finalization and artifact
+            downloads wait for explicit host approval.
           </p>
         </section>
 

@@ -1,7 +1,7 @@
 import { checkPlanRequest, noStoreHeaders, planError, planStoreErrorResponse } from "@/lib/plan-api.server";
-import { buildDynamicPartyPlan, type DynamicPlanConfiguration } from "@/lib/dynamic-plan.server";
+import { buildDynamicPartyPlan } from "@/lib/dynamic-plan.server";
 import { getPlanStore, getPlanStoreStatus, isPartyPlan } from "@/lib/plan-store.server";
-import type { PlanApiSuccess } from "@/lib/plan-store-contracts";
+import type { PlanApiSuccess, PlanCreationConfiguration } from "@/lib/plan-store-contracts";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   Boolean(value) && typeof value === "object" && !Array.isArray(value);
 
-const parseConfiguration = (value: unknown): DynamicPlanConfiguration | null => {
+const parseConfiguration = (value: unknown): PlanCreationConfiguration | null => {
   if (!isRecord(value)) return null;
   const inspirationTitle = typeof value.inspirationTitle === "string" ? value.inspirationTitle.trim() : "";
   const inspirationAuthor = typeof value.inspirationAuthor === "string" ? value.inspirationAuthor.trim() : "";
@@ -32,7 +32,7 @@ const parseConfiguration = (value: unknown): DynamicPlanConfiguration | null => 
     ...(typeof value.guestCount === "number" ? { guestCount: value.guestCount } : {}),
     ...(typeof value.budgetAmount === "number" ? { budgetAmount: value.budgetAmount } : {}),
     ...(Array.isArray(value.dietaryRequirements) ? { dietaryRequirements: value.dietaryRequirements.map((item) => String(item).trim()) } : {}),
-    ...(typeof value.tone === "string" ? { tone: value.tone as DynamicPlanConfiguration["tone"] } : {}),
+    ...(typeof value.tone === "string" ? { tone: value.tone as PlanCreationConfiguration["tone"] } : {}),
     ...(typeof value.eventDate === "string" ? { eventDate: value.eventDate } : {}),
     ...(Array.isArray(value.requestedThemes) ? { requestedThemes: value.requestedThemes.map((item) => String(item).trim()) } : {}),
     ...(typeof value.includeWine === "boolean" ? { includeWine: value.includeWine } : {}),
@@ -71,14 +71,20 @@ export async function POST(request: Request) {
     }
     const configuration = body.configuration === undefined ? undefined : parseConfiguration(body.configuration);
     if (body.configuration !== undefined && !configuration) {
-      return planError("BAD_REQUEST", "configuration must include a valid inspiration title and author.", 422);
+      return planError("BAD_REQUEST", "The new-plan configuration contains an invalid or missing field.", 422);
     }
-    const initialPlan = configuration
+    const build = configuration
       ? await buildDynamicPartyPlan(configuration, request.signal)
-      : body.initialPlan;
+      : undefined;
+    const initialPlan = build?.plan ?? body.initialPlan;
     const stored = await getPlanStore().create(initialPlan);
     return Response.json(
-      { ok: true, plan: stored.plan, storage: stored.metadata } satisfies PlanApiSuccess,
+      {
+        ok: true,
+        plan: stored.plan,
+        storage: stored.metadata,
+        ...(build ? { creation: { providerReceipts: build.providerReceipts } } : {}),
+      } satisfies PlanApiSuccess,
       { status: 201, headers: noStoreHeaders },
     );
   } catch (error) {

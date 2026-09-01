@@ -141,6 +141,18 @@ export type Pairing = {
   pairingReason: string;
   sourceId: string;
   source: SourceRef;
+  recipeDetails?: {
+    servings: number;
+    prepMinutes: number;
+    ingredients: Array<{
+      name: string;
+      quantityText: string;
+    }>;
+    dietaryTags: string[];
+    allergens: string[];
+    instructionsUrl: string;
+    confirmed: false;
+  };
 };
 
 export type TrackEditorialContext = {
@@ -158,7 +170,7 @@ export type Track = {
   title: string;
   artist: string;
   moment: string;
-  provider: "Apple Music";
+  provider: "Apple Music" | "Reviewed soundtrack anchors";
   status: "DRAFT" | "CONFIRMED";
   sequence?: number;
   source?: SourceRef;

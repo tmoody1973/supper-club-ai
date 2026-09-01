@@ -8,6 +8,7 @@ import {
   type GrapeMindsWineQuery,
 } from "@/lib/grapeminds.server";
 import { pairingFromBeverage } from "@/lib/seed-plan";
+import { discoverZeroProofPairingsWithPerplexity } from "@/lib/perplexity-recipes.server";
 import type { CurationRequest, CurationResponse, PairingCurationData } from "@/lib/curation-contracts";
 import type { CreativeBrief, MenuCourse, Pairing, SourceRef } from "@/lib/types";
 
@@ -213,6 +214,16 @@ const grapeMindsPairing = (
 export function curatePairingsFromCatalog(
   request: PairingRequest,
 ): CurationResponse<PairingCurationData> {
+  if (!request.includeWine && !request.includeZeroProof) {
+    return {
+      ok: true,
+      mode: "LOCAL_FALLBACK",
+      provider: "No pairing provider used",
+      data: { pairings: [] },
+      sources: [],
+      warnings: [],
+    };
+  }
   const pairings: Pairing[] = [];
   const usedWines = new Set<string>();
   const usedZeroProof = new Set<string>();
@@ -322,6 +333,64 @@ export async function curatePairingsWithFallback(
   request: PairingRequest,
   signal: AbortSignal,
 ): Promise<CurationResponse<PairingCurationData>> {
+  const withPerplexityZeroProof = async (
+    base: CurationResponse<PairingCurationData>,
+  ): Promise<CurationResponse<PairingCurationData>> => {
+    if (!request.includeZeroProof) return base;
+    if (!process.env.PERPLEXITY_API_KEY) {
+      base.warnings.push({
+        code: "PROVIDER_FALLBACK",
+        message: "Perplexity zero-proof recipe discovery was not used (PERPLEXITY_API_KEY is not configured). Supper Club AI used its reviewed zero-proof catalog instead.",
+      });
+      return base;
+    }
+    try {
+      const discovery = await discoverZeroProofPairingsWithPerplexity({
+        courses: request.courses,
+        servings: request.servings ?? 6,
+        dietaryRequirements: request.dietaryRequirements ?? [],
+        creativeBrief: request.creativeBrief,
+        signal,
+      });
+      if (!discovery.pairings.length) {
+        throw new Error("No zero-proof recipe passed source, alcohol, and dietary screening.");
+      }
+      const liveByCourse = new Map(discovery.pairings.map((pairing) => [pairing.courseId, pairing]));
+      const pairings = request.courses.flatMap((course) => [
+        ...base.data.pairings.filter((pairing) => pairing.courseId === course.courseId && pairing.kind === "WINE"),
+        liveByCourse.get(course.courseId) ?? base.data.pairings.find((pairing) =>
+          pairing.courseId === course.courseId && pairing.kind === "ZERO_PROOF"),
+      ].filter((pairing): pairing is Pairing => Boolean(pairing)));
+      const complete = request.courses.every((course) => liveByCourse.has(course.courseId));
+      const zeroProofProvider = complete
+        ? "Perplexity Agent API"
+        : "Perplexity Agent API + reviewed zero-proof catalog";
+      const provider = base.provider.replace(/reviewed zero-proof catalog/i, zeroProofProvider);
+      return {
+        ...base,
+        mode: base.mode === "LOCAL_FALLBACK" && !request.includeWine && complete ? "LIVE" : "HYBRID",
+        provider,
+        data: { pairings },
+        sources: pairings.map((pairing) => pairing.source),
+        warnings: [...base.warnings, {
+          code: "LIVE_ZERO_PROOF_RECIPE_REVIEW",
+          message: `${discovery.pairings.length} zero-proof recipes were discovered through Perplexity and screened for explicit alcohol and dietary conflicts. Review original instructions, packaged-ingredient labels, allergens, and cross-contact before serving.`,
+          affectedIds: discovery.pairings.map((pairing) => pairing.pairingId),
+        }, ...(!complete ? [{
+          code: "PARTIAL_ZERO_PROOF_FALLBACK",
+          message: "Perplexity did not return a valid recipe for every course, so the reviewed zero-proof catalog filled the remaining courses.",
+        }] : [])],
+      };
+    } catch (error) {
+      if (signal.aborted || (error instanceof Error && error.name === "AbortError")) throw error;
+      base.warnings.push({
+        code: "PROVIDER_FALLBACK",
+        message: `Perplexity zero-proof recipe discovery was not used (${error instanceof Error ? error.message : "provider unavailable"}). Supper Club AI used its reviewed zero-proof catalog instead.`,
+      });
+      return base;
+    }
+  };
+
   if (!request.includeWine || !process.env.GRAPEMINDS_API_KEY) {
     const fallback = curatePairingsFromCatalog(request);
     if (request.includeWine && !process.env.GRAPEMINDS_API_KEY) {
@@ -330,7 +399,7 @@ export async function curatePairingsWithFallback(
         message: "GrapeMinds was not used (GRAPEMINDS_API_KEY is not configured). Supper Club AI used X-Wines instead.",
       });
     }
-    return fallback;
+    return withPerplexityZeroProof(fallback);
   }
 
   try {
@@ -368,7 +437,7 @@ export async function curatePairingsWithFallback(
       ...localFallback.data.pairings.filter((pairing) =>
         pairing.courseId === course.courseId && pairing.kind === "ZERO_PROOF"),
     ].filter((pairing): pairing is Pairing => Boolean(pairing)));
-    return {
+    return withPerplexityZeroProof({
       ok: true,
       mode: "HYBRID",
       provider: request.includeZeroProof
@@ -380,14 +449,15 @@ export async function curatePairingsWithFallback(
         code: "GRAPEMINDS_LIVE_REVIEW",
         message: "Starter and main-course wine metadata was retrieved live from GrapeMinds. Dessert wine uses X-Wines because the live list did not supply verifiable sweetness. Confirm every bottle, vintage, allergen, price, and availability before serving.",
       }],
-    };
+    });
   } catch (error) {
+    if (signal.aborted || (error instanceof Error && error.name === "AbortError")) throw error;
     const fallback = curatePairingsFromCatalog(request);
     const reason = error instanceof Error ? error.message : "provider unavailable";
     fallback.warnings.unshift({
       code: "PROVIDER_FALLBACK",
       message: `GrapeMinds was not used (${reason}). Supper Club AI used X-Wines instead.`,
     });
-    return fallback;
+    return withPerplexityZeroProof(fallback);
   }
 }

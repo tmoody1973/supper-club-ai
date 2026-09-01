@@ -1,4 +1,8 @@
-import type { PlanApiResponse, PlanApiSuccess } from "@/lib/plan-store-contracts";
+import type {
+  PlanApiResponse,
+  PlanApiSuccess,
+  PlanCreationConfiguration,
+} from "@/lib/plan-store-contracts";
 import type { PartyPlan } from "@/lib/types";
 
 export class PlanClientError extends Error {
@@ -34,6 +38,20 @@ export const createSharedPlan = async (initialPlan: PartyPlan) =>
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ initialPlan }),
       cache: "no-store",
+    }),
+  );
+
+export const createDynamicSharedPlan = async (
+  configuration: PlanCreationConfiguration,
+  signal?: AbortSignal,
+) =>
+  parse(
+    await fetch("/api/plans", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ configuration }),
+      cache: "no-store",
+      signal,
     }),
   );
 

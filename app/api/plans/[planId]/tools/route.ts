@@ -181,8 +181,15 @@ export async function POST(request: Request, context: Context) {
       next = setWinePairing(plan, expectedPlanVersion, courseId, pairing);
       data = { selectedPairing: pairing, warnings: results.warnings };
     } else if (operation === "CREATE_ZERO_PROOF_PAIRINGS") {
-      next = createZeroProofPairings(plan, expectedPlanVersion);
-      data = { pairings: next.pairings.filter((pairing) => pairing.kind === "ZERO_PROOF") };
+      const created = await createZeroProofPairings(plan, expectedPlanVersion, request.signal);
+      next = created.plan;
+      data = {
+        pairings: next.pairings.filter((pairing) => pairing.kind === "ZERO_PROOF"),
+        provider: created.curation.provider,
+        providerMode: created.curation.mode,
+        warnings: created.curation.warnings,
+        sources: created.curation.sources,
+      };
     } else if (operation === "REFRESH_MUSIC_METADATA") {
       const storefront = (text(body.storefront, 2) ?? "us").toLowerCase();
       if (!/^[a-z]{2}$/.test(storefront)) return planError("BAD_REQUEST", "storefront must be a two-letter country code.", 422);

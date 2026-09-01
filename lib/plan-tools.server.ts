@@ -2,7 +2,7 @@ import "server-only";
 
 import { findAppleMusicMatch, searchAppleMusicCatalog } from "@/lib/apple-music.server";
 import { briefFromPlanTheme } from "@/lib/creative-brief";
-import { curateZeroProofPairings, searchWinePairingCandidates } from "@/lib/pairing-engine.server";
+import { curatePairingsWithFallback, searchWinePairingCandidates } from "@/lib/pairing-engine.server";
 import { buildPrepTasks, buildShoppingList, courseFromRecipe, RECIPE_CATALOG } from "@/lib/seed-plan";
 import type { MenuCourse, Pairing, PartyPlan, Receipt, ToolWarning, Track } from "@/lib/types";
 
@@ -168,9 +168,24 @@ export function setWinePairing(plan: PartyPlan, expectedPlanVersion: number, cou
   return next;
 }
 
-export function createZeroProofPairings(plan: PartyPlan, expectedPlanVersion: number) {
+export async function createZeroProofPairings(plan: PartyPlan, expectedPlanVersion: number, signal: AbortSignal) {
   if (plan.planVersion !== expectedPlanVersion) throw new Error(`VERSION_CONFLICT:${plan.planVersion}`);
-  const zeroProof = curateZeroProofPairings(plan.courses, plan.theme.creativeBrief);
+  const curation = await curatePairingsWithFallback({
+    action: "CURATE_PAIRINGS",
+    courses: plan.courses.map((course) => ({
+      courseId: course.courseId,
+      role: course.role,
+      title: course.title,
+      ingredients: course.ingredients.map((ingredient) => ingredient.name),
+      dietaryTags: course.dietaryTags,
+    })),
+    includeWine: false,
+    includeZeroProof: true,
+    servings: plan.guestCount,
+    dietaryRequirements: plan.dietaryRequirements,
+    creativeBrief: plan.theme.creativeBrief,
+  }, signal);
+  const zeroProof = curation.data.pairings.filter((pairing) => pairing.kind === "ZERO_PROOF");
   const next = structuredClone(plan);
   next.planVersion += 1;
   next.pairings = [...next.pairings.filter((pairing) => pairing.kind !== "ZERO_PROOF"), ...zeroProof];
@@ -180,8 +195,9 @@ export function createZeroProofPairings(plan: PartyPlan, expectedPlanVersion: nu
     return labels.length ? { ...movement, pairingLabel: labels.join(" / "), status: "EDITING" } : movement;
   });
   next.receipts = [receipt("create_zero_proof_pairings", "Zero-proof pairings created", `${zeroProof.length} substantial non-alcoholic pairings attached across the menu.`, "PAIRING"), ...next.receipts].slice(0, 12);
+  next.warnings = [...new Map([...next.warnings, ...curation.warnings].map((warning) => [`${warning.code}:${warning.message}`, warning])).values()];
   next.updatedAt = new Date().toISOString();
-  return next;
+  return { plan: next, curation };
 }
 
 const substitutionRules: Array<{ pattern: RegExp; alternatives: string[]; supports: string[] }> = [

@@ -43,11 +43,13 @@ import {
   type GuestShareKitPreview,
 } from "@/lib/guest-share-kit";
 import {
+  createDynamicSharedPlan,
   createSharedPlan,
   PlanClientError,
   readSharedPlan,
   replaceSharedPlan,
 } from "@/lib/plan-store-client";
+import type { PlanCreationConfiguration } from "@/lib/plan-store-contracts";
 import {
   buildPrepTasks,
   buildShoppingList,
@@ -119,7 +121,7 @@ type GroceryPricingData = {
 };
 
 const navItems = [
-  { number: "01", label: "Overview", detail: "Seed & Stars", view: "RUN_OF_SHOW" as const, movementId: "movement-arrival" },
+  { number: "01", label: "Overview", view: "RUN_OF_SHOW" as const, movementId: "movement-arrival" },
   { number: "02", label: "Run of show", view: "RUN_OF_SHOW" as const, movementId: "movement-main" },
   { number: "03", label: "Menu & pairings", view: "RUN_OF_SHOW" as const, movementId: "movement-main" },
   { number: "04", label: "Reading & music", view: "RUN_OF_SHOW" as const, movementId: "movement-reading" },
@@ -169,17 +171,18 @@ function SalonMark({ size = 22 }: { size?: number }) {
   );
 }
 
-function EarthseedSeal() {
+function ThemeSeal({ title, author }: { title: string; author: string }) {
+  const ringLabel = `${title} · ${author} · `.toUpperCase();
   return (
-    <svg viewBox="0 0 140 140" role="img" aria-label="Earthseed — we shape change">
+    <svg viewBox="0 0 140 140" role="img" aria-label={`${title} by ${author}`}>
       <defs>
-        <path id="earthseed-ring" d="M 70,70 m -52,0 a 52,52 0 1,1 104,0 a 52,52 0 1,1 -104,0" />
+        <path id="theme-ring" d="M 70,70 m -52,0 a 52,52 0 1,1 104,0 a 52,52 0 1,1 -104,0" />
       </defs>
       <circle cx="70" cy="70" r="61" />
       <circle cx="70" cy="70" r="44" />
-      <text><textPath href="#earthseed-ring" startOffset="2%">EARTHSEED · WE SHAPE CHANGE · </textPath></text>
-      <path className="seal-stem" d="M70 96V47M70 60C58 57 52 50 51 40C62 40 69 46 70 60ZM70 72C82 69 88 62 89 52C78 52 71 58 70 72ZM70 86C60 83 55 77 54 69C63 69 69 75 70 86Z" />
-      <path className="seal-roots" d="M70 95L58 105M70 95L82 105M70 95V108" />
+      <text><textPath href="#theme-ring" startOffset="2%">{ringLabel}</textPath></text>
+      <path className="seal-stem" d="M70 43L90 70L70 97L50 70Z" />
+      <circle className="seal-roots" cx="70" cy="70" r="9" />
     </svg>
   );
 }
@@ -204,6 +207,7 @@ export function SupperClubWorkspace() {
   const [guestSharePreview, setGuestSharePreview] = useState<GuestShareKitPreview | null>(null);
   const [guestShareIncludeLocation, setGuestShareIncludeLocation] = useState(false);
   const [guestShareBusy, setGuestShareBusy] = useState(false);
+  const createPlanInFlightRef = useRef(false);
 
   const updatePlan = useCallback((next: PartyPlan) => {
     planRef.current = next;
@@ -293,13 +297,15 @@ export function SupperClubWorkspace() {
       }
       try {
         const result = await replaceSharedPlan(next, expectedPlanVersion);
-        updatePlan(result.plan);
+        if (planRef.current.planId === next.planId) updatePlan(result.plan);
         return result.plan;
       } catch (error) {
         if (error instanceof PlanClientError && error.code === "VERSION_CONFLICT") {
           const current = await readSharedPlan(next.planId);
-          updatePlan(current.plan);
-          announce(`A newer plan was loaded · v${current.plan.planVersion}`);
+          if (planRef.current.planId === next.planId) {
+            updatePlan(current.plan);
+            announce(`A newer plan was loaded · v${current.plan.planVersion}`);
+          }
         }
         throw error;
       }
@@ -307,12 +313,46 @@ export function SupperClubWorkspace() {
     [announce, planStoreMode, updatePlan],
   );
 
+  const createAndOpenPartyPlan = useCallback(async (
+    configuration: PlanCreationConfiguration,
+    signal: AbortSignal,
+  ) => {
+    if (createPlanInFlightRef.current) {
+      throw new Error("A new supper club plan is already being created.");
+    }
+    createPlanInFlightRef.current = true;
+    try {
+      const result = await createDynamicSharedPlan(configuration, signal);
+      if (signal.aborted) throw new DOMException("Plan creation was cancelled.", "AbortError");
+      updatePlan(result.plan);
+      setPlanStoreMode("SHARED");
+      setActiveView("RUN_OF_SHOW");
+      setSelectedMovementId("movement-main");
+      setGroceryStores(null);
+      setGroceryPricing(null);
+      setGuestSharePreview(null);
+      setGuestShareIncludeLocation(false);
+      setConfirmingFinalize(false);
+      setMobileNavOpen(false);
+      setMobileReceiptsOpen(false);
+      setUtilityMenuOpen(false);
+      const url = new URL(window.location.href);
+      url.searchParams.set("plan", result.plan.planId);
+      window.history.pushState({}, "", url);
+      announce(`Fresh plan opened · ${result.plan.title}`);
+      return result;
+    } finally {
+      createPlanInFlightRef.current = false;
+    }
+  }, [announce, updatePlan]);
+
   useEffect(() => {
     if (planStoreMode === "BOOTING") return;
     const controller = new AbortController();
     let active = true;
     registerSupperClubTools({
       getPlan: () => planRef.current,
+      createPartyPlan: createAndOpenPartyPlan,
       syncPlan: (next) => {
         updatePlan(next);
         announce(`${next.receipts[0]?.title ?? "Plan updated"} · v${next.planVersion}`);
@@ -345,7 +385,7 @@ export function SupperClubWorkspace() {
       active = false;
       controller.abort();
     };
-  }, [announce, persistPlan, planStoreMode, showGroceryToolData]);
+  }, [announce, createAndOpenPartyPlan, persistPlan, planStoreMode, showGroceryToolData]);
 
   useEffect(() => {
     setGroceryPricing(null);
@@ -734,7 +774,7 @@ export function SupperClubWorkspace() {
                   aria-current={selectedNavNumber === item.number ? "page" : undefined}
                 >
                   <span className="folio-number">{item.number}</span>
-                  <span className="folio-copy"><strong>{item.label}</strong>{item.detail ? <small>{item.detail}</small> : null}</span>
+                  <span className="folio-copy"><strong>{item.label}</strong>{item.number === "01" ? <small>{plan.title}</small> : null}</span>
                   {selectedNavNumber === item.number ? <span className="folio-active-dot" /> : null}
                 </button>
               </li>
@@ -837,7 +877,7 @@ export function SupperClubWorkspace() {
         <div className="dialog-backdrop" role="presentation" onMouseDown={() => setConfirmingFinalize(false)}>
           <section className="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="finalize-title" onMouseDown={(event) => event.stopPropagation()}>
             <span className="dialog-kicker">Host approval required</span>
-            <h2 id="finalize-title">Finalize Seed & Stars?</h2>
+            <h2 id="finalize-title">Finalize {plan.title}?</h2>
             <p>This locks the current plan for export. You can keep editing later, but a new version will be created.</p>
             <div className="dialog-warning"><CircleAlert size={18} /> Dietary labels are informational. Verify labels and cross-contact with every guest.</div>
             <div className="dialog-actions">
@@ -897,7 +937,7 @@ function RunOfShow({
               <figcaption>Cover via Open Library</figcaption>
             </figure>
           ) : null}
-          <div className="earthseed-seal"><EarthseedSeal /></div>
+          <div className="earthseed-seal"><ThemeSeal title={plan.inspiration.title} author={plan.inspiration.author} /></div>
         </div>
         <p>{plan.theme.framing}</p>
         <dl className="host-facts">
@@ -921,6 +961,9 @@ function RunOfShow({
         </div>
         {plan.movements.map((movement) => {
           const selected = movement.movementId === selectedMovementId;
+          const movementTrack = plan.soundtrack.find((track) =>
+            track.artist.toLowerCase() === movement.musicLabel.toLowerCase())
+            ?? (movement.movementId === "movement-dessert" ? plan.soundtrack.at(-1) : undefined);
           return (
             <article data-tour={selected ? "selected-movement" : undefined} className={selected ? "movement movement--selected" : "movement"} key={movement.movementId}>
               <button className="movement-row" type="button" onClick={() => onSelectMovement(movement.movementId)} aria-expanded={selected}>
@@ -936,7 +979,13 @@ function RunOfShow({
               </button>
               {selected ? (
                 selectedCourse ? (
-                  <CoursePlate course={selectedCourse} pairings={selectedPairings} onConfirm={() => onConfirmCourse(selectedCourse.courseId)} onReplace={() => onReplaceCourse(selectedCourse)} />
+                  <CoursePlate
+                    course={selectedCourse}
+                    pairings={selectedPairings}
+                    musicCue={movementTrack ? `${movementTrack.artist} — ${movementTrack.title}` : movement.musicLabel}
+                    onConfirm={() => onConfirmCourse(selectedCourse.courseId)}
+                    onReplace={() => onReplaceCourse(selectedCourse)}
+                  />
                 ) : (
                   <CulturalPlate movementId={movement.movementId} plan={plan} onRefreshMusic={onRefreshMusic} refreshingMusic={refreshingMusic} />
                 )
@@ -949,7 +998,7 @@ function RunOfShow({
   );
 }
 
-function CoursePlate({ course, pairings, onConfirm, onReplace }: { course: MenuCourse; pairings: PartyPlan["pairings"]; onConfirm: () => void; onReplace: () => void }) {
+function CoursePlate({ course, pairings, musicCue, onConfirm, onReplace }: { course: MenuCourse; pairings: PartyPlan["pairings"]; musicCue: string; onConfirm: () => void; onReplace: () => void }) {
   const wine = pairings.find((pairing) => pairing.kind === "WINE");
   const zero = pairings.find((pairing) => pairing.kind === "ZERO_PROOF");
   return (
@@ -965,8 +1014,8 @@ function CoursePlate({ course, pairings, onConfirm, onReplace }: { course: MenuC
       <div className="course-column">
         <span className="field-label">Pairings + cultural links</span>
         <div className="plate-field"><Grape size={15} /><span><small>Wine</small><strong>{wine?.name ?? "Not selected"}</strong><p>{wine?.pairingReason}</p></span></div>
-        <div className="plate-field"><Leaf size={15} /><span><small>Zero-proof</small><strong>{zero?.name ?? "Not selected"}</strong><p>{zero?.pairingReason}</p></span></div>
-        <div className="plate-field"><Music2 size={15} /><span><small>Music cue</small><strong>{course.role === "MAIN" ? "Jlin — The Precision of Infinity" : course.role === "STARTER" ? "Jeff Parker — Suite for Max Brown" : "Nala Sinephro — Space 1.8"}</strong></span></div>
+        <div className="plate-field"><Leaf size={15} /><span><small>Zero-proof</small><strong>{zero?.name ?? "Not selected"}</strong><p>{zero?.pairingReason}</p>{zero?.recipeDetails ? <><p>{zero.recipeDetails.prepMinutes} min · {zero.recipeDetails.ingredients.slice(0, 4).map((ingredient) => ingredient.name).join(", ")}</p><a className="source-link" href={zero.recipeDetails.instructionsUrl} target="_blank" rel="noreferrer"><FileText size={14} /> View zero-proof recipe <ChevronRight size={14} /></a></> : null}</span></div>
+        <div className="plate-field"><Music2 size={15} /><span><small>Music cue</small><strong>{musicCue}</strong></span></div>
         <div className="plate-field"><BookOpen size={15} /><span><small>Theme connection</small><p>{course.themeConnection}</p></span></div>
       </div>
       <div className="course-column course-column--source">

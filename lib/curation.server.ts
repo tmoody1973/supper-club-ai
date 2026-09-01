@@ -8,6 +8,7 @@ import {
   themeIdeaFromVocabulary,
 } from "@/lib/creative-brief";
 import { curatePairingsWithFallback } from "@/lib/pairing-engine.server";
+import { discoverMenuCoursesWithPerplexity } from "@/lib/perplexity-recipes.server";
 import { courseFromRecipe } from "@/lib/seed-plan";
 import type {
   CurationRequest,
@@ -389,6 +390,11 @@ async function researchTheme(
     attribution: "Original theme vocabulary and hosting interpretation by Supper Club AI.",
     licenseNote: "Does not reproduce book text or imply author or estate endorsement.",
   };
+  const reviewedThemeSources = [
+    editorialSource,
+    ...(localBook?.sourceRefs ?? []),
+  ].filter((source, index, items) =>
+    items.findIndex((candidate) => candidate.sourceId === source.sourceId) === index);
   const requested = new Set(request.requestedThemes.map((item) => item.toLowerCase()));
   const catalogIdeas: ThemeIdea[] = localBook?.themes.map((item) => ({
     themeId: `theme-${item.theme.toLowerCase()}`,
@@ -468,7 +474,8 @@ async function researchTheme(
           editionKey: book.cover_edition_key,
         }) ?? base.bookCover,
       },
-      sources: [source],
+      sources: [source, ...reviewedThemeSources].filter((item, index, items) =>
+        items.findIndex((candidate) => candidate.sourceId === item.sourceId) === index),
       warnings: [],
     };
   } catch (error) {
@@ -478,7 +485,8 @@ async function researchTheme(
       mode: "LOCAL_FALLBACK",
       provider: "Reviewed book catalog",
       data: base,
-      sources: [base.source],
+      sources: [base.source, ...reviewedThemeSources].filter((item, index, items) =>
+        items.findIndex((candidate) => candidate.sourceId === item.sourceId) === index),
       warnings: [fallbackWarning("Open Library", reason)],
     };
   }
@@ -489,23 +497,12 @@ async function curateMenu(
   signal: AbortSignal,
 ): Promise<CurationResponse<MenuCurationData>> {
   const key = process.env.SPOONACULAR_API_KEY;
-  const fallback = localCourses(
+  const fallback = () => localCourses(
     request.servings,
     request.creativeBrief,
     request.dietaryRequirements,
     request.preparationMinutesMax,
   );
-  if (!key) {
-    return {
-      ok: true,
-      mode: "LOCAL_FALLBACK",
-      provider: "Reviewed recipe catalog",
-      data: { courses: fallback, estimatedMenuCost: { amount: 118, currency: "USD", confidence: "LOW" } },
-      sources: fallback.map((course) => course.source),
-      warnings: [fallbackWarning("Spoonacular", "SPOONACULAR_API_KEY is not configured")],
-    };
-  }
-
   const motifs = request.creativeBrief?.ingredientMotifs ?? [];
   const searches: Array<{ role: MenuCourse["role"]; type: string; query: string; courseId: string }> = [
     { role: "STARTER", type: "appetizer", query: motifs.slice(0, 2).join(" ") || "seasonal vegetable", courseId: "course-first" },
@@ -520,6 +517,60 @@ async function curateMenu(
     requiredDiet.includes("NUT_FREE") ? "peanut" : undefined,
     requiredDiet.includes("NUT_FREE") ? "tree nut" : undefined,
   ].filter((item): item is string => Boolean(item));
+  const priceWarning: ToolWarning = {
+    code: "PRICE_UNVERIFIED",
+    message: `Recipe providers do not verify live grocery prices. Confirm the shopping list against the $${request.menuBudgetCap.amount} menu cap before purchase.`,
+  };
+  const perplexityFallback = async (spoonacularReason: string): Promise<CurationResponse<MenuCurationData>> => {
+    try {
+      const discovery = await discoverMenuCoursesWithPerplexity({
+        roles: searches.map((search) => search.role),
+        servings: request.servings,
+        dietaryRequirements: request.dietaryRequirements,
+        preparationMinutesMax: request.preparationMinutesMax,
+        creativeBrief: request.creativeBrief,
+        signal,
+      });
+      const byRole = new Map(discovery.courses.map((course) => [course.role, course]));
+      const courses = searches.map((search) => byRole.get(search.role)).filter((course): course is MenuCourse => Boolean(course));
+      if (courses.length !== searches.length) {
+        throw new Error("Perplexity did not return a complete three-course menu that passed dietary and source screening.");
+      }
+      return {
+        ok: true,
+        mode: "LIVE",
+        provider: "Perplexity Agent API",
+        data: { courses, estimatedMenuCost: { amount: 118, currency: "USD", confidence: "LOW" } },
+        sources: discovery.sources,
+        warnings: [{
+          code: "PROVIDER_FALLBACK",
+          message: `Spoonacular was not used (${spoonacularReason}). Supper Club AI used web-grounded Perplexity recipe discovery instead.`,
+        }, {
+          code: "LIVE_RECIPE_REVIEW",
+          message: "Perplexity recipe candidates passed structural and dietary screening but remain unconfirmed. Review original instructions, ingredient labels, allergens, cultural framing, and cross-contact before serving.",
+          affectedIds: courses.map((course) => course.courseId),
+        }, priceWarning],
+      };
+    } catch (error) {
+      if (signal.aborted || (error instanceof Error && error.name === "AbortError")) throw error;
+      const perplexityReason = error instanceof Error ? error.message : "provider unavailable";
+      const local = fallback();
+      return {
+        ok: true,
+        mode: "LOCAL_FALLBACK",
+        provider: "Reviewed recipe catalog",
+        data: { courses: local, estimatedMenuCost: { amount: 118, currency: "USD", confidence: "LOW" } },
+        sources: local.map((course) => course.source),
+        warnings: [{
+          code: "PROVIDER_FALLBACK",
+          message: `Spoonacular was not used (${spoonacularReason}); Perplexity was not used (${perplexityReason}). Supper Club AI used its reviewed local recipe catalog instead.`,
+        }, priceWarning],
+      };
+    }
+  };
+
+  if (!key) return perplexityFallback("SPOONACULAR_API_KEY is not configured");
+
   try {
     const results = await Promise.all(searches.map(async (search) => {
       const url = new URL("https://api.spoonacular.com/recipes/complexSearch");
@@ -562,18 +613,12 @@ async function curateMenu(
         code: "LIVE_RECIPE_REVIEW",
         message: "Live recipe candidates are unconfirmed. Verify the original instructions, ingredient labels, allergens, cultural framing, and cross-contact before serving.",
         affectedIds: results.map((course) => course.courseId),
-      }],
+      }, priceWarning],
     };
   } catch (error) {
+    if (signal.aborted || (error instanceof Error && error.name === "AbortError")) throw error;
     const reason = error instanceof Error ? error.message : "provider unavailable";
-    return {
-      ok: true,
-      mode: "LOCAL_FALLBACK",
-      provider: "Reviewed recipe catalog",
-      data: { courses: fallback, estimatedMenuCost: { amount: 118, currency: "USD", confidence: "LOW" } },
-      sources: fallback.map((course) => course.source),
-      warnings: [fallbackWarning("Spoonacular", reason)],
-    };
+    return perplexityFallback(reason);
   }
 }
 
@@ -651,9 +696,17 @@ const soundtrackSeedsForBrief = (brief?: CreativeBrief, customNotes?: string): S
 const localSoundtrack = (seeds: SoundtrackSeed[]): Track[] => seeds.map((track, index) => ({
   trackId: `track-${index + 1}`,
   ...track,
-  provider: "Apple Music",
+  provider: "Reviewed soundtrack anchors",
   status: "DRAFT",
   metadataStatus: "REVIEWED_SEED",
+  source: {
+    sourceId: `src-reviewed-soundtrack-${index + 1}`,
+    provider: "Reviewed soundtrack anchors",
+    title: `${track.artist} — ${track.title}`,
+    url: "https://www.thesupperclub.app/about",
+    accessedAt: accessedAt(),
+    attribution: "Reviewed listening anchor selected by Supper Club AI; verify the recording in the linked music catalog before use.",
+  },
 }));
 
 async function discogsContext(
@@ -747,6 +800,7 @@ async function curateSoundtrack(
   }));
   const liveCount = tracks.filter((track) => track.metadataStatus === "LIVE_APPLE_MUSIC_MATCH").length;
   const sources = tracks.flatMap((track) => [track.source, track.releaseContext?.source].filter((item): item is SourceRef => Boolean(item)));
+  const reviewedCount = tracks.length - liveCount;
   if (!process.env.DISCOGS_TOKEN && liveCount) {
     warnings.push({
       code: "DISCOGS_NOT_CONFIGURED",
@@ -756,7 +810,9 @@ async function curateSoundtrack(
   return {
     ok: true,
     mode: liveCount ? (process.env.DISCOGS_TOKEN ? "HYBRID" : "LIVE") : "LOCAL_FALLBACK",
-    provider: liveCount ? (process.env.DISCOGS_TOKEN ? "Apple Music + Discogs" : "Apple Music") : "Reviewed soundtrack anchors",
+    provider: liveCount
+      ? ["Apple Music", process.env.DISCOGS_TOKEN ? "Discogs" : "", reviewedCount ? "reviewed soundtrack anchors" : ""].filter(Boolean).join(" + ")
+      : "Reviewed soundtrack anchors",
     data: { soundtrack: tracks, savedToLibrary: false },
     sources,
     warnings,
@@ -965,7 +1021,7 @@ export function providerStatus(): ProviderStatus[] {
     { provider: "Reviewed zero-proof catalog", configured: true, mode: "LOCAL" },
     { provider: "Apple Music", configured: Boolean(process.env.APPLE_MUSIC_DEVELOPER_TOKEN), mode: "LIVE" },
     { provider: "Discogs", configured: Boolean(process.env.DISCOGS_TOKEN), mode: "OPTIONAL_ENRICHMENT" },
-    { provider: "Perplexity", configured: Boolean(process.env.PERPLEXITY_API_KEY), mode: "OPTIONAL_ENRICHMENT" },
+    { provider: "Perplexity", configured: Boolean(process.env.PERPLEXITY_API_KEY), mode: "LIVE" },
   ];
 }
 

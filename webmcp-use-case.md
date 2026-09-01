@@ -37,7 +37,7 @@ Before WebMCP, this collaboration was difficult because websites and agents had 
 
 ## How We Implemented WebMCP
 
-Supper Club AI registers twenty-four typed tools with `document.modelContext.registerTool`:
+Supper Club AI registers twenty-five typed website tools with `document.modelContext.registerTool`:
 
 1. `get_party_plan`
 2. `configure_party`
@@ -63,12 +63,15 @@ Supper Club AI registers twenty-four typed tools with `document.modelContext.reg
 22. `preview_guest_share_kit`
 23. `export_guest_share_kit`
 24. `export_host_packet`
+25. `create_party_plan`
 
-Each tool has a focused description, a JSON input schema, behavioral annotations, and a structured success or error response. The response can include the updated plan version, affected interface sections, source references, warnings, a human-readable summary, and suggested next actions.
+`create_party_plan` starts from the host's inspiration, guest count, budget, dietary requirements, and wine and zero-proof preferences. It creates a fresh plan through the dynamic-plan endpoint, changes the website to the returned plan ID, and leaves the previous plan untouched. Its structured result includes provider receipts for the theme, menu, pairings, and soundtrack so the host can see which provider and operating mode produced each section.
+
+The website's twenty-five WebMCP tools are separate from the ChatGPT MCP App's sixteen focused tools. Both operate on the same versioned plan model, but the website exposes the broader composition and artifact toolkit. Every tool has a focused description, a JSON input schema, behavioral annotations, and a structured success or error response. A response can include the updated plan version, affected interface sections, source references, provider receipts, warnings, a human-readable summary, and suggested next actions.
 
 The WebMCP tools operate on the same React plan state that renders the Supper Club AI workspace. When a tool succeeds, it commits a new version of the plan, updates the relevant interface sections, and adds a visible receipt. State-changing tools require `expectedPlanVersion`, which prevents an agent from overwriting newer host changes with stale information. Provider requests also perform a second version check before their results are applied.
 
-Research and curation run through a same-origin server gateway so private credentials never enter browser code or WebMCP responses. The gateway normalizes results from sources including Open Library, Spoonacular, GrapeMinds with X-Wines fallback, Apple Music, and Discogs into Supper Club AI's shared data model. Reviewed local catalogs provide graceful fallbacks, and the interface clearly identifies sources and fallback behavior.
+Research and curation run through a same-origin server gateway so private credentials never enter browser code or WebMCP responses. The gateway normalizes results from sources including Open Library; Spoonacular with Perplexity Agent and the reviewed recipe catalog as fallbacks; GrapeMinds with X-Wines fallback; Perplexity-backed zero-proof discovery with a reviewed catalog fallback; and Apple Music with reviewed soundtrack anchors. Discogs can add release context. Provider receipts report the selected provider, live or fallback mode, and source count instead of exposing credentials or raw payloads.
 
 Finally, tool permissions match the consequence of each action. Reading the plan and previewing the redacted guest kit are read-only. Curation tools can revise specified sections. Finalization, host-packet export, and guest-share export require explicit approval because they lock state or create downloaded files. This gives the agent useful agency without removing the Creative Host from the decisions that matter.
 

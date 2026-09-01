@@ -8,21 +8,17 @@ import type {
   ThemeCurationData,
 } from "@/lib/curation-contracts";
 import { buildPrepTasks, buildShoppingList, makeSeedPlan } from "@/lib/seed-plan";
+import type {
+  PlanCreationConfiguration,
+  PlanCreationProviderReceipt,
+} from "@/lib/plan-store-contracts";
 import type { Movement, PartyPlan, Receipt, ToolWarning } from "@/lib/types";
 
-export type DynamicPlanConfiguration = {
-  title?: string;
-  inspirationTitle: string;
-  inspirationAuthor: string;
-  guestCount?: number;
-  budgetAmount?: number;
-  dietaryRequirements?: string[];
-  tone?: PartyPlan["tone"];
-  eventDate?: string;
-  requestedThemes?: string[];
-  includeWine?: boolean;
-  includeZeroProof?: boolean;
-  musicStorefront?: string;
+export type DynamicPlanConfiguration = PlanCreationConfiguration;
+
+export type DynamicPlanBuild = {
+  plan: PartyPlan;
+  providerReceipts: PlanCreationProviderReceipt[];
 };
 
 const labelNow = () =>
@@ -61,23 +57,55 @@ const pairingLabel = (courseId: string, pairings: PairingCurationData["pairings"
 
 const dynamicMovements = (
   skeleton: Movement[],
+  theme: ThemeCurationData,
   menu: MenuCurationData,
   pairings: PairingCurationData,
   soundtrack: SoundtrackCurationData,
 ): Movement[] => {
   const courses = new Map(menu.courses.map((course) => [course.courseId, course]));
+  const themeLabels = theme.ideas.map((idea) => idea.name).filter(Boolean);
   return skeleton.map((movement, index) => {
     const course = movement.courseId ? courses.get(movement.courseId) : undefined;
     const track = soundtrack.soundtrack[index % Math.max(soundtrack.soundtrack.length, 1)];
     if (!course) {
+      const neutralCopy = movement.movementId === "movement-arrival"
+        ? {
+            title: "Arrival / welcome ritual",
+            subtitle: "Gather + ground",
+            recipeLabel: "Opening bite",
+            pairingLabel: "Opening zero-proof sip",
+            hostCue: "Welcome circle",
+          }
+        : movement.movementId === "movement-reading"
+          ? {
+              title: "Reading / reflection",
+              subtitle: themeLabels[0] ?? "Theme + conversation",
+              recipeLabel: "Original theme note",
+              pairingLabel: "Herbal infusion",
+              hostCue: "Read + reflect",
+            }
+          : {
+              title: "Listening interval",
+              subtitle: "Music + reflection",
+              recipeLabel: "Table reset",
+              pairingLabel: "Sparkling water",
+              hostCue: "Sit with it",
+            };
       return {
         ...movement,
+        ...neutralCopy,
         musicLabel: track?.artist ?? movement.musicLabel,
         status: "DRAFT",
       };
     }
+    const subtitle = course.role === "STARTER"
+      ? (themeLabels[0] ?? "First offering")
+      : course.role === "MAIN"
+        ? (themeLabels[1] ?? "Shared table")
+        : (themeLabels[2] ?? "Sweet close");
     return {
       ...movement,
+      subtitle,
       recipeLabel: course.title,
       pairingLabel: pairingLabel(course.courseId, pairings.pairings),
       musicLabel: track?.artist ?? "Soundtrack cue",
@@ -89,7 +117,7 @@ const dynamicMovements = (
 export async function buildDynamicPartyPlan(
   configuration: DynamicPlanConfiguration,
   signal: AbortSignal,
-): Promise<PartyPlan> {
+): Promise<DynamicPlanBuild> {
   const skeleton = makeSeedPlan();
   const guestCount = configuration.guestCount ?? 8;
   const budgetAmount = configuration.budgetAmount ?? 280;
@@ -129,6 +157,8 @@ export async function buildDynamicPartyPlan(
       })),
       includeWine,
       includeZeroProof,
+      servings: guestCount,
+      dietaryRequirements,
       creativeBrief: themeResult.data.creativeBrief,
     }, signal) as Promise<Awaited<ReturnType<typeof curate>> & { data: PairingCurationData }>,
     curate({
@@ -151,7 +181,38 @@ export async function buildDynamicPartyPlan(
     ...soundtrackResult.warnings,
   ]);
 
-  return {
+  const providerReceipts: PlanCreationProviderReceipt[] = [
+    {
+      stage: "THEME",
+      provider: themeResult.provider,
+      mode: themeResult.mode,
+      sources: themeResult.sources,
+      warnings: themeResult.warnings,
+    },
+    {
+      stage: "MENU",
+      provider: menuResult.provider,
+      mode: menuResult.mode,
+      sources: menuResult.sources,
+      warnings: menuResult.warnings,
+    },
+    {
+      stage: "PAIRINGS",
+      provider: pairingResult.provider,
+      mode: pairingResult.mode,
+      sources: pairingResult.sources,
+      warnings: pairingResult.warnings,
+    },
+    {
+      stage: "SOUNDTRACK",
+      provider: soundtrackResult.provider,
+      mode: soundtrackResult.mode,
+      sources: soundtrackResult.sources,
+      warnings: soundtrackResult.warnings,
+    },
+  ];
+
+  const plan: PartyPlan = {
     ...skeleton,
     title,
     inspiration: {
@@ -176,7 +237,7 @@ export async function buildDynamicPartyPlan(
       copyrightNotice:
         "This plan uses original thematic interpretation and bibliographic metadata. It does not reproduce the source work or imply endorsement by its creator or estate.",
     },
-    movements: dynamicMovements(skeleton.movements, menuResult.data, pairingResult.data, soundtrackResult.data),
+    movements: dynamicMovements(skeleton.movements, themeResult.data, menuResult.data, pairingResult.data, soundtrackResult.data),
     courses,
     pairings: pairingResult.data.pairings,
     soundtrack: soundtrackResult.data.soundtrack,
@@ -184,13 +245,15 @@ export async function buildDynamicPartyPlan(
     prep,
     receipts: [
       receipt("create_shopping_list", "Shopping list reconciled", `${shopping.length} ingredients grouped by aisle.`, "SHOPPING"),
-      receipt("curate_soundtrack", "Soundtrack sequenced", `${soundtrackResult.data.soundtrack.length} live or reviewed listening anchors selected.`, "MUSIC"),
-      receipt("curate_pairings", "Pairings curated", `${pairingResult.data.pairings.length} wine or zero-proof choices matched to the menu.`, "PAIRING"),
-      receipt("curate_menu", "Menu curated", `${courses.length} courses selected for ${guestCount} guests.`, "RECIPE"),
-      receipt("research_theme", "Theme researched", `A fresh cultural brief was created for ${configuration.inspirationTitle}.`, "THEME"),
+      receipt("curate_soundtrack", "Soundtrack sequenced", `${soundtrackResult.provider} (${soundtrackResult.mode.toLowerCase()}): ${soundtrackResult.data.soundtrack.length} listening anchors selected from ${soundtrackResult.sources.length} source${soundtrackResult.sources.length === 1 ? "" : "s"}.`, "MUSIC"),
+      receipt("curate_pairings", "Pairings curated", `${pairingResult.provider} (${pairingResult.mode.toLowerCase()}): ${pairingResult.data.pairings.length} wine or zero-proof choices matched from ${pairingResult.sources.length} source${pairingResult.sources.length === 1 ? "" : "s"}.`, "PAIRING"),
+      receipt("curate_menu", "Menu curated", `${menuResult.provider} (${menuResult.mode.toLowerCase()}): ${courses.length} courses selected from ${menuResult.sources.length} source${menuResult.sources.length === 1 ? "" : "s"} for ${guestCount} guests.`, "RECIPE"),
+      receipt("research_theme", "Theme researched", `${themeResult.provider} (${themeResult.mode.toLowerCase()}): a fresh cultural brief for ${configuration.inspirationTitle} used ${themeResult.sources.length} source${themeResult.sources.length === 1 ? "" : "s"}.`, "THEME"),
     ],
     warnings,
     exports: [],
     updatedAt: new Date().toISOString(),
   };
+
+  return { plan, providerReceipts };
 }
