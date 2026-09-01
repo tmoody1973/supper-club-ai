@@ -2,14 +2,14 @@
 
 Supper Club AI is a culturally literate planning workspace for Creative Hosts. Its featured demo, **Seed & Stars**, turns an Afrofuturist dinner inspired by Octavia E. Butler's *Parable of the Sower* into a sourced run of show: theme, menu, pairings, soundtrack, shopping list, prep timeline, and downloadable host packet.
 
-The website exposes nine typed WebMCP tools so an agent can read and update the same structured plan the host sees in the browser. The repository also includes an MCP App for ChatGPT with an interactive host-brief form.
+The website exposes ten typed WebMCP tools so an agent can read and update the same structured plan the host sees in the browser. The repository also includes an MCP App for ChatGPT with an interactive host-brief form.
 
 - **Live application:** [supper-club-ai.vercel.app](https://supper-club-ai.vercel.app/)
 - **License:** [MIT](./LICENSE)
 
 ## WebMCP implementation
 
-The nine tool definitions live in [`lib/webmcp-tools.ts`](./lib/webmcp-tools.ts). Each tool declares a name, description, JSON input schema, annotations, and an `execute` function. The application registers every definition with the browser's model context:
+The ten tool definitions live in [`lib/webmcp-tools.ts`](./lib/webmcp-tools.ts). Each tool declares a name, description, JSON input schema, annotations, and an `execute` function. The application registers every definition with the browser's model context:
 
 ```ts
 const tools: WebMCPTool[] = [
@@ -28,8 +28,8 @@ const tools: WebMCPTool[] = [
     },
   },
   // configure_party, research_theme, curate_menu, curate_pairings,
-  // curate_soundtrack, create_shopping_list, finalize_party_plan,
-  // and export_host_packet
+  // curate_soundtrack, enrich_soundtrack_context, create_shopping_list,
+  // finalize_party_plan, and export_host_packet
 ];
 
 for (const definition of tools) {
@@ -47,7 +47,7 @@ The executable implementation includes version-conflict protection, structured s
 - `app/api/plans/` — anonymous, versioned PlanStore HTTP boundary shared by the website and MCP app.
 - `chatgpt-app/` — MCP server and self-contained interactive ChatGPT App.
 - `components/` — the Creative Host workspace and shared WebMCP-driven interface.
-- `lib/webmcp-tools.ts` — all nine WebMCP tool definitions and registration.
+- `lib/webmcp-tools.ts` — all ten WebMCP tool definitions and registration.
 - `lib/curation.server.ts` — normalized book, recipe, and music provider gateway.
 - `lib/pairing-engine.server.ts` — GrapeMinds, X-Wines, and local pairing logic.
 - `data/` — reviewed fallback catalogs, schemas, and permitted vendor data.
@@ -75,6 +75,8 @@ npm run start
 Provider credentials are optional during development. Open Library and the reviewed local catalogs work without keys; missing recipe or music credentials produce explicit local-fallback receipts.
 
 Wine pairing uses live GrapeMinds metadata when `GRAPEMINDS_API_KEY` is configured, the CC0 X-Wines subset as an automatic fallback, and a reviewed local catalog for zero-proof drinks. GrapeMinds records are used for live discovery and are not copied into a persistent local dataset.
+
+When `PERPLEXITY_API_KEY` is configured, `enrich_soundtrack_context` uses the Perplexity Agent API with web search and structured output to attach concise artist, album, cultural, and hosting notes to soundtrack entries. The normalized plan stores the selected original source links, not Perplexity credentials or raw provider payloads.
 
 ## Shared PlanStore
 

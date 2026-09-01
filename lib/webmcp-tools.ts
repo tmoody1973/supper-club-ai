@@ -8,6 +8,7 @@ import type {
   MenuCurationData,
   PairingCurationData,
   SoundtrackCurationData,
+  SoundtrackEnrichmentData,
   ThemeCurationData,
 } from "@/lib/curation-contracts";
 import type {
@@ -649,6 +650,109 @@ export async function registerSupperClubTools(
               curation.sources,
             ),
             nextActions: [{ tool: "create_shopping_list", label: "Build the shopping list", reason: "Reconcile ingredients across the confirmed menu.", requiresConfirmation: false }],
+          },
+        );
+      },
+    }),
+    tool({
+      name: "enrich_soundtrack_context",
+      title: "Research artists and albums",
+      description:
+        "Use Perplexity Agent API web research to attach concise, source-backed artist, album, cultural, and hosting context to selected tracks in the current soundtrack. This does not save or publish a playlist.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          planId: { type: "string" },
+          expectedPlanVersion: { type: "number" },
+          trackIds: {
+            type: "array",
+            items: { type: "string" },
+            minItems: 1,
+            maxItems: 6,
+            description: "Optional soundtrack track IDs to research. Omit to enrich the full soundtrack.",
+          },
+        },
+        required: ["planId", "expectedPlanVersion"],
+        additionalProperties: false,
+      },
+      annotations: { readOnlyHint: false, idempotentHint: false, openWorldHint: true },
+      execute: async (input, options) => {
+        const plan = runtime.getPlan();
+        if (input.planId !== plan.planId) return failure(plan, "PLAN_NOT_FOUND", "That plan is not open.");
+        const versionError = checkVersion(plan, input);
+        if (versionError) return versionError;
+        const requestedIds = Array.isArray(input.trackIds)
+          ? new Set(input.trackIds.map(String))
+          : null;
+        const targetTracks = requestedIds
+          ? plan.soundtrack.filter((track) => requestedIds.has(track.trackId))
+          : plan.soundtrack;
+        if (!targetTracks.length) {
+          return failure(plan, "VALIDATION_ERROR", "Choose at least one track from the current soundtrack.");
+        }
+
+        let curation;
+        try {
+          curation = await requestCuration<SoundtrackEnrichmentData>({
+            action: "ENRICH_SOUNDTRACK",
+            tracks: targetTracks.map(({ trackId, title, artist, albumName, sourceUrl }) => ({
+              trackId,
+              title,
+              artist,
+              albumName,
+              sourceUrl,
+            })),
+            theme: {
+              title: `${plan.inspiration.title} by ${plan.inspiration.author}`,
+              framing: plan.theme.framing,
+            },
+          }, options.signal);
+        } catch (error) {
+          return curationFailure(plan, error, options.signal);
+        }
+
+        const current = runtime.getPlan();
+        if (input.planId !== current.planId) return failure(current, "PLAN_NOT_FOUND", "That plan is not open.");
+        const currentVersionError = checkVersion(current, input);
+        if (currentVersionError) return currentVersionError;
+        const enrichmentByTrack = new Map(
+          curation.data.enrichments.map((item) => [item.trackId, item.context]),
+        );
+        const next = structuredClone(current);
+        next.soundtrack = current.soundtrack.map((track) => {
+          const editorialContext = enrichmentByTrack.get(track.trackId);
+          return editorialContext ? { ...track, editorialContext } : track;
+        });
+        const committed = await commit(
+          runtime,
+          current,
+          next,
+          makeReceipt(
+            "enrich_soundtrack_context",
+            "Music context researched",
+            `${enrichmentByTrack.size} soundtrack ${enrichmentByTrack.size === 1 ? "entry" : "entries"} enriched with source-backed artist and album notes.`,
+            "MUSIC",
+          ),
+        );
+        return success(
+          committed,
+          ["SOUNDTRACK"],
+          {
+            enrichments: curation.data.enrichments,
+            enrichedTrackIds: [...enrichmentByTrack.keys()],
+            provider: curation.provider,
+            providerMode: curation.mode,
+          },
+          `Added researched context to ${enrichmentByTrack.size} soundtrack ${enrichmentByTrack.size === 1 ? "entry" : "entries"}.`,
+          {
+            warnings: mergeWarnings(committed.warnings, curation.warnings),
+            sources: curation.sources,
+            nextActions: [{
+              tool: "create_shopping_list",
+              label: "Build the shopping list",
+              reason: "Continue coordinating the practical dinner plan.",
+              requiresConfirmation: false,
+            }],
           },
         );
       },

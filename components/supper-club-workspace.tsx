@@ -122,6 +122,7 @@ export function SupperClubWorkspace() {
   const [utilityMenuOpen, setUtilityMenuOpen] = useState(false);
   const [confirmingFinalize, setConfirmingFinalize] = useState(false);
   const [webmcpStatus, setWebmcpStatus] = useState<"CONNECTING" | "READY" | "PREVIEW" | "ERROR">("CONNECTING");
+  const [webmcpToolCount, setWebmcpToolCount] = useState(0);
   const [planStoreMode, setPlanStoreMode] = useState<PlanStoreMode>("BOOTING");
   const [toast, setToast] = useState<string | null>(null);
 
@@ -225,6 +226,7 @@ export function SupperClubWorkspace() {
           return;
         }
         if (registration) {
+          setWebmcpToolCount(registration.count);
           setWebmcpStatus("READY");
         } else {
           setWebmcpStatus("PREVIEW");
@@ -471,13 +473,13 @@ export function SupperClubWorkspace() {
           <span className="brand-context">Creative Host Workspace</span>
         </div>
         <div className="topbar-meta">
-          <Link className="about-link" href="/about">About / how to use</Link>
+          <Link className="about-link" href="/about" prefetch={false}>About / how to use</Link>
           <span className="issue-label">Issue 0052</span>
           <span className="plan-state">{plan.status === "FINALIZED" ? "Finalized" : "Plan editing"}</span>
           <span className="last-saved"><small>Last saved</small><strong>Today {formatLastSaved(plan.updatedAt)}</strong></span>
           <span className={`tool-status tool-status--${webmcpStatus.toLowerCase()}`} title="WebMCP connection status">
             <span className="tool-status-dot" />
-            {webmcpStatus === "READY" ? "9 tools live" : webmcpStatus === "PREVIEW" ? "Preview mode" : webmcpStatus === "ERROR" ? "Tool error" : "Connecting"}
+            {webmcpStatus === "READY" ? `${webmcpToolCount} tools live` : webmcpStatus === "PREVIEW" ? "Preview mode" : webmcpStatus === "ERROR" ? "Tool error" : "Connecting"}
           </span>
           <button className="packet-action" type="button" onClick={() => setActiveView("HOST_PACKET")}>
             Review host packet <ChevronRight size={16} />
@@ -749,6 +751,26 @@ function CulturalPlate({ movementId, plan }: { movementId: string; plan: PartyPl
                 <strong>{track.title}</strong>
                 <small>{track.artist} · {track.moment}</small>
                 {track.albumName ? <small className="track-album">{track.albumName}</small> : null}
+                {track.editorialContext ? (
+                  <details className="track-context">
+                    <summary>Artist + album context</summary>
+                    <div>
+                      <p><b>Artist</b>{track.editorialContext.artistOverview}</p>
+                      <p><b>Recording</b>{track.editorialContext.albumOverview}</p>
+                      <p><b>Why it matters</b>{track.editorialContext.culturalContext}</p>
+                      <p><b>Host cue</b>{track.editorialContext.hostingNote}</p>
+                      {track.editorialContext.sources.length ? (
+                        <nav aria-label={`Sources for ${track.title}`}>
+                          {track.editorialContext.sources.slice(0, 4).map((source) => (
+                            <a key={source.sourceId} href={source.url} target="_blank" rel="noreferrer">
+                              {source.title} <ExternalLink size={11} aria-hidden="true" />
+                            </a>
+                          ))}
+                        </nav>
+                      ) : null}
+                    </div>
+                  </details>
+                ) : null}
                 {track.previewUrl ? (
                   <audio controls preload="none" src={track.previewUrl} aria-label={`Preview ${track.title} by ${track.artist}`}>
                     Your browser does not support Apple Music audio previews.

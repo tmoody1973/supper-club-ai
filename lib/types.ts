@@ -131,6 +131,15 @@ export type Pairing = {
   source: SourceRef;
 };
 
+export type TrackEditorialContext = {
+  artistOverview: string;
+  albumOverview: string;
+  culturalContext: string;
+  hostingNote: string;
+  researchedAt: string;
+  sources: SourceRef[];
+};
+
 export type Track = {
   trackId: string;
   providerId?: string;
@@ -156,6 +165,7 @@ export type Track = {
     styles: string[];
     source: SourceRef;
   };
+  editorialContext?: TrackEditorialContext;
 };
 
 export type Movement = {

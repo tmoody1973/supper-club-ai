@@ -64,7 +64,7 @@ const planningSteps = [
 
 const webmcpSteps = [
   "Open Supper Club AI in ChatGPT’s in-app browser. Keep the site and your conversation together.",
-  "Look for “9 tools live” in the black header. That means the page has made its WebMCP capabilities available.",
+  "Look for “10 tools live” in the black header. That means the page has made its WebMCP capabilities available.",
   "In chat, describe the gathering and ask ChatGPT to use the Supper Club AI tools—not merely suggest ideas in prose.",
   "Watch the plan change on the page. Each agent action also appears as a timestamped receipt in the right margin.",
   "Review and revise. You can preserve good choices while asking the agent to replace only what needs work.",
@@ -84,7 +84,7 @@ const liveTools = [
   ["Theme", "Research a sourced cultural frame without reproducing copyrighted text."],
   ["Menu", "Curate three connected courses and keep dietary information visible."],
   ["Pairings", "Attach wine and substantial zero-proof choices to each course."],
-  ["Soundtrack", "Sequence a musical arc with artwork, previews, and release context when available."],
+  ["Soundtrack", "Sequence a musical arc with artwork, previews, and researched artist and album context when available."],
   ["Shopping", "Reconcile recipe ingredients into one editable, course-linked list."],
   ["Host packet", "Validate the complete plan and export a practical PDF after approval."],
 ];
@@ -157,7 +157,7 @@ export default function AboutPage() {
             <span className={styles.statusLive}>Available now</span>
             <h3>The WebMCP website</h3>
             <p>
-              Open the full visual workspace. The page exposes nine typed WebMCP tools so an
+              Open the full visual workspace. The page exposes ten typed WebMCP tools so an
               agent can update the board while you watch, review, and edit.
             </p>
             <ul>

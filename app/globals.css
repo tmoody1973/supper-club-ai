@@ -1093,6 +1093,60 @@ a:focus-visible {
   opacity: 0.8;
 }
 
+.track-context {
+  margin-top: 10px;
+  border-top: 1px dotted var(--rule-strong);
+  border-bottom: 1px dotted var(--rule-strong);
+}
+
+.track-context summary {
+  padding: 8px 0;
+  color: var(--marginalia);
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.track-context > div {
+  padding: 2px 0 10px;
+}
+
+.track-context p {
+  margin: 8px 0 0;
+  font-family: var(--serif);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.track-context b {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--signal-dark);
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.track-context nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin-top: 11px;
+}
+
+.track-context nav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--marginalia);
+  font-family: var(--mono);
+  font-size: 10px;
+  text-underline-offset: 3px;
+}
+
 .track-copy audio {
   width: min(100%, 330px);
   height: 32px;

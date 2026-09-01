@@ -6,6 +6,7 @@ import type {
   ThemeIdea,
   ToolWarning,
   Track,
+  TrackEditorialContext,
 } from "@/lib/types";
 
 export type CurationMode = "LIVE" | "HYBRID" | "LOCAL_FALLBACK";
@@ -32,6 +33,13 @@ export type PairingCurationData = { pairings: Pairing[] };
 export type SoundtrackCurationData = {
   soundtrack: Track[];
   savedToLibrary: false;
+};
+
+export type SoundtrackEnrichmentData = {
+  enrichments: Array<{
+    trackId: string;
+    context: TrackEditorialContext;
+  }>;
 };
 
 export type CurationRequest =
@@ -69,6 +77,20 @@ export type CurationRequest =
       energyArc: "ARRIVAL_TO_ASCENT" | "STEADY_GLOW" | "CUSTOM";
       customEnergyNotes?: string;
       creativeBrief?: CreativeBrief;
+    }
+  | {
+      action: "ENRICH_SOUNDTRACK";
+      tracks: Array<{
+        trackId: string;
+        title: string;
+        artist: string;
+        albumName?: string;
+        sourceUrl?: string;
+      }>;
+      theme: {
+        title: string;
+        framing: string;
+      };
     };
 
 export type CurationResponse<T> = {
@@ -89,7 +111,7 @@ export type CurationErrorResponse = {
 };
 
 export type ProviderStatus = {
-  provider: "Open Library" | "Spoonacular" | "GrapeMinds" | "X-Wines" | "Reviewed zero-proof catalog" | "Apple Music" | "Discogs";
+  provider: "Open Library" | "Spoonacular" | "GrapeMinds" | "X-Wines" | "Reviewed zero-proof catalog" | "Apple Music" | "Discogs" | "Perplexity";
   configured: boolean;
   mode: "LIVE" | "LOCAL" | "OPTIONAL_ENRICHMENT";
 };

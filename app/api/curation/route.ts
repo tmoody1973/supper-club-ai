@@ -9,6 +9,7 @@ const actions = new Set([
   "CURATE_MENU",
   "CURATE_PAIRINGS",
   "CURATE_SOUNDTRACK",
+  "ENRICH_SOUNDTRACK",
 ]);
 
 export async function GET() {
