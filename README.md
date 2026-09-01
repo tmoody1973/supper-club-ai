@@ -2,6 +2,8 @@
 
 Supper Club AI is an **agent-readable cultural hosting workspace** for Creative Hosts—not an AI dinner planner. It turns one cultural inspiration into a shared, sourced run of show spanning the theme, menu, pairings, soundtrack, shopping list, prep timeline, and downloadable host packet. Its featured demo, **Seed & Stars**, composes an Afrofuturist gathering inspired by Octavia E. Butler's *Parable of the Sower*.
 
+> Supper Club AI turns cultural inspiration into a coordinated, hostable experience by giving people and agents one shared, agent-readable workspace—reducing the fragmented research and manual reconciliation that make ambitious gatherings difficult to produce.
+
 The website exposes twenty-two typed WebMCP tools so an agent can read and update the same structured plan the host sees in the browser. Unlike a chat that leaves the host reconciling disconnected suggestions, Supper Club AI makes each change part of a durable, versioned plan with visible sources, warnings, and tool receipts. The repository also includes an MCP App for ChatGPT with sixteen focused tools and an interactive host-brief form.
 
 - **Live application:** [thesupperclub.app](https://www.thesupperclub.app/)

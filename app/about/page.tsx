@@ -478,10 +478,10 @@ Connect to: https://supper-club-ai-mcp.tarikjmoody.workers.dev/mcp`}</code></pre
             <p className={styles.sectionLabel}>09 / Why this matters</p>
             <h2 id="impact-title">Make ambitious gatherings possible without turning the host into a project manager.</h2>
             <p>
-              Cultural hosting asks one person to coordinate research, recipes, dietary needs,
-              bottles, music, shopping, and timing across disconnected tabs, chats, and lists.
-              Supper Club AI holds those dependencies in one agent-readable plan, so a change
-              can be traced and reconciled instead of quietly breaking the evening.
+              Supper Club AI turns cultural inspiration into a coordinated, hostable experience
+              by giving people and agents one shared, agent-readable workspace—reducing the
+              fragmented research and manual reconciliation that make ambitious gatherings
+              difficult to produce.
             </p>
           </div>
 
