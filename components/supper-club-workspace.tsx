@@ -1549,8 +1549,8 @@ function AgentMarginalia({ receipts, warnings, planVersion }: { receipts: Receip
             </article>
           );
         })}
+        {warnings.map((warning) => <article className="conflict-note" key={warning.code}><CircleAlert size={18} /><div><span>{warning.code.replaceAll("_", " ")}</span><p>{warning.message}</p></div></article>)}
       </div>
-      {warnings.map((warning) => <article className="conflict-note" key={warning.code}><CircleAlert size={18} /><div><span>{warning.code.replaceAll("_", " ")}</span><p>{warning.message}</p></div></article>)}
       <div className="rail-foot"><span><PenLine size={14} /> Marginalia is saved with plan v{planVersion}</span></div>
     </aside>
   );

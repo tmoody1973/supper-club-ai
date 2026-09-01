@@ -2654,6 +2654,7 @@ html[data-theme="dark"] .mobile-receipts-jump {
 }
 
 .rail-head {
+  flex: 0 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: start;
@@ -2728,7 +2729,11 @@ html[data-theme="dark"] .mobile-receipts-jump {
 }
 
 .receipt-list {
+  min-height: 0;
+  flex: 1 1 auto;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
 }
 
 .receipt {
@@ -2829,6 +2834,7 @@ html[data-theme="dark"] .mobile-receipts-jump {
 }
 
 .rail-foot {
+  flex: 0 0 auto;
   margin-top: auto;
   padding: 11px 16px;
   border-top: 1px solid rgba(243, 235, 221, 0.15);
