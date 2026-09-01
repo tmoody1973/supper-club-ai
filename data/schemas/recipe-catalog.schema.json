@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "recipe-catalog.schema.json",
+  "title": "Supper Club AI recipe catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "catalogType", "generatedAt", "items"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "catalogType": { "const": "recipes" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/recipe" }
+    }
+  },
+  "$defs": {
+    "recipe": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "summary",
+        "courseRoles",
+        "servings",
+        "times",
+        "ingredients",
+        "instructions",
+        "dietaryTags",
+        "allergens",
+        "themeConnections",
+        "sourceRefs",
+        "reviewStatus"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^recipe-[a-z0-9-]+$" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 180 },
+        "summary": { "type": "string", "minLength": 20, "maxLength": 600 },
+        "courseRoles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["WELCOME", "STARTER", "MAIN", "SIDE", "DESSERT", "BEVERAGE"] }
+        },
+        "culturalTraditions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 100 }
+        },
+        "servings": { "type": "number", "exclusiveMinimum": 0 },
+        "times": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["prepMinutes", "cookMinutes", "totalMinutes"],
+          "properties": {
+            "prepMinutes": { "type": "integer", "minimum": 0 },
+            "cookMinutes": { "type": "integer", "minimum": 0 },
+            "totalMinutes": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "ingredients": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["ingredientId", "name", "canonicalName", "quantityText", "category", "isOptional"],
+            "properties": {
+              "ingredientId": { "type": "string", "pattern": "^ingredient-[a-z0-9-]+$" },
+              "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+              "canonicalName": { "type": "string", "minLength": 1, "maxLength": 120 },
+              "quantityText": { "type": "string", "minLength": 1, "maxLength": 80 },
+              "normalizedQuantity": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["value", "unit"],
+                "properties": {
+                  "value": { "type": "number", "exclusiveMinimum": 0 },
+                  "unit": { "type": "string", "minLength": 1, "maxLength": 30 }
+                }
+              },
+              "preparation": { "type": "string", "maxLength": 160 },
+              "category": {
+                "enum": ["PRODUCE", "BAKERY", "PANTRY", "SPICES", "REFRIGERATED", "PROTEIN", "BEVERAGES", "WINE", "OTHER"]
+              },
+              "isOptional": { "type": "boolean" },
+              "substitutions": {
+                "type": "array",
+                "items": { "type": "string", "minLength": 1, "maxLength": 160 }
+              }
+            }
+          }
+        },
+        "instructions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode"],
+          "properties": {
+            "mode": { "enum": ["EMBEDDED", "SOURCE_LINK"] },
+            "steps": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string", "minLength": 1, "maxLength": 1000 }
+            },
+            "sourceUrl": { "type": "string", "format": "uri" },
+            "rightsNote": { "type": "string", "maxLength": 500 }
+          },
+          "allOf": [
+            {
+              "if": { "properties": { "mode": { "const": "EMBEDDED" } } },
+              "then": { "required": ["steps", "rightsNote"] }
+            },
+            {
+              "if": { "properties": { "mode": { "const": "SOURCE_LINK" } } },
+              "then": { "required": ["sourceUrl"] }
+            }
+          ]
+        },
+        "dietaryTags": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["VEGETARIAN", "VEGAN", "GLUTEN_FREE", "DAIRY_FREE", "NUT_FREE", "PESCATARIAN"] }
+        },
+        "allergens": {
+          "description": "The nine major U.S. food-allergen categories. This is not a complete list of possible individual sensitivities.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["MILK", "EGG", "FISH", "SHELLFISH", "TREE_NUT", "PEANUT", "WHEAT", "SOY", "SESAME"] }
+        },
+        "themeConnections": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "catalog-common.schema.json#/$defs/themeConnection" }
+        },
+        "estimatedCost": { "$ref": "catalog-common.schema.json#/$defs/moneyEstimate" },
+        "image": { "$ref": "catalog-common.schema.json#/$defs/imageRef" },
+        "sourceRefs": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "catalog-common.schema.json#/$defs/sourceRef" }
+        },
+        "reviewStatus": { "$ref": "catalog-common.schema.json#/$defs/reviewStatus" },
+        "reviewNotes": { "type": "string", "maxLength": 1000 }
+      }
+    }
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wine-catalog.schema.json",
+  "title": "Supper Club AI wine and zero-proof catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "catalogType", "generatedAt", "items"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "catalogType": { "const": "wines" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/pairingOption" }
+    }
+  },
+  "$defs": {
+    "pairingOption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "name",
+        "style",
+        "isAlcoholic",
+        "tastingNotes",
+        "pairingTags",
+        "courseRoles",
+        "themeConnections",
+        "sourceRefs",
+        "reviewStatus"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^(wine|zero-proof)-[a-z0-9-]+$" },
+        "kind": { "enum": ["WINE", "ZERO_PROOF"] },
+        "name": { "type": "string", "minLength": 1, "maxLength": 180 },
+        "producer": { "type": "string", "maxLength": 160 },
+        "vintage": { "type": ["integer", "null"], "minimum": 1900, "maximum": 2100 },
+        "style": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "isAlcoholic": { "type": "boolean" },
+        "color": { "enum": ["RED", "WHITE", "ROSE", "ORANGE", "SPARKLING", "FORTIFIED", "NON_ALCOHOLIC", "OTHER"] },
+        "country": { "type": "string", "maxLength": 100 },
+        "region": { "type": "string", "maxLength": 120 },
+        "grapes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 80 }
+        },
+        "sweetness": { "enum": ["BONE_DRY", "DRY", "OFF_DRY", "MEDIUM", "SWEET"] },
+        "body": { "enum": ["LIGHT", "MEDIUM", "FULL"] },
+        "acidity": { "enum": ["LOW", "MEDIUM", "HIGH"] },
+        "tannin": { "enum": ["NONE", "LOW", "MEDIUM", "HIGH"] },
+        "alcoholByVolume": { "type": "number", "minimum": 0, "maximum": 100 },
+        "tastingNotes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 60 }
+        },
+        "pairingTags": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 80 }
+        },
+        "courseRoles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["WELCOME", "STARTER", "MAIN", "SIDE", "DESSERT"] }
+        },
+        "servingTemperatureCelsius": { "type": "number", "minimum": 0, "maximum": 30 },
+        "themeConnections": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "catalog-common.schema.json#/$defs/themeConnection" }
+        },
+        "estimatedPrice": { "$ref": "catalog-common.schema.json#/$defs/moneyEstimate" },
+        "image": { "$ref": "catalog-common.schema.json#/$defs/imageRef" },
+        "sourceRefs": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "catalog-common.schema.json#/$defs/sourceRef" }
+        },
+        "reviewStatus": { "$ref": "catalog-common.schema.json#/$defs/reviewStatus" },
+        "reviewNotes": { "type": "string", "maxLength": 1000 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "kind": { "const": "WINE" } } },
+          "then": {
+            "properties": { "isAlcoholic": { "const": true } },
+            "required": ["producer", "color"]
+          }
+        },
+        {
+          "if": { "properties": { "kind": { "const": "ZERO_PROOF" } } },
+          "then": {
+            "properties": { "isAlcoholic": { "const": false } }
+          }
+        }
+      ]
+    }
+  }
+}

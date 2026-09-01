@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "catalog-common.schema.json",
+  "title": "Supper Club AI shared catalog definitions",
+  "$defs": {
+    "sourceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceId", "provider", "title", "url", "accessedAt"],
+      "properties": {
+        "sourceId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,79}$" },
+        "provider": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "title": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "url": { "type": "string", "format": "uri" },
+        "accessedAt": { "type": "string", "format": "date-time" },
+        "attribution": { "type": "string", "maxLength": 500 },
+        "licenseNote": { "type": "string", "maxLength": 500 }
+      }
+    },
+    "imageRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["url", "alt", "credit", "rightsNote"],
+      "properties": {
+        "url": { "type": "string", "format": "uri" },
+        "alt": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "credit": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "rightsNote": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "license": { "type": "string", "maxLength": 120 },
+        "sourceId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,79}$" }
+      }
+    },
+    "moneyEstimate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["amount", "currency", "confidence", "asOf"],
+      "properties": {
+        "amount": { "type": "number", "minimum": 0 },
+        "currency": { "const": "USD" },
+        "confidence": { "enum": ["LOW", "MEDIUM", "HIGH"] },
+        "asOf": { "type": "string", "format": "date" },
+        "sourceId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,79}$" }
+      }
+    },
+    "themeConnection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["theme", "explanation"],
+      "properties": {
+        "theme": {
+          "enum": ["ADAPTATION", "COMMUNITY", "RESILIENCE", "CHANGE", "IMAGINED_FUTURES", "ANCESTRY", "CLIMATE"]
+        },
+        "explanation": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "sourceIds": {
+          "type": "array",
+          "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,79}$" },
+          "uniqueItems": true
+        }
+      }
+    },
+    "reviewStatus": {
+      "enum": ["DRAFT", "REVIEWED", "APPROVED"]
+    }
+  }
+}

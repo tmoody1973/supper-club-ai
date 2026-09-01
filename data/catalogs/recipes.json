@@ -1,0 +1,3295 @@
+{
+  "schemaVersion": "1.0",
+  "catalogType": "recipes",
+  "generatedAt": "2026-08-31T23:15:00Z",
+  "items": [
+    {
+      "id": "recipe-jollof-style-tomato-pepper-soup",
+      "title": "Jollof-Style Tomato and Pepper Soup",
+      "summary": "A bright, blended tomato-and-red-pepper soup draws on the flavor foundation used in several West African dishes. Ginger, garlic, thyme, and a controlled amount of hot pepper make it a warming opening course.",
+      "courseRoles": [
+        "STARTER"
+      ],
+      "culturalTraditions": [
+        "West African-inspired"
+      ],
+      "servings": 6,
+      "times": {
+        "prepMinutes": 20,
+        "cookMinutes": 30,
+        "totalMinutes": 50
+      },
+      "ingredients": [
+        {
+          "ingredientId": "ingredient-red-bell-pepper",
+          "name": "red bell peppers",
+          "canonicalName": "red bell pepper",
+          "quantityText": "6 peppers",
+          "normalizedQuantity": {
+            "value": 6,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-tomato",
+          "name": "tomatoes",
+          "canonicalName": "tomato",
+          "quantityText": "4 large tomatoes",
+          "normalizedQuantity": {
+            "value": 4,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-red-onion",
+          "name": "red onions",
+          "canonicalName": "red onion",
+          "quantityText": "2 medium onions",
+          "normalizedQuantity": {
+            "value": 2,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-ginger",
+          "name": "fresh ginger",
+          "canonicalName": "ginger",
+          "quantityText": "2-inch piece",
+          "normalizedQuantity": {
+            "value": 2,
+            "unit": "inch"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-garlic",
+          "name": "garlic",
+          "canonicalName": "garlic",
+          "quantityText": "6 cloves",
+          "normalizedQuantity": {
+            "value": 6,
+            "unit": "clove"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-vegetable-stock",
+          "name": "vegetable stock",
+          "canonicalName": "vegetable stock",
+          "quantityText": "6 cups",
+          "normalizedQuantity": {
+            "value": 6,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-scotch-bonnet-pepper",
+          "name": "Scotch bonnet pepper",
+          "canonicalName": "scotch bonnet pepper",
+          "quantityText": "1 pepper",
+          "normalizedQuantity": {
+            "value": 1,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": true
+        }
+      ],
+      "instructions": {
+        "mode": "SOURCE_LINK",
+        "sourceUrl": "https://cheflolaskitchen.com/nigerian-pepper-sauce-ata-dindin/",
+        "rightsNote": "Use the linked source for instructions. This catalog stores an original summary and structured ingredient data, not source instruction text."
+      },
+      "dietaryTags": [
+        "VEGAN",
+        "GLUTEN_FREE",
+        "DAIRY_FREE"
+      ],
+      "allergens": [],
+      "themeConnections": [
+        {
+          "theme": "ADAPTATION",
+          "explanation": "A familiar pantry base becomes a shared first course through a change in form, from sauce foundation to table soup.",
+          "sourceIds": [
+            "src-jollof-soup"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-jollof-soup",
+          "provider": "Chef Lola's Kitchen",
+          "title": "Nigerian Pepper Sauce - Ata dindin",
+          "url": "https://cheflolaskitchen.com/nigerian-pepper-sauce-ata-dindin/",
+          "accessedAt": "2026-08-31T17:56:00Z",
+          "attribution": "Recipe and culinary-context source. Catalog summary, theme connection, and ingredient normalization are original.",
+          "licenseNote": "Instructions remain at the linked source; no source recipe prose or images are stored here."
+        }
+      ],
+      "reviewStatus": "DRAFT"
+    },
+    {
+      "id": "recipe-kelewele-style-roasted-plantains",
+      "title": "Kelewele-Style Roasted Plantains",
+      "summary": "Ripe plantains are roasted with ginger, warming spices, citrus, and a savory peanut-miso glaze. The dish takes inspiration from Ghanaian kelewele while using an oven method and a clearly labeled modern garnish.",
+      "courseRoles": [
+        "STARTER"
+      ],
+      "culturalTraditions": [
+        "Ghanaian-inspired"
+      ],
+      "servings": 6,
+      "times": {
+        "prepMinutes": 25,
+        "cookMinutes": 85,
+        "totalMinutes": 110
+      },
+      "ingredients": [
+        {
+          "ingredientId": "ingredient-ripe-plantain",
+          "name": "ripe plantains",
+          "canonicalName": "ripe plantain",
+          "quantityText": "6 medium plantains",
+          "normalizedQuantity": {
+            "value": 6,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-orange-juice",
+          "name": "orange juice",
+          "canonicalName": "orange juice",
+          "quantityText": "1 1/2 cups",
+          "normalizedQuantity": {
+            "value": 1.5,
+            "unit": "cup"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-lime",
+          "name": "lime juice",
+          "canonicalName": "lime",
+          "quantityText": "3 limes",
+          "normalizedQuantity": {
+            "value": 3,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-peanut-butter",
+          "name": "peanut butter",
+          "canonicalName": "peanut butter",
+          "quantityText": "3/8 cup",
+          "normalizedQuantity": {
+            "value": 0.375,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-miso",
+          "name": "white miso",
+          "canonicalName": "miso",
+          "quantityText": "1 1/2 tablespoons",
+          "normalizedQuantity": {
+            "value": 1.5,
+            "unit": "tablespoon"
+          },
+          "category": "REFRIGERATED",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-soy-sauce",
+          "name": "soy sauce",
+          "canonicalName": "soy sauce",
+          "quantityText": "1 1/2 tablespoons",
+          "normalizedQuantity": {
+            "value": 1.5,
+            "unit": "tablespoon"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-ginger",
+          "name": "fresh ginger",
+          "canonicalName": "ginger",
+          "quantityText": "3 inches",
+          "normalizedQuantity": {
+            "value": 3,
+            "unit": "inch"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        }
+      ],
+      "instructions": {
+        "mode": "SOURCE_LINK",
+        "sourceUrl": "https://cooking.nytimes.com/recipes/1027632-roasted-kelewele-spiced-plantains-with-crispy-shallots-and-herbs",
+        "rightsNote": "Use the linked source for instructions. This catalog stores an original summary and structured ingredient data, not source instruction text."
+      },
+      "dietaryTags": [
+        "VEGETARIAN",
+        "DAIRY_FREE"
+      ],
+      "allergens": [
+        "PEANUT",
+        "SOY",
+        "WHEAT"
+      ],
+      "themeConnections": [
+        {
+          "theme": "CHANGE",
+          "explanation": "Roasting rather than frying reframes a plantain snack for a communal dinner while keeping spice and fruit at the center.",
+          "sourceIds": [
+            "src-kelewele-plantains"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-kelewele-plantains",
+          "provider": "The New York Times",
+          "title": "Roasted Kelewele (Spiced Plantains) With Crispy Shallots and Herbs",
+          "url": "https://cooking.nytimes.com/recipes/1027632-roasted-kelewele-spiced-plantains-with-crispy-shallots-and-herbs",
+          "accessedAt": "2026-08-31T12:00:00Z",
+          "attribution": "Recipe and culinary-context source. Catalog summary, theme connection, and ingredient normalization are original.",
+          "licenseNote": "Instructions remain at the linked source; no source recipe prose or images are stored here."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Contains honey and soy sauce. Human review should confirm gluten-free substitutions if needed."
+    },
+    {
+      "id": "recipe-black-eyed-pea-fritters",
+      "title": "Akara-Style Black-Eyed Pea Fritters",
+      "summary": "Peeled black-eyed peas, onion, and hot pepper are blended and fried into crisp-edged, tender fritters. Akara is a well-known Nigerian preparation; the catalog source link provides the method rather than reproducing it here.",
+      "courseRoles": [
+        "STARTER"
+      ],
+      "culturalTraditions": [
+        "Nigerian"
+      ],
+      "servings": 6,
+      "times": {
+        "prepMinutes": 120,
+        "cookMinutes": 20,
+        "totalMinutes": 140
+      },
+      "ingredients": [
+        {
+          "ingredientId": "ingredient-black-eyed-peas",
+          "name": "dried black-eyed peas",
+          "canonicalName": "black-eyed peas",
+          "quantityText": "1 1/2 cups",
+          "normalizedQuantity": {
+            "value": 1.5,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-red-onion",
+          "name": "red onion",
+          "canonicalName": "red onion",
+          "quantityText": "1/2 large onion",
+          "normalizedQuantity": {
+            "value": 0.5,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-habanero-pepper",
+          "name": "habanero pepper",
+          "canonicalName": "habanero pepper",
+          "quantityText": "1/2 pepper",
+          "normalizedQuantity": {
+            "value": 0.5,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": true
+        },
+        {
+          "ingredientId": "ingredient-salt",
+          "name": "kosher salt",
+          "canonicalName": "salt",
+          "quantityText": "1 1/2 teaspoons",
+          "normalizedQuantity": {
+            "value": 1.5,
+            "unit": "teaspoon"
+          },
+          "category": "SPICES",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-vegetable-oil",
+          "name": "vegetable oil",
+          "canonicalName": "vegetable oil",
+          "quantityText": "3 cups",
+          "normalizedQuantity": {
+            "value": 3,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        }
+      ],
+      "instructions": {
+        "mode": "SOURCE_LINK",
+        "sourceUrl": "https://www.myactivekitchen.com/how-to-make-akara-recipe/",
+        "rightsNote": "Use the linked source for instructions. This catalog stores an original summary and structured ingredient data, not source instruction text."
+      },
+      "dietaryTags": [
+        "VEGAN",
+        "VEGETARIAN",
+        "GLUTEN_FREE",
+        "DAIRY_FREE"
+      ],
+      "allergens": [],
+      "themeConnections": [
+        {
+          "theme": "COMMUNITY",
+          "explanation": "Small fritters are designed for passing, sharing, and beginning a meal through a hands-on common plate.",
+          "sourceIds": [
+            "src-akara"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-akara",
+          "provider": "My Active Kitchen",
+          "title": "How To Make Akara (Koose/Acaraje)",
+          "url": "https://www.myactivekitchen.com/how-to-make-akara-recipe/",
+          "accessedAt": "2026-08-31T18:37:40Z",
+          "attribution": "Replacement factual or instruction source. Catalog summary, theme connection, and pairing notes are original.",
+          "licenseNote": "Recipe prose and photography remain subject to the publisher’s rights; instructions are linked, not reproduced."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Soaking and skin removal affect texture; confirm service timing with a test batch."
+    },
+    {
+      "id": "recipe-senegalese-carrot-citrus-salad",
+      "title": "Carrot and Citrus Salad with Peanuts",
+      "summary": "Grated carrots meet orange, lime, ginger, and crushed roasted peanuts in a chilled starter. The salad is labeled Senegalese-inspired because the linked source is a related North African carrot-and-orange preparation rather than a Senegalese primary source.",
+      "courseRoles": [
+        "STARTER"
+      ],
+      "culturalTraditions": [
+        "Senegalese-inspired"
+      ],
+      "servings": 6,
+      "times": {
+        "prepMinutes": 15,
+        "cookMinutes": 0,
+        "totalMinutes": 15
+      },
+      "ingredients": [
+        {
+          "ingredientId": "ingredient-carrot",
+          "name": "carrots",
+          "canonicalName": "carrot",
+          "quantityText": "2 pounds",
+          "normalizedQuantity": {
+            "value": 2,
+            "unit": "pound"
+          },
+          "category": "PRODUCE",
+          "isOptional": false,
+          "preparation": "grated"
+        },
+        {
+          "ingredientId": "ingredient-orange-juice",
+          "name": "orange juice",
+          "canonicalName": "orange juice",
+          "quantityText": "2 cups",
+          "normalizedQuantity": {
+            "value": 2,
+            "unit": "cup"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-lime-juice",
+          "name": "lime juice",
+          "canonicalName": "lime juice",
+          "quantityText": "2 tablespoons",
+          "normalizedQuantity": {
+            "value": 2,
+            "unit": "tablespoon"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-peanut",
+          "name": "roasted peanuts",
+          "canonicalName": "peanut",
+          "quantityText": "1/2 cup",
+          "normalizedQuantity": {
+            "value": 0.5,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false,
+          "preparation": "crushed"
+        },
+        {
+          "ingredientId": "ingredient-cinnamon",
+          "name": "ground cinnamon",
+          "canonicalName": "cinnamon",
+          "quantityText": "1/2 teaspoon",
+          "normalizedQuantity": {
+            "value": 0.5,
+            "unit": "teaspoon"
+          },
+          "category": "SPICES",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-ginger",
+          "name": "ground ginger",
+          "canonicalName": "ginger",
+          "quantityText": "1/2 teaspoon",
+          "normalizedQuantity": {
+            "value": 0.5,
+            "unit": "teaspoon"
+          },
+          "category": "SPICES",
+          "isOptional": false
+        }
+      ],
+      "instructions": {
+        "mode": "SOURCE_LINK",
+        "sourceUrl": "https://globaltableadventure.com/recipe/moroccan-carrot-juicy-orange-salad/",
+        "rightsNote": "Use the linked source for instructions. This catalog stores an original summary and structured ingredient data, not source instruction text."
+      },
+      "dietaryTags": [
+        "VEGAN",
+        "VEGETARIAN",
+        "GLUTEN_FREE",
+        "DAIRY_FREE"
+      ],
+      "allergens": [
+        "PEANUT"
+      ],
+      "themeConnections": [
+        {
+          "theme": "ANCESTRY",
+          "explanation": "Citrus, spice, and peanut create a conversation about how ingredients and techniques travel across distinct regions and households.",
+          "sourceIds": [
+            "src-carrot-citrus"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-carrot-citrus",
+          "provider": "Global Table Adventure",
+          "title": "Moroccan Carrot & Juicy Orange Salad",
+          "url": "https://globaltableadventure.com/recipe/moroccan-carrot-juicy-orange-salad/",
+          "accessedAt": "2026-08-31T17:54:00Z",
+          "attribution": "Recipe and culinary-context source. Catalog summary, theme connection, and ingredient normalization are original.",
+          "licenseNote": "Instructions remain at the linked source; no source recipe prose or images are stored here."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Cultural designation requires human review; source is not Senegalese."
+    },
+    {
+      "id": "recipe-caribbean-pumpkin-soup",
+      "title": "Caribbean Pumpkin Soup",
+      "summary": "Calabaza or butternut squash is blended with thyme, curry powder, nutmeg, lime, and a modest amount of dairy for a velvety soup. Scotch bonnet provides optional heat, while the squash keeps the course approachable.",
+      "courseRoles": [
+        "STARTER"
+      ],
+      "culturalTraditions": [
+        "Caribbean"
+      ],
+      "servings": 6,
+      "times": {
+        "prepMinutes": 25,
+        "cookMinutes": 50,
+        "totalMinutes": 75
+      },
+      "ingredients": [
+        {
+          "ingredientId": "ingredient-butternut-squash",
+          "name": "butternut squash",
+          "canonicalName": "butternut squash",
+          "quantityText": "3 pounds",
+          "normalizedQuantity": {
+            "value": 3,
+            "unit": "pound"
+          },
+          "category": "PRODUCE",
+          "isOptional": false,
+          "preparation": "peeled and cubed",
+          "substitutions": [
+            "calabaza pumpkin"
+          ]
+        },
+        {
+          "ingredientId": "ingredient-yellow-onion",
+          "name": "yellow onion",
+          "canonicalName": "yellow onion",
+          "quantityText": "1 medium onion",
+          "normalizedQuantity": {
+            "value": 1,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-garlic",
+          "name": "garlic",
+          "canonicalName": "garlic",
+          "quantityText": "4 cloves",
+          "normalizedQuantity": {
+            "value": 4,
+            "unit": "clove"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-vegetable-stock",
+          "name": "vegetable stock",
+          "canonicalName": "vegetable stock",
+          "quantityText": "4 cups",
+          "normalizedQuantity": {
+            "value": 4,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-milk",
+          "name": "milk",
+          "canonicalName": "milk",
+          "quantityText": "1 cup",
+          "normalizedQuantity": {
+            "value": 1,
+            "unit": "cup"
+          },
+          "category": "REFRIGERATED",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-heavy-cream",
+          "name": "heavy cream",
+          "canonicalName": "heavy cream",
+          "quantityText": "1/4 cup",
+          "normalizedQuantity": {
+            "value": 0.25,
+            "unit": "cup"
+          },
+          "category": "REFRIGERATED",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-thyme",
+          "name": "fresh thyme",
+          "canonicalName": "thyme",
+          "quantityText": "4 sprigs",
+          "normalizedQuantity": {
+            "value": 4,
+            "unit": "sprig"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        }
+      ],
+      "instructions": {
+        "mode": "SOURCE_LINK",
+        "sourceUrl": "https://partners.winemag.com/fallpairings/jamaican-style-pumpkin-soup/",
+        "rightsNote": "Use the linked source for instructions. This catalog stores an original summary and structured ingredient data, not source instruction text."
+      },
+      "dietaryTags": [
+        "VEGETARIAN",
+        "GLUTEN_FREE"
+      ],
+      "allergens": [
+        "MILK"
+      ],
+      "themeConnections": [
+        {
+          "theme": "RESILIENCE",
+          "explanation": "A durable squash becomes a generous soup that can be prepared ahead and shared across a large table.",
+          "sourceIds": [
+            "src-caribbean-pumpkin"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-caribbean-pumpkin",
+          "provider": "Wine Enthusiast",
+          "title": "Jamaican-Style Pumpkin Soup",
+          "url": "https://partners.winemag.com/fallpairings/jamaican-style-pumpkin-soup/",
+          "accessedAt": "2026-08-31T18:37:00Z",
+          "attribution": "Replacement factual or instruction source. Catalog summary, theme connection, and pairing notes are original.",
+          "licenseNote": "All rights to the recipe and pairing content are reserved by Wine Enthusiast Companies."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Use vegetable stock to retain the vegetarian classification."
+    },
+    {
+      "id": "recipe-ethiopian-inspired-tomato-cucumber-salad",
+      "title": "Tomato and Cucumber Salad",
+      "summary": "Tomato, cucumber, sweet onion, lemon, and olive oil make a cooling salad intended to sit beside richer spiced dishes. It is described as Ethiopian-inspired because cucumber is a catalog addition to the linked tomato-and-pepper salad context.",
+      "courseRoles": [
+        "STARTER"
+      ],
+      "culturalTraditions": [
+        "Ethiopian-inspired"
+      ],
+      "servings": 6,
+      "times": {
+        "prepMinutes": 15,
+        "cookMinutes": 0,
+        "totalMinutes": 15
+      },
+      "ingredients": [
+        {
+          "ingredientId": "ingredient-tomato",
+          "name": "tomatoes",
+          "canonicalName": "tomato",
+          "quantityText": "3 1/2 cups",
+          "normalizedQuantity": {
+            "value": 3.5,
+            "unit": "cup"
+          },
+          "category": "PRODUCE",
+          "isOptional": false,
+          "preparation": "chopped"
+        },
+        {
+          "ingredientId": "ingredient-cucumber",
+          "name": "cucumbers",
+          "canonicalName": "cucumber",
+          "quantityText": "2 1/4 cups",
+          "normalizedQuantity": {
+            "value": 2.25,
+            "unit": "cup"
+          },
+          "category": "PRODUCE",
+          "isOptional": false,
+          "preparation": "chopped"
+        },
+        {
+          "ingredientId": "ingredient-sweet-onion",
+          "name": "sweet onion",
+          "canonicalName": "sweet onion",
+          "quantityText": "6 tablespoons",
+          "normalizedQuantity": {
+            "value": 6,
+            "unit": "tablespoon"
+          },
+          "category": "PRODUCE",
+          "isOptional": false,
+          "preparation": "minced"
+        },
+        {
+          "ingredientId": "ingredient-jalapeno",
+          "name": "jalapeño",
+          "canonicalName": "jalapeno",
+          "quantityText": "1 pepper",
+          "normalizedQuantity": {
+            "value": 1,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": true
+        },
+        {
+          "ingredientId": "ingredient-lemon-juice",
+          "name": "lemon juice",
+          "canonicalName": "lemon juice",
+          "quantityText": "2 tablespoons",
+          "normalizedQuantity": {
+            "value": 2,
+            "unit": "tablespoon"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-olive-oil",
+          "name": "olive oil",
+          "canonicalName": "olive oil",
+          "quantityText": "1 1/2 tablespoons",
+          "normalizedQuantity": {
+            "value": 1.5,
+            "unit": "tablespoon"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        }
+      ],
+      "instructions": {
+        "mode": "SOURCE_LINK",
+        "sourceUrl": "https://togetherwomenrise.org/recipes/ethiopian-cucumber-and-tomato-salad/",
+        "rightsNote": "Use the linked source for instructions. This catalog stores an original summary and structured ingredient data, not source instruction text."
+      },
+      "dietaryTags": [
+        "VEGAN",
+        "VEGETARIAN",
+        "GLUTEN_FREE",
+        "DAIRY_FREE",
+        "NUT_FREE"
+      ],
+      "allergens": [],
+      "themeConnections": [
+        {
+          "theme": "ADAPTATION",
+          "explanation": "The fresh salad creates contrast within a spiced menu and shows how a simple side can adapt to seasonal produce.",
+          "sourceIds": [
+            "src-tomato-cucumber"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-tomato-cucumber",
+          "provider": "Together Women Rise",
+          "title": "Ethiopian Cucumber and Tomato Salad",
+          "url": "https://togetherwomenrise.org/recipes/ethiopian-cucumber-and-tomato-salad/",
+          "accessedAt": "2026-08-31T12:00:00Z",
+          "attribution": "Recipe and culinary-context source. Catalog summary, theme connection, and ingredient normalization are original.",
+          "licenseNote": "Instructions remain at the linked source; no source recipe prose or images are stored here."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Human review should confirm the cultural description against the exact source recipe."
+    },
+    {
+      "id": "recipe-suya-spiced-mushroom-skewers",
+      "title": "Suya-Spiced Mushroom Skewers",
+      "summary": "Mushrooms are marinated in a nutty, spicy suya-inspired seasoning and grilled or roasted for charred edges. The dish is an explicitly plant-forward adaptation of a meat-centered preparation and should be presented as inspired rather than traditional suya.",
+      "courseRoles": [
+        "STARTER"
+      ],
+      "culturalTraditions": [
+        "Nigerian-inspired"
+      ],
+      "servings": 6,
+      "times": {
+        "prepMinutes": 60,
+        "cookMinutes": 15,
+        "totalMinutes": 75
+      },
+      "ingredients": [
+        {
+          "ingredientId": "ingredient-oyster-mushroom",
+          "name": "oyster mushrooms",
+          "canonicalName": "oyster mushroom",
+          "quantityText": "3 pounds",
+          "normalizedQuantity": {
+            "value": 3,
+            "unit": "pound"
+          },
+          "category": "PRODUCE",
+          "isOptional": false,
+          "substitutions": [
+            "maitake mushrooms"
+          ]
+        },
+        {
+          "ingredientId": "ingredient-kuli-kuli-powder",
+          "name": "kuli-kuli powder",
+          "canonicalName": "kuli-kuli powder",
+          "quantityText": "3/4 cup",
+          "normalizedQuantity": {
+            "value": 0.75,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-yaji-spice-blend",
+          "name": "yaji spice blend",
+          "canonicalName": "yaji spice blend",
+          "quantityText": "6 tablespoons",
+          "normalizedQuantity": {
+            "value": 6,
+            "unit": "tablespoon"
+          },
+          "category": "SPICES",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-vegetable-oil",
+          "name": "vegetable oil",
+          "canonicalName": "vegetable oil",
+          "quantityText": "3/4 cup",
+          "normalizedQuantity": {
+            "value": 0.75,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-red-onion",
+          "name": "red onion",
+          "canonicalName": "red onion",
+          "quantityText": "1 1/2 onions",
+          "normalizedQuantity": {
+            "value": 1.5,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-tomato",
+          "name": "tomatoes",
+          "canonicalName": "tomato",
+          "quantityText": "3/4 pound",
+          "normalizedQuantity": {
+            "value": 0.75,
+            "unit": "pound"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        }
+      ],
+      "instructions": {
+        "mode": "SOURCE_LINK",
+        "sourceUrl": "https://foodwise.org/recipes/vegan-suya-spiced-grilled-mushrooms/",
+        "rightsNote": "Use the linked source for instructions. This catalog stores an original summary and structured ingredient data, not source instruction text."
+      },
+      "dietaryTags": [
+        "VEGAN",
+        "VEGETARIAN",
+        "DAIRY_FREE"
+      ],
+      "allergens": [
+        "PEANUT"
+      ],
+      "themeConnections": [
+        {
+          "theme": "IMAGINED_FUTURES",
+          "explanation": "A familiar spice profile is carried into a plant-forward format, inviting diners to imagine abundance through substitution rather than scarcity.",
+          "sourceIds": [
+            "src-suya-mushrooms"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-suya-mushrooms",
+          "provider": "Foodwise",
+          "title": "Vegan Suya (Spiced Grilled Mushrooms)",
+          "url": "https://foodwise.org/recipes/vegan-suya-spiced-grilled-mushrooms/",
+          "accessedAt": "2026-08-31T12:00:00Z",
+          "attribution": "Recipe and culinary-context source. Catalog summary, theme connection, and ingredient normalization are original.",
+          "licenseNote": "Instructions remain at the linked source; no source recipe prose or images are stored here."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Contains peanut-derived kuli-kuli; confirm bouillon ingredients if serving gluten-free diners."
+    },
+    {
+      "id": "recipe-berbere-roasted-chickpeas",
+      "title": "Berbere Roasted Chickpeas",
+      "summary": "Soaked chickpeas are roasted until crisp with olive oil, salt, and berbere. This snack-style course uses an Ethiopian spice blend and is described as inspired rather than equated with a specific traditional dish.",
+      "courseRoles": [
+        "STARTER"
+      ],
+      "culturalTraditions": [
+        "Ethiopian-inspired"
+      ],
+      "servings": 6,
+      "times": {
+        "prepMinutes": 10,
+        "cookMinutes": 50,
+        "totalMinutes": 60
+      },
+      "ingredients": [
+        {
+          "ingredientId": "ingredient-chickpeas",
+          "name": "dried chickpeas",
+          "canonicalName": "chickpeas",
+          "quantityText": "1 1/2 cups",
+          "normalizedQuantity": {
+            "value": 1.5,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false,
+          "preparation": "soaked overnight"
+        },
+        {
+          "ingredientId": "ingredient-olive-oil",
+          "name": "olive oil",
+          "canonicalName": "olive oil",
+          "quantityText": "1 1/2 tablespoons",
+          "normalizedQuantity": {
+            "value": 1.5,
+            "unit": "tablespoon"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-berbere-spice-blend",
+          "name": "berbere spice blend",
+          "canonicalName": "berbere spice blend",
+          "quantityText": "2 tablespoons",
+          "normalizedQuantity": {
+            "value": 2,
+            "unit": "tablespoon"
+          },
+          "category": "SPICES",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-salt",
+          "name": "kosher salt",
+          "canonicalName": "salt",
+          "quantityText": "1/2 teaspoon",
+          "normalizedQuantity": {
+            "value": 0.5,
+            "unit": "teaspoon"
+          },
+          "category": "SPICES",
+          "isOptional": false
+        }
+      ],
+      "instructions": {
+        "mode": "SOURCE_LINK",
+        "sourceUrl": "https://portandfin.com/berbere-roasted-chickpeas/",
+        "rightsNote": "Use the linked source for instructions. This catalog stores an original summary and structured ingredient data, not source instruction text."
+      },
+      "dietaryTags": [
+        "VEGAN",
+        "VEGETARIAN",
+        "GLUTEN_FREE",
+        "DAIRY_FREE",
+        "NUT_FREE"
+      ],
+      "allergens": [],
+      "themeConnections": [
+        {
+          "theme": "RESILIENCE",
+          "explanation": "Shelf-stable legumes and a spice blend become a crisp shared snack, emphasizing pantry readiness and small acts of care.",
+          "sourceIds": [
+            "src-berbere-chickpeas"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-berbere-chickpeas",
+          "provider": "Port and Fin",
+          "title": "Berbere Roasted Chickpeas",
+          "url": "https://portandfin.com/berbere-roasted-chickpeas/",
+          "accessedAt": "2026-08-31T10:40:00Z",
+          "attribution": "Recipe and culinary-context source. Catalog summary, theme connection, and ingredient normalization are original.",
+          "licenseNote": "Instructions remain at the linked source; no source recipe prose or images are stored here."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Dried chickpeas require advance soaking; verify spice blend ingredients for individual dietary needs."
+    },
+    {
+      "id": "recipe-misir-wat-red-lentils",
+      "title": "Misir Wat Red Lentils",
+      "summary": "Red lentils simmer with onion, garlic, tomato, berbere, and spiced clarified butter into a deeply seasoned Ethiopian stew. Served with a grain or flatbread, it anchors the vegetarian center of the dinner.",
+      "courseRoles": [
+        "MAIN"
+      ],
+      "culturalTraditions": [
+        "Ethiopian"
+      ],
+      "servings": 6,
+      "times": {
+        "prepMinutes": 10,
+        "cookMinutes": 55,
+        "totalMinutes": 65
+      },
+      "ingredients": [
+        {
+          "ingredientId": "ingredient-red-lentils",
+          "name": "red lentils",
+          "canonicalName": "red lentils",
+          "quantityText": "1 1/2 cups",
+          "normalizedQuantity": {
+            "value": 1.5,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-yellow-onion",
+          "name": "yellow onions",
+          "canonicalName": "yellow onion",
+          "quantityText": "1 1/2 large onions",
+          "normalizedQuantity": {
+            "value": 1.5,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-niter-kibbeh",
+          "name": "niter kibbeh",
+          "canonicalName": "niter kibbeh",
+          "quantityText": "6 tablespoons",
+          "normalizedQuantity": {
+            "value": 6,
+            "unit": "tablespoon"
+          },
+          "category": "REFRIGERATED",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-garlic",
+          "name": "garlic",
+          "canonicalName": "garlic",
+          "quantityText": "5 cloves",
+          "normalizedQuantity": {
+            "value": 5,
+            "unit": "clove"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-roma-tomato",
+          "name": "Roma tomatoes",
+          "canonicalName": "roma tomato",
+          "quantityText": "2 tomatoes",
+          "normalizedQuantity": {
+            "value": 2,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-tomato-paste",
+          "name": "tomato paste",
+          "canonicalName": "tomato paste",
+          "quantityText": "4 1/2 tablespoons",
+          "normalizedQuantity": {
+            "value": 4.5,
+            "unit": "tablespoon"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-berbere-spice",
+          "name": "berbere spice",
+          "canonicalName": "berbere spice",
+          "quantityText": "3 tablespoons",
+          "normalizedQuantity": {
+            "value": 3,
+            "unit": "tablespoon"
+          },
+          "category": "SPICES",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-vegetable-broth",
+          "name": "vegetable broth",
+          "canonicalName": "vegetable broth",
+          "quantityText": "3 3/4 cups",
+          "normalizedQuantity": {
+            "value": 3.75,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        }
+      ],
+      "instructions": {
+        "mode": "SOURCE_LINK",
+        "sourceUrl": "https://www.daringgourmet.com/misir-wat-ethiopian-spiced-red-lentils/",
+        "rightsNote": "Use the linked source for instructions. This catalog stores an original summary and structured ingredient data, not source instruction text."
+      },
+      "dietaryTags": [
+        "VEGETARIAN",
+        "GLUTEN_FREE"
+      ],
+      "allergens": [
+        "MILK"
+      ],
+      "themeConnections": [
+        {
+          "theme": "COMMUNITY",
+          "explanation": "A lentil stew is naturally suited to a shared platter and supports conversation about how staples become hospitality.",
+          "sourceIds": [
+            "src-misir-wat"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-misir-wat",
+          "provider": "The Daring Gourmet",
+          "title": "Misir Wat (Ethiopian Spiced Red Lentils)",
+          "url": "https://www.daringgourmet.com/misir-wat-ethiopian-spiced-red-lentils/",
+          "accessedAt": "2026-08-31T12:00:00Z",
+          "attribution": "Recipe and culinary-context source. Catalog summary, theme connection, and ingredient normalization are original.",
+          "licenseNote": "Instructions remain at the linked source; no source recipe prose or images are stored here."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Niter kibbeh contains milk; use a tested plant-fat adaptation only after human review if vegan service is needed."
+    },
+    {
+      "id": "recipe-yassa-style-mushrooms-and-onions",
+      "title": "Yassa-Style Mushrooms and Onions",
+      "summary": "Mushrooms and eggplant take the place of meat in a lemony, onion-forward sauce with mustard, ginger, and chile. It is an adaptation inspired by Senegalese yassa, presented with rice, millet, or fonio rather than described as a traditional dish.",
+      "courseRoles": [
+        "MAIN"
+      ],
+      "culturalTraditions": [
+        "Senegalese-inspired"
+      ],
+      "servings": 6,
+      "times": {
+        "prepMinutes": 15,
+        "cookMinutes": 30,
+        "totalMinutes": 45
+      },
+      "ingredients": [
+        {
+          "ingredientId": "ingredient-baby-bella-mushroom",
+          "name": "baby bella mushrooms",
+          "canonicalName": "baby bella mushroom",
+          "quantityText": "1 1/2 pounds",
+          "normalizedQuantity": {
+            "value": 1.5,
+            "unit": "pound"
+          },
+          "category": "PRODUCE",
+          "isOptional": false,
+          "preparation": "sliced"
+        },
+        {
+          "ingredientId": "ingredient-eggplant",
+          "name": "eggplant",
+          "canonicalName": "eggplant",
+          "quantityText": "1 1/5 pounds",
+          "normalizedQuantity": {
+            "value": 1.2,
+            "unit": "pound"
+          },
+          "category": "PRODUCE",
+          "isOptional": false,
+          "preparation": "cubed"
+        },
+        {
+          "ingredientId": "ingredient-yellow-onion",
+          "name": "yellow onions",
+          "canonicalName": "yellow onion",
+          "quantityText": "2 1/4 pounds",
+          "normalizedQuantity": {
+            "value": 2.25,
+            "unit": "pound"
+          },
+          "category": "PRODUCE",
+          "isOptional": false,
+          "preparation": "thinly sliced"
+        },
+        {
+          "ingredientId": "ingredient-lime",
+          "name": "limes",
+          "canonicalName": "lime",
+          "quantityText": "3 limes",
+          "normalizedQuantity": {
+            "value": 3,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-dijon-mustard",
+          "name": "Dijon mustard",
+          "canonicalName": "dijon mustard",
+          "quantityText": "1 1/2 tablespoons",
+          "normalizedQuantity": {
+            "value": 1.5,
+            "unit": "tablespoon"
+          },
+          "category": "REFRIGERATED",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-ginger",
+          "name": "fresh ginger",
+          "canonicalName": "ginger",
+          "quantityText": "3 inches",
+          "normalizedQuantity": {
+            "value": 3,
+            "unit": "inch"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-vegetable-stock",
+          "name": "vegetable stock",
+          "canonicalName": "vegetable stock",
+          "quantityText": "3 cups",
+          "normalizedQuantity": {
+            "value": 3,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        }
+      ],
+      "instructions": {
+        "mode": "SOURCE_LINK",
+        "sourceUrl": "https://cooking.nytimes.com/recipes/1023666-mushroom-and-eggplant-yassa",
+        "rightsNote": "Use the linked source for instructions. This catalog stores an original summary and structured ingredient data, not source instruction text."
+      },
+      "dietaryTags": [
+        "VEGAN",
+        "VEGETARIAN",
+        "GLUTEN_FREE",
+        "DAIRY_FREE"
+      ],
+      "allergens": [],
+      "themeConnections": [
+        {
+          "theme": "ADAPTATION",
+          "explanation": "The dish makes substitution explicit, using vegetables to carry a bright yassa-style sauce into a plant-based main.",
+          "sourceIds": [
+            "src-yassa-mushrooms"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-yassa-mushrooms",
+          "provider": "NYT Cooking",
+          "title": "Mushroom and Eggplant Yassa",
+          "url": "https://cooking.nytimes.com/recipes/1023666-mushroom-and-eggplant-yassa",
+          "accessedAt": "2026-08-31T17:55:00Z",
+          "attribution": "Recipe and culinary-context source. Catalog summary, theme connection, and ingredient normalization are original.",
+          "licenseNote": "Instructions remain at the linked source; no source recipe prose or images are stored here."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Contains mustard, which is not represented by the schema allergen enum; label it in service materials."
+    },
+    {
+      "id": "recipe-jamaican-jerk-roasted-cauliflower",
+      "title": "Jamaican Jerk Roasted Cauliflower",
+      "summary": "A whole cauliflower is rubbed with a high-heat allspice, thyme, ginger, and Scotch bonnet jerk-style mixture, then roasted with beans and chickpeas. The recipe is a contemporary vegetarian interpretation of Jamaican jerk flavors.",
+      "courseRoles": [
+        "MAIN"
+      ],
+      "culturalTraditions": [
+        "Jamaican-inspired"
+      ],
+      "servings": 6,
+      "times": {
+        "prepMinutes": 15,
+        "cookMinutes": 52,
+        "totalMinutes": 67
+      },
+      "ingredients": [
+        {
+          "ingredientId": "ingredient-cauliflower",
+          "name": "cauliflower",
+          "canonicalName": "cauliflower",
+          "quantityText": "1 large head",
+          "normalizedQuantity": {
+            "value": 1,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-scotch-bonnet-pepper",
+          "name": "Scotch bonnet peppers",
+          "canonicalName": "scotch bonnet pepper",
+          "quantityText": "2 peppers",
+          "normalizedQuantity": {
+            "value": 2,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": true
+        },
+        {
+          "ingredientId": "ingredient-garlic",
+          "name": "garlic",
+          "canonicalName": "garlic",
+          "quantityText": "6 cloves",
+          "normalizedQuantity": {
+            "value": 6,
+            "unit": "clove"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-scallion",
+          "name": "scallions",
+          "canonicalName": "scallion",
+          "quantityText": "6 scallions",
+          "normalizedQuantity": {
+            "value": 6,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-allspice-berries",
+          "name": "allspice berries",
+          "canonicalName": "allspice berries",
+          "quantityText": "2 tablespoons",
+          "normalizedQuantity": {
+            "value": 2,
+            "unit": "tablespoon"
+          },
+          "category": "SPICES",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-thyme",
+          "name": "fresh thyme",
+          "canonicalName": "thyme",
+          "quantityText": "8 sprigs",
+          "normalizedQuantity": {
+            "value": 8,
+            "unit": "sprig"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-black-beans",
+          "name": "black beans",
+          "canonicalName": "black beans",
+          "quantityText": "15 ounces",
+          "normalizedQuantity": {
+            "value": 15,
+            "unit": "ounce"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-chickpeas",
+          "name": "chickpeas",
+          "canonicalName": "chickpeas",
+          "quantityText": "15 ounces",
+          "normalizedQuantity": {
+            "value": 15,
+            "unit": "ounce"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        }
+      ],
+      "instructions": {
+        "mode": "SOURCE_LINK",
+        "sourceUrl": "https://livitygardens.com/jamaican-jerk-whole-roasted-cauliflower-with-black-beans-and-chickpeas/",
+        "rightsNote": "Use the linked source for instructions. This catalog stores an original summary and structured ingredient data, not source instruction text."
+      },
+      "dietaryTags": [
+        "VEGAN",
+        "VEGETARIAN",
+        "GLUTEN_FREE",
+        "DAIRY_FREE"
+      ],
+      "allergens": [],
+      "themeConnections": [
+        {
+          "theme": "CHANGE",
+          "explanation": "A celebratory whole roasted vegetable changes the visual center of the table while respecting the need to name adaptation accurately.",
+          "sourceIds": [
+            "src-jerk-cauliflower"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-jerk-cauliflower",
+          "provider": "Livity Gardens",
+          "title": "Jamaican Jerk Whole Roasted Cauliflower with Black Beans and Chickpeas",
+          "url": "https://livitygardens.com/jamaican-jerk-whole-roasted-cauliflower-with-black-beans-and-chickpeas/",
+          "accessedAt": "2026-08-31T12:00:00Z",
+          "attribution": "Recipe and culinary-context source. Catalog summary, theme connection, and ingredient normalization are original.",
+          "licenseNote": "Instructions remain at the linked source; no source recipe prose or images are stored here."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "The source uses substantial Scotch bonnet heat; reduce for mixed tolerance and record changes after testing."
+    },
+    {
+      "id": "recipe-trinidadian-channa-and-pumpkin",
+      "title": "Channa and Pumpkin Curry",
+      "summary": "Chickpeas and pumpkin simmer in a warm curry with ginger, tomato, allspice, and chile. The menu labels this a Trinidadian-inspired version because the linked source describes a Caribbean pumpkin-and-chickpea curry rather than documenting a specific traditional recipe.",
+      "courseRoles": [
+        "MAIN"
+      ],
+      "culturalTraditions": [
+        "Trinidadian-inspired"
+      ],
+      "servings": 6,
+      "times": {
+        "prepMinutes": 15,
+        "cookMinutes": 35,
+        "totalMinutes": 50
+      },
+      "ingredients": [
+        {
+          "ingredientId": "ingredient-chickpeas",
+          "name": "chickpeas",
+          "canonicalName": "chickpeas",
+          "quantityText": "600 grams",
+          "normalizedQuantity": {
+            "value": 600,
+            "unit": "gram"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-pumpkin",
+          "name": "pumpkin",
+          "canonicalName": "pumpkin",
+          "quantityText": "675 grams",
+          "normalizedQuantity": {
+            "value": 675,
+            "unit": "gram"
+          },
+          "category": "PRODUCE",
+          "isOptional": false,
+          "preparation": "cubed"
+        },
+        {
+          "ingredientId": "ingredient-yellow-onion",
+          "name": "yellow onion",
+          "canonicalName": "yellow onion",
+          "quantityText": "1 large onion",
+          "normalizedQuantity": {
+            "value": 1,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-garlic",
+          "name": "garlic",
+          "canonicalName": "garlic",
+          "quantityText": "3 cloves",
+          "normalizedQuantity": {
+            "value": 3,
+            "unit": "clove"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-ginger",
+          "name": "fresh ginger",
+          "canonicalName": "ginger",
+          "quantityText": "4 centimeters",
+          "normalizedQuantity": {
+            "value": 4,
+            "unit": "centimeter"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-tomato",
+          "name": "tomatoes",
+          "canonicalName": "tomato",
+          "quantityText": "3 tomatoes",
+          "normalizedQuantity": {
+            "value": 3,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-vegetable-stock",
+          "name": "vegetable stock",
+          "canonicalName": "vegetable stock",
+          "quantityText": "450 milliliters",
+          "normalizedQuantity": {
+            "value": 450,
+            "unit": "milliliter"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-curry-paste",
+          "name": "curry paste",
+          "canonicalName": "curry paste",
+          "quantityText": "1 1/2 tablespoons",
+          "normalizedQuantity": {
+            "value": 1.5,
+            "unit": "tablespoon"
+          },
+          "category": "SPICES",
+          "isOptional": false
+        }
+      ],
+      "instructions": {
+        "mode": "SOURCE_LINK",
+        "sourceUrl": "https://blog.flametreepublishing.com/simple-recipes/bid/75510/Simple-Recipes-Caribbean-2-Pumpkin-Chickpea-Curry",
+        "rightsNote": "Use the linked source for instructions. This catalog stores an original summary and structured ingredient data, not source instruction text."
+      },
+      "dietaryTags": [
+        "VEGAN",
+        "VEGETARIAN",
+        "GLUTEN_FREE",
+        "DAIRY_FREE"
+      ],
+      "allergens": [],
+      "themeConnections": [
+        {
+          "theme": "COMMUNITY",
+          "explanation": "Chickpeas, pumpkin, and rice make a flexible shared meal that welcomes diners with different appetites.",
+          "sourceIds": [
+            "src-channa-pumpkin"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-channa-pumpkin",
+          "provider": "Flame Tree Publishing",
+          "title": "Simple Recipes: Caribbean #2, Pumpkin & Chickpea Curry",
+          "url": "https://blog.flametreepublishing.com/simple-recipes/bid/75510/Simple-Recipes-Caribbean-2-Pumpkin-Chickpea-Curry",
+          "accessedAt": "2026-08-31T17:58:33Z",
+          "attribution": "Recipe and culinary-context source. Catalog summary, theme connection, and ingredient normalization are original.",
+          "licenseNote": "Instructions remain at the linked source; no source recipe prose or images are stored here."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Cultural designation and optional banana variation require human review before publication."
+    },
+    {
+      "id": "recipe-west-african-inspired-peanut-chickpea-stew",
+      "title": "West African-Inspired Peanut Chickpea Stew",
+      "summary": "Tomato, chickpeas, coconut milk, and peanut butter create a quick, creamy one-pot stew. It takes inspiration from several West African peanut stews and is intentionally labeled as an adaptation rather than assigned to one national tradition.",
+      "courseRoles": [
+        "MAIN"
+      ],
+      "culturalTraditions": [
+        "West African-inspired"
+      ],
+      "servings": 6,
+      "times": {
+        "prepMinutes": 10,
+        "cookMinutes": 25,
+        "totalMinutes": 35
+      },
+      "ingredients": [
+        {
+          "ingredientId": "ingredient-yellow-onion",
+          "name": "yellow onion",
+          "canonicalName": "yellow onion",
+          "quantityText": "1 medium onion",
+          "normalizedQuantity": {
+            "value": 1,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-red-bell-pepper",
+          "name": "red bell pepper",
+          "canonicalName": "red bell pepper",
+          "quantityText": "1 large pepper",
+          "normalizedQuantity": {
+            "value": 1,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-garlic",
+          "name": "garlic",
+          "canonicalName": "garlic",
+          "quantityText": "6 cloves",
+          "normalizedQuantity": {
+            "value": 6,
+            "unit": "clove"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-diced-tomatoes",
+          "name": "diced tomatoes",
+          "canonicalName": "diced tomatoes",
+          "quantityText": "28 ounces",
+          "normalizedQuantity": {
+            "value": 28,
+            "unit": "ounce"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-tomato-paste",
+          "name": "tomato paste",
+          "canonicalName": "tomato paste",
+          "quantityText": "1/2 cup",
+          "normalizedQuantity": {
+            "value": 0.5,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-peanut-butter",
+          "name": "peanut butter",
+          "canonicalName": "peanut butter",
+          "quantityText": "1 cup",
+          "normalizedQuantity": {
+            "value": 1,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-coconut-milk",
+          "name": "light coconut milk",
+          "canonicalName": "coconut milk",
+          "quantityText": "2 cups",
+          "normalizedQuantity": {
+            "value": 2,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-chickpeas",
+          "name": "chickpeas",
+          "canonicalName": "chickpeas",
+          "quantityText": "30 ounces",
+          "normalizedQuantity": {
+            "value": 30,
+            "unit": "ounce"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        }
+      ],
+      "instructions": {
+        "mode": "SOURCE_LINK",
+        "sourceUrl": "https://minimalistbaker.com/1-pot-chickpea-tomato-peanut-stew-west-african-inspired/",
+        "rightsNote": "Use the linked source for instructions. This catalog stores an original summary and structured ingredient data, not source instruction text."
+      },
+      "dietaryTags": [
+        "VEGAN",
+        "VEGETARIAN",
+        "GLUTEN_FREE",
+        "DAIRY_FREE"
+      ],
+      "allergens": [
+        "PEANUT"
+      ],
+      "themeConnections": [
+        {
+          "theme": "RESILIENCE",
+          "explanation": "Affordable, shelf-stable staples make a nourishing main that can scale for a group without sacrificing bold flavor.",
+          "sourceIds": [
+            "src-peanut-stew"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-peanut-stew",
+          "provider": "Minimalist Baker",
+          "title": "1-Pot Chickpea Tomato Peanut Stew (West African-Inspired)",
+          "url": "https://minimalistbaker.com/1-pot-chickpea-tomato-peanut-stew-west-african-inspired/",
+          "accessedAt": "2026-08-31T12:00:00Z",
+          "attribution": "Recipe and culinary-context source. Catalog summary, theme connection, and ingredient normalization are original.",
+          "licenseNote": "Instructions remain at the linked source; no source recipe prose or images are stored here."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Peanut allergy is material. Maintain the inspired label and avoid implying a single traditional origin."
+    },
+    {
+      "id": "recipe-louisiana-style-red-beans-and-rice",
+      "title": "Louisiana-Style Red Beans and Rice",
+      "summary": "Red kidney beans simmer slowly with onion, celery, bell pepper, garlic, herbs, and smoked sausage, then are served over rice. The dish is described as Louisiana Creole-inspired to distinguish this adapted six-person record from any singular authoritative version.",
+      "courseRoles": [
+        "MAIN"
+      ],
+      "culturalTraditions": [
+        "Louisiana Creole-inspired"
+      ],
+      "servings": 6,
+      "times": {
+        "prepMinutes": 30,
+        "cookMinutes": 240,
+        "totalMinutes": 270
+      },
+      "ingredients": [
+        {
+          "ingredientId": "ingredient-red-kidney-beans",
+          "name": "dried red kidney beans",
+          "canonicalName": "red kidney beans",
+          "quantityText": "1 pound",
+          "normalizedQuantity": {
+            "value": 1,
+            "unit": "pound"
+          },
+          "category": "PANTRY",
+          "isOptional": false,
+          "preparation": "soaked"
+        },
+        {
+          "ingredientId": "ingredient-andouille-sausage",
+          "name": "andouille sausage",
+          "canonicalName": "andouille sausage",
+          "quantityText": "1 pound",
+          "normalizedQuantity": {
+            "value": 1,
+            "unit": "pound"
+          },
+          "category": "PROTEIN",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-yellow-onion",
+          "name": "yellow onion",
+          "canonicalName": "yellow onion",
+          "quantityText": "1 large onion",
+          "normalizedQuantity": {
+            "value": 1,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-green-bell-pepper",
+          "name": "green bell pepper",
+          "canonicalName": "green bell pepper",
+          "quantityText": "1 pepper",
+          "normalizedQuantity": {
+            "value": 1,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-celery",
+          "name": "celery",
+          "canonicalName": "celery",
+          "quantityText": "4 stalks",
+          "normalizedQuantity": {
+            "value": 4,
+            "unit": "stalk"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-garlic",
+          "name": "garlic",
+          "canonicalName": "garlic",
+          "quantityText": "3 cloves",
+          "normalizedQuantity": {
+            "value": 3,
+            "unit": "clove"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-white-rice",
+          "name": "cooked white rice",
+          "canonicalName": "white rice",
+          "quantityText": "6 cups",
+          "normalizedQuantity": {
+            "value": 6,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        }
+      ],
+      "instructions": {
+        "mode": "SOURCE_LINK",
+        "sourceUrl": "http://www.camelliabrand.com/recipes/new-orleans-style-red-beans-rice/",
+        "rightsNote": "Use the linked source for instructions. This catalog stores an original summary and structured ingredient data, not source instruction text."
+      },
+      "dietaryTags": [
+        "GLUTEN_FREE",
+        "DAIRY_FREE"
+      ],
+      "allergens": [],
+      "themeConnections": [
+        {
+          "theme": "ANCESTRY",
+          "explanation": "Long simmering and an everyday bean-and-rice foundation invite conversation about routines, nourishment, and place-specific food memory.",
+          "sourceIds": [
+            "src-red-beans-rice"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-red-beans-rice",
+          "provider": "Camellia Brand",
+          "title": "New Orleans-Style Red Beans & Rice",
+          "url": "http://www.camelliabrand.com/recipes/new-orleans-style-red-beans-rice/",
+          "accessedAt": "2026-08-31T12:00:00Z",
+          "attribution": "Recipe and culinary-context source. Catalog summary, theme connection, and ingredient normalization are original.",
+          "licenseNote": "Instructions remain at the linked source; no source recipe prose or images are stored here."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Packaged sausage and seasoning labels require human allergen review; source URL should be rechecked before publishing."
+    },
+    {
+      "id": "recipe-jamaican-rice-and-peas",
+      "title": "Jamaican Rice and Peas",
+      "summary": "Rice cooks with red kidney beans, coconut milk, thyme, allspice, scallion, and a whole Scotch bonnet for aromatic heat. This staple side is designed to pair with curries, stews, and roasted vegetables across the menu.",
+      "courseRoles": [
+        "SIDE"
+      ],
+      "culturalTraditions": [
+        "Jamaican"
+      ],
+      "servings": 6,
+      "times": {
+        "prepMinutes": 5,
+        "cookMinutes": 25,
+        "totalMinutes": 30
+      },
+      "ingredients": [
+        {
+          "ingredientId": "ingredient-white-rice",
+          "name": "long-grain white rice",
+          "canonicalName": "white rice",
+          "quantityText": "2 cups",
+          "normalizedQuantity": {
+            "value": 2,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-coconut-milk",
+          "name": "unsweetened coconut milk",
+          "canonicalName": "coconut milk",
+          "quantityText": "13.5 ounces",
+          "normalizedQuantity": {
+            "value": 13.5,
+            "unit": "ounce"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-red-kidney-beans",
+          "name": "red kidney beans",
+          "canonicalName": "red kidney beans",
+          "quantityText": "15.5 ounces",
+          "normalizedQuantity": {
+            "value": 15.5,
+            "unit": "ounce"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-scallion",
+          "name": "scallions",
+          "canonicalName": "scallion",
+          "quantityText": "3 scallions",
+          "normalizedQuantity": {
+            "value": 3,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-thyme",
+          "name": "fresh thyme",
+          "canonicalName": "thyme",
+          "quantityText": "2 sprigs",
+          "normalizedQuantity": {
+            "value": 2,
+            "unit": "sprig"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-allspice",
+          "name": "ground allspice",
+          "canonicalName": "allspice",
+          "quantityText": "1/2 teaspoon",
+          "normalizedQuantity": {
+            "value": 0.5,
+            "unit": "teaspoon"
+          },
+          "category": "SPICES",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-scotch-bonnet-pepper",
+          "name": "Scotch bonnet pepper",
+          "canonicalName": "scotch bonnet pepper",
+          "quantityText": "1 whole pepper",
+          "normalizedQuantity": {
+            "value": 1,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": true
+        }
+      ],
+      "instructions": {
+        "mode": "SOURCE_LINK",
+        "sourceUrl": "https://www.myforkinglife.com/jamaican-rice-and-peas/",
+        "rightsNote": "Use the linked source for instructions. This catalog stores an original summary and structured ingredient data, not source instruction text."
+      },
+      "dietaryTags": [
+        "VEGAN",
+        "VEGETARIAN",
+        "GLUTEN_FREE",
+        "DAIRY_FREE"
+      ],
+      "allergens": [],
+      "themeConnections": [
+        {
+          "theme": "COMMUNITY",
+          "explanation": "Rice and beans provide a dependable shared base that helps several distinct dishes meet at one table.",
+          "sourceIds": [
+            "src-rice-peas"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-rice-peas",
+          "provider": "My Forking Life",
+          "title": "Jamaican Rice and Peas",
+          "url": "https://www.myforkinglife.com/jamaican-rice-and-peas/",
+          "accessedAt": "2026-08-31T10:30:00Z",
+          "attribution": "Recipe and culinary-context source. Catalog summary, theme connection, and ingredient normalization are original.",
+          "licenseNote": "Instructions remain at the linked source; no source recipe prose or images are stored here."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Keep the pepper whole if lower heat is desired; inspect the can label for additives."
+    },
+    {
+      "id": "recipe-smoky-collard-greens-with-black-eyed-peas",
+      "title": "Smoky Collard Greens with Black-Eyed Peas",
+      "summary": "Collard greens and black-eyed peas simmer in a smoky broth with onion, celery, garlic, bacon, and paprika. The combination reflects Southern U.S. foodways while this catalog record remains a practical dinner adaptation rather than a universal definition of the tradition.",
+      "courseRoles": [
+        "SIDE"
+      ],
+      "culturalTraditions": [
+        "Southern U.S.-inspired"
+      ],
+      "servings": 6,
+      "times": {
+        "prepMinutes": 10,
+        "cookMinutes": 120,
+        "totalMinutes": 130
+      },
+      "ingredients": [
+        {
+          "ingredientId": "ingredient-black-eyed-peas",
+          "name": "dried black-eyed peas",
+          "canonicalName": "black-eyed peas",
+          "quantityText": "1 1/2 pounds",
+          "normalizedQuantity": {
+            "value": 1.5,
+            "unit": "pound"
+          },
+          "category": "PANTRY",
+          "isOptional": false,
+          "preparation": "soaked"
+        },
+        {
+          "ingredientId": "ingredient-collard-greens",
+          "name": "collard greens",
+          "canonicalName": "collard greens",
+          "quantityText": "6 cups",
+          "normalizedQuantity": {
+            "value": 6,
+            "unit": "cup"
+          },
+          "category": "PRODUCE",
+          "isOptional": false,
+          "preparation": "chopped"
+        },
+        {
+          "ingredientId": "ingredient-bacon",
+          "name": "bacon",
+          "canonicalName": "bacon",
+          "quantityText": "4 slices",
+          "normalizedQuantity": {
+            "value": 4,
+            "unit": "slice"
+          },
+          "category": "PROTEIN",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-yellow-onion",
+          "name": "yellow onion",
+          "canonicalName": "yellow onion",
+          "quantityText": "1 1/2 cups",
+          "normalizedQuantity": {
+            "value": 1.5,
+            "unit": "cup"
+          },
+          "category": "PRODUCE",
+          "isOptional": false,
+          "preparation": "diced"
+        },
+        {
+          "ingredientId": "ingredient-celery",
+          "name": "celery",
+          "canonicalName": "celery",
+          "quantityText": "1 1/2 stalks",
+          "normalizedQuantity": {
+            "value": 1.5,
+            "unit": "stalk"
+          },
+          "category": "PRODUCE",
+          "isOptional": false,
+          "preparation": "diced"
+        },
+        {
+          "ingredientId": "ingredient-garlic",
+          "name": "garlic",
+          "canonicalName": "garlic",
+          "quantityText": "5 cloves",
+          "normalizedQuantity": {
+            "value": 5,
+            "unit": "clove"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-chicken-broth",
+          "name": "chicken broth",
+          "canonicalName": "chicken broth",
+          "quantityText": "5 cups",
+          "normalizedQuantity": {
+            "value": 5,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-smoked-paprika",
+          "name": "smoked paprika",
+          "canonicalName": "smoked paprika",
+          "quantityText": "2 teaspoons",
+          "normalizedQuantity": {
+            "value": 2,
+            "unit": "teaspoon"
+          },
+          "category": "SPICES",
+          "isOptional": false
+        }
+      ],
+      "instructions": {
+        "mode": "SOURCE_LINK",
+        "sourceUrl": "https://www.africanbites.com/black-eyed-peas-and-collard-greens/",
+        "rightsNote": "Use the linked source for instructions. This catalog stores an original summary and structured ingredient data, not source instruction text."
+      },
+      "dietaryTags": [
+        "GLUTEN_FREE",
+        "DAIRY_FREE"
+      ],
+      "allergens": [],
+      "themeConnections": [
+        {
+          "theme": "RESILIENCE",
+          "explanation": "Greens and legumes make a sturdy side whose slow cooking rewards time, attention, and sharing.",
+          "sourceIds": [
+            "src-collards-peas"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-collards-peas",
+          "provider": "African Bites",
+          "title": "Black-Eyed Peas and Collard Greens",
+          "url": "https://www.africanbites.com/black-eyed-peas-and-collard-greens/",
+          "accessedAt": "2026-08-31T12:00:00Z",
+          "attribution": "Recipe and culinary-context source. Catalog summary, theme connection, and ingredient normalization are original.",
+          "licenseNote": "Instructions remain at the linked source; no source recipe prose or images are stored here."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Check bacon and broth labels for allergens and sodium; cultural framing should be reviewed by a knowledgeable editor."
+    },
+    {
+      "id": "recipe-sweet-potato-pie",
+      "title": "Sweet Potato Pie",
+      "summary": "Roasted sweet potato purée is folded into a gently spiced custard and baked in a buttery crust. The dessert is situated with care in Southern U.S. and African American foodways, without claiming a single origin story for the dish.",
+      "courseRoles": [
+        "DESSERT"
+      ],
+      "culturalTraditions": [
+        "Southern U.S. and African American foodways"
+      ],
+      "servings": 6,
+      "times": {
+        "prepMinutes": 100,
+        "cookMinutes": 130,
+        "totalMinutes": 350
+      },
+      "ingredients": [
+        {
+          "ingredientId": "ingredient-all-purpose-flour",
+          "name": "all-purpose flour",
+          "canonicalName": "all-purpose flour",
+          "quantityText": "1 1/8 cups",
+          "normalizedQuantity": {
+            "value": 1.125,
+            "unit": "cup"
+          },
+          "category": "BAKERY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-unsalted-butter",
+          "name": "unsalted butter",
+          "canonicalName": "unsalted butter",
+          "quantityText": "12 tablespoons",
+          "normalizedQuantity": {
+            "value": 12,
+            "unit": "tablespoon"
+          },
+          "category": "REFRIGERATED",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-sweet-potato",
+          "name": "sweet potato purée",
+          "canonicalName": "sweet potato",
+          "quantityText": "21 ounces",
+          "normalizedQuantity": {
+            "value": 21,
+            "unit": "ounce"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-brown-sugar",
+          "name": "light brown sugar",
+          "canonicalName": "brown sugar",
+          "quantityText": "3/8 cup",
+          "normalizedQuantity": {
+            "value": 0.375,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-egg",
+          "name": "eggs",
+          "canonicalName": "egg",
+          "quantityText": "2 large eggs",
+          "normalizedQuantity": {
+            "value": 2,
+            "unit": "item"
+          },
+          "category": "REFRIGERATED",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-heavy-cream",
+          "name": "heavy cream",
+          "canonicalName": "heavy cream",
+          "quantityText": "9/16 cup",
+          "normalizedQuantity": {
+            "value": 0.5625,
+            "unit": "cup"
+          },
+          "category": "REFRIGERATED",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-cinnamon",
+          "name": "ground cinnamon",
+          "canonicalName": "cinnamon",
+          "quantityText": "3/4 teaspoon",
+          "normalizedQuantity": {
+            "value": 0.75,
+            "unit": "teaspoon"
+          },
+          "category": "SPICES",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-nutmeg",
+          "name": "ground nutmeg",
+          "canonicalName": "nutmeg",
+          "quantityText": "3/8 teaspoon",
+          "normalizedQuantity": {
+            "value": 0.375,
+            "unit": "teaspoon"
+          },
+          "category": "SPICES",
+          "isOptional": false
+        }
+      ],
+      "instructions": {
+        "mode": "SOURCE_LINK",
+        "sourceUrl": "https://www.myforkinglife.com/southern-sweet-potato-pie/",
+        "rightsNote": "Use the linked source for instructions. This catalog stores an original summary and structured ingredient data, not source instruction text."
+      },
+      "dietaryTags": [
+        "VEGETARIAN"
+      ],
+      "allergens": [
+        "WHEAT",
+        "MILK",
+        "EGG"
+      ],
+      "themeConnections": [
+        {
+          "theme": "ANCESTRY",
+          "explanation": "A pie course opens room for guests to share how a dessert or holiday dish carries family memory across generations.",
+          "sourceIds": [
+            "src-sweet-potato-pie"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-sweet-potato-pie",
+          "provider": "My Forking Life",
+          "title": "Southern Sweet Potato Pie Recipe",
+          "url": "https://www.myforkinglife.com/southern-sweet-potato-pie/",
+          "accessedAt": "2026-08-31T18:38:46Z",
+          "attribution": "Replacement factual or instruction source. Catalog summary, theme connection, and pairing notes are original.",
+          "licenseNote": "Recipe prose and photography remain subject to the publisher’s rights; instructions are linked, not reproduced."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Cooling time is material for service; portions should be tested for a six-person dinner."
+    },
+    {
+      "id": "recipe-hibiscus-poached-pears",
+      "title": "Hibiscus-Poached Pears",
+      "summary": "Firm pears poach in a ruby hibiscus infusion scented with ginger, citrus peel, allspice, and warm baking spices. Cream and pistachio garnish make this a composed dessert with a bright, tart finish.",
+      "courseRoles": [
+        "DESSERT"
+      ],
+      "culturalTraditions": [
+        "Contemporary hibiscus dessert"
+      ],
+      "servings": 6,
+      "times": {
+        "prepMinutes": 45,
+        "cookMinutes": 65,
+        "totalMinutes": 210
+      },
+      "ingredients": [
+        {
+          "ingredientId": "ingredient-bosc-pear",
+          "name": "Bosc pears",
+          "canonicalName": "bosc pear",
+          "quantityText": "6 pears",
+          "normalizedQuantity": {
+            "value": 6,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-dried-hibiscus-flowers",
+          "name": "dried hibiscus flowers",
+          "canonicalName": "dried hibiscus flowers",
+          "quantityText": "2 1/4 cups",
+          "normalizedQuantity": {
+            "value": 2.25,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-brown-sugar",
+          "name": "brown sugar",
+          "canonicalName": "brown sugar",
+          "quantityText": "2 1/4 cups",
+          "normalizedQuantity": {
+            "value": 2.25,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-ginger",
+          "name": "fresh ginger",
+          "canonicalName": "ginger",
+          "quantityText": "6 inches",
+          "normalizedQuantity": {
+            "value": 6,
+            "unit": "inch"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-lemon",
+          "name": "lemons",
+          "canonicalName": "lemon",
+          "quantityText": "3 lemons",
+          "normalizedQuantity": {
+            "value": 3,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-heavy-cream",
+          "name": "heavy cream",
+          "canonicalName": "heavy cream",
+          "quantityText": "3/4 cup",
+          "normalizedQuantity": {
+            "value": 0.75,
+            "unit": "cup"
+          },
+          "category": "REFRIGERATED",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-pistachio",
+          "name": "pistachios",
+          "canonicalName": "pistachio",
+          "quantityText": "6 tablespoons",
+          "normalizedQuantity": {
+            "value": 6,
+            "unit": "tablespoon"
+          },
+          "category": "PANTRY",
+          "isOptional": false,
+          "preparation": "chopped"
+        }
+      ],
+      "instructions": {
+        "mode": "SOURCE_LINK",
+        "sourceUrl": "https://www.foodnetwork.com/recipes/food-network-kitchen/spiced-hibiscus-poached-pears-17688213",
+        "rightsNote": "Use the linked source for instructions. This catalog stores an original summary and structured ingredient data, not source instruction text."
+      },
+      "dietaryTags": [
+        "VEGETARIAN",
+        "GLUTEN_FREE"
+      ],
+      "allergens": [
+        "MILK",
+        "TREE_NUT"
+      ],
+      "themeConnections": [
+        {
+          "theme": "IMAGINED_FUTURES",
+          "explanation": "The unexpected color and tart floral profile make dessert a sensory invitation to imagine familiar fruit differently.",
+          "sourceIds": [
+            "src-hibiscus-pears"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-hibiscus-pears",
+          "provider": "Food Network",
+          "title": "Spiced Hibiscus Poached Pears",
+          "url": "https://www.foodnetwork.com/recipes/food-network-kitchen/spiced-hibiscus-poached-pears-17688213",
+          "accessedAt": "2026-08-31T17:55:00Z",
+          "attribution": "Recipe and culinary-context source. Catalog summary, theme connection, and ingredient normalization are original.",
+          "licenseNote": "Instructions remain at the linked source; no source recipe prose or images are stored here."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "A human should review the source framing before making any Haitian cultural association; none is asserted in this catalog record."
+    },
+    {
+      "id": "recipe-coconut-sweet-potato-pudding",
+      "title": "Coconut Sweet Potato Pudding",
+      "summary": "Grated sweet potato and yellow yam bake with coconut milk, cornmeal, brown rice flour, sugar, and warm spices into a dense, sliceable pudding. The linked source identifies the dish as a Jamaican dessert and provides the full method.",
+      "courseRoles": [
+        "DESSERT"
+      ],
+      "culturalTraditions": [
+        "Jamaican"
+      ],
+      "servings": 6,
+      "times": {
+        "prepMinutes": 25,
+        "cookMinutes": 120,
+        "totalMinutes": 145
+      },
+      "ingredients": [
+        {
+          "ingredientId": "ingredient-sweet-potato",
+          "name": "sweet potatoes",
+          "canonicalName": "sweet potato",
+          "quantityText": "1 1/2 pounds",
+          "normalizedQuantity": {
+            "value": 1.5,
+            "unit": "pound"
+          },
+          "category": "PRODUCE",
+          "isOptional": false,
+          "preparation": "finely grated"
+        },
+        {
+          "ingredientId": "ingredient-yellow-yam",
+          "name": "yellow yam",
+          "canonicalName": "yellow yam",
+          "quantityText": "3/8 pound",
+          "normalizedQuantity": {
+            "value": 0.375,
+            "unit": "pound"
+          },
+          "category": "PRODUCE",
+          "isOptional": false,
+          "preparation": "finely grated"
+        },
+        {
+          "ingredientId": "ingredient-cornmeal",
+          "name": "fine cornmeal",
+          "canonicalName": "cornmeal",
+          "quantityText": "6 tablespoons",
+          "normalizedQuantity": {
+            "value": 6,
+            "unit": "tablespoon"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-brown-rice-flour",
+          "name": "brown rice flour",
+          "canonicalName": "brown rice flour",
+          "quantityText": "6 tablespoons",
+          "normalizedQuantity": {
+            "value": 6,
+            "unit": "tablespoon"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-cane-sugar",
+          "name": "raw cane sugar",
+          "canonicalName": "cane sugar",
+          "quantityText": "3/4 cup",
+          "normalizedQuantity": {
+            "value": 0.75,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-coconut-milk",
+          "name": "coconut milk",
+          "canonicalName": "coconut milk",
+          "quantityText": "13.5 ounces",
+          "normalizedQuantity": {
+            "value": 13.5,
+            "unit": "ounce"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-cinnamon",
+          "name": "ground cinnamon",
+          "canonicalName": "cinnamon",
+          "quantityText": "3/4 teaspoon",
+          "normalizedQuantity": {
+            "value": 0.75,
+            "unit": "teaspoon"
+          },
+          "category": "SPICES",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-nutmeg",
+          "name": "ground nutmeg",
+          "canonicalName": "nutmeg",
+          "quantityText": "3/4 teaspoon",
+          "normalizedQuantity": {
+            "value": 0.75,
+            "unit": "teaspoon"
+          },
+          "category": "SPICES",
+          "isOptional": false
+        }
+      ],
+      "instructions": {
+        "mode": "SOURCE_LINK",
+        "sourceUrl": "https://thatgirlcookshealthy.com/jamaican-sweet-potato-pudding/",
+        "rightsNote": "Use the linked source for instructions. This catalog stores an original summary and structured ingredient data, not source instruction text."
+      },
+      "dietaryTags": [
+        "VEGAN",
+        "VEGETARIAN",
+        "GLUTEN_FREE",
+        "DAIRY_FREE"
+      ],
+      "allergens": [],
+      "themeConnections": [
+        {
+          "theme": "ANCESTRY",
+          "explanation": "Root vegetables, coconut, and slow baking create a dessert course that can support a conversation about place, technique, and food memory.",
+          "sourceIds": [
+            "src-coconut-pudding"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-coconut-pudding",
+          "provider": "That Girl Cooks Healthy",
+          "title": "Jamaican Sweet Potato Pudding (Gluten Free + Vegan)",
+          "url": "https://thatgirlcookshealthy.com/jamaican-sweet-potato-pudding/",
+          "accessedAt": "2026-08-31T12:00:00Z",
+          "attribution": "Recipe and culinary-context source. Catalog summary, theme connection, and ingredient normalization are original.",
+          "licenseNote": "Instructions remain at the linked source; no source recipe prose or images are stored here."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Verify individual coconut and flour-product labels for participant dietary needs."
+    },
+    {
+      "id": "recipe-nigerian-style-chin-chin",
+      "title": "Nigerian Chin Chin",
+      "summary": "Chin chin is a crisp fried dough snack often associated with Nigerian celebrations. This six-person adaptation uses flour, milk, butter, nutmeg, and optional citrus zest; the linked source supplies the full technique.",
+      "courseRoles": [
+        "DESSERT"
+      ],
+      "culturalTraditions": [
+        "Nigerian"
+      ],
+      "servings": 6,
+      "times": {
+        "prepMinutes": 20,
+        "cookMinutes": 30,
+        "totalMinutes": 50
+      },
+      "ingredients": [
+        {
+          "ingredientId": "ingredient-all-purpose-flour",
+          "name": "all-purpose flour",
+          "canonicalName": "all-purpose flour",
+          "quantityText": "200 grams",
+          "normalizedQuantity": {
+            "value": 200,
+            "unit": "gram"
+          },
+          "category": "BAKERY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-granulated-sugar",
+          "name": "granulated sugar",
+          "canonicalName": "granulated sugar",
+          "quantityText": "50 grams",
+          "normalizedQuantity": {
+            "value": 50,
+            "unit": "gram"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-unsalted-butter",
+          "name": "unsalted butter",
+          "canonicalName": "unsalted butter",
+          "quantityText": "50 grams",
+          "normalizedQuantity": {
+            "value": 50,
+            "unit": "gram"
+          },
+          "category": "REFRIGERATED",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-milk",
+          "name": "whole milk",
+          "canonicalName": "milk",
+          "quantityText": "75 milliliters",
+          "normalizedQuantity": {
+            "value": 75,
+            "unit": "milliliter"
+          },
+          "category": "REFRIGERATED",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-baking-powder",
+          "name": "baking powder",
+          "canonicalName": "baking powder",
+          "quantityText": "3/4 teaspoon",
+          "normalizedQuantity": {
+            "value": 0.75,
+            "unit": "teaspoon"
+          },
+          "category": "BAKERY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-nutmeg",
+          "name": "ground nutmeg",
+          "canonicalName": "nutmeg",
+          "quantityText": "1/4 teaspoon",
+          "normalizedQuantity": {
+            "value": 0.25,
+            "unit": "teaspoon"
+          },
+          "category": "SPICES",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-vegetable-oil",
+          "name": "vegetable oil",
+          "canonicalName": "vegetable oil",
+          "quantityText": "1 quart",
+          "normalizedQuantity": {
+            "value": 1,
+            "unit": "quart"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        }
+      ],
+      "instructions": {
+        "mode": "SOURCE_LINK",
+        "sourceUrl": "https://thebiscuitbestiary.com/2024/02/27/nigerian-chin-chin/",
+        "rightsNote": "Use the linked source for instructions. This catalog stores an original summary and structured ingredient data, not source instruction text."
+      },
+      "dietaryTags": [
+        "VEGETARIAN"
+      ],
+      "allergens": [
+        "WHEAT",
+        "MILK"
+      ],
+      "themeConnections": [
+        {
+          "theme": "COMMUNITY",
+          "explanation": "A bite-sized snack supports easy sharing and allows dessert to circulate informally alongside conversation.",
+          "sourceIds": [
+            "src-chin-chin"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-chin-chin",
+          "provider": "The Biscuit Bestiary",
+          "title": "Nigerian Chin Chin",
+          "url": "https://thebiscuitbestiary.com/2024/02/27/nigerian-chin-chin/",
+          "accessedAt": "2026-08-31T18:39:00Z",
+          "attribution": "Replacement factual or instruction source. Catalog summary, theme connection, and pairing notes are original.",
+          "licenseNote": "All rights are reserved by the author, with content made available for public informational use."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Citrus is a modern variation in the linked version; retain optional wording and confirm frying plan."
+    },
+    {
+      "id": "recipe-mango-coconut-lime-salad",
+      "title": "Mango, Coconut, and Lime Fruit Salad",
+      "summary": "Mango, pineapple, berries, banana, and other ripe fruit are tossed with a coconut-lime dressing for a cool, bright finish. It is labeled Thai-inspired because the linked source is a Thai fruit-salad reference while the final fruit mix is flexible and seasonal.",
+      "courseRoles": [
+        "DESSERT"
+      ],
+      "culturalTraditions": [
+        "Thai-inspired"
+      ],
+      "servings": 6,
+      "times": {
+        "prepMinutes": 15,
+        "cookMinutes": 0,
+        "totalMinutes": 15
+      },
+      "ingredients": [
+        {
+          "ingredientId": "ingredient-pineapple",
+          "name": "pineapple",
+          "canonicalName": "pineapple",
+          "quantityText": "1 cup",
+          "normalizedQuantity": {
+            "value": 1,
+            "unit": "cup"
+          },
+          "category": "PRODUCE",
+          "isOptional": false,
+          "preparation": "cubed"
+        },
+        {
+          "ingredientId": "ingredient-mango",
+          "name": "mango",
+          "canonicalName": "mango",
+          "quantityText": "1 cup",
+          "normalizedQuantity": {
+            "value": 1,
+            "unit": "cup"
+          },
+          "category": "PRODUCE",
+          "isOptional": false,
+          "preparation": "cubed"
+        },
+        {
+          "ingredientId": "ingredient-strawberry",
+          "name": "strawberries",
+          "canonicalName": "strawberry",
+          "quantityText": "1 1/2 cups",
+          "normalizedQuantity": {
+            "value": 1.5,
+            "unit": "cup"
+          },
+          "category": "PRODUCE",
+          "isOptional": false,
+          "preparation": "sliced"
+        },
+        {
+          "ingredientId": "ingredient-banana",
+          "name": "banana",
+          "canonicalName": "banana",
+          "quantityText": "1 banana",
+          "normalizedQuantity": {
+            "value": 1,
+            "unit": "item"
+          },
+          "category": "PRODUCE",
+          "isOptional": false,
+          "preparation": "sliced"
+        },
+        {
+          "ingredientId": "ingredient-coconut-milk",
+          "name": "coconut milk",
+          "canonicalName": "coconut milk",
+          "quantityText": "1/4 cup",
+          "normalizedQuantity": {
+            "value": 0.25,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-lime-juice",
+          "name": "lime juice",
+          "canonicalName": "lime juice",
+          "quantityText": "1 tablespoon",
+          "normalizedQuantity": {
+            "value": 1,
+            "unit": "tablespoon"
+          },
+          "category": "PRODUCE",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-sugar",
+          "name": "sugar",
+          "canonicalName": "sugar",
+          "quantityText": "2 1/2 tablespoons",
+          "normalizedQuantity": {
+            "value": 2.5,
+            "unit": "tablespoon"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        }
+      ],
+      "instructions": {
+        "mode": "SOURCE_LINK",
+        "sourceUrl": "https://www.skinnytaste.com/tropical-fruit-salad-recipe/",
+        "rightsNote": "Use the linked source for instructions. This catalog stores an original summary and structured ingredient data, not source instruction text."
+      },
+      "dietaryTags": [
+        "VEGAN",
+        "VEGETARIAN",
+        "GLUTEN_FREE",
+        "DAIRY_FREE"
+      ],
+      "allergens": [],
+      "themeConnections": [
+        {
+          "theme": "CLIMATE",
+          "explanation": "A seasonal fruit dessert invites a practical discussion of choosing what is ripe and locally available rather than fixing the menu to one import-dependent list.",
+          "sourceIds": [
+            "src-mango-coconut"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-mango-coconut",
+          "provider": "Skinnytaste",
+          "title": "Tropical Summer Fruit Salad Recipe",
+          "url": "https://www.skinnytaste.com/tropical-fruit-salad-recipe/",
+          "accessedAt": "2026-08-31T18:42:36Z",
+          "attribution": "Factual and instruction source for a tropical fruit salad. Catalog summary, lime variation, theme connection, and ingredient normalization are original.",
+          "licenseNote": "Recipe prose and photography remain subject to the publisher’s rights; instructions are linked, not reproduced."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "The source supports a tropical mango and coconut fruit salad. Lime is a catalog variation; retain the Thai-inspired label only after human cultural review."
+    },
+    {
+      "id": "recipe-cinnamon-banana-bread-pudding",
+      "title": "Cinnamon Banana Bread Pudding",
+      "summary": "Day-old bread cubes soak in cinnamon-nutmeg custard with sliced bananas, then bake into a warm spoonable dessert. It is a practical way to make use of stale bread while ending the meal with familiar comfort.",
+      "courseRoles": [
+        "DESSERT"
+      ],
+      "culturalTraditions": [
+        "American-inspired"
+      ],
+      "servings": 6,
+      "times": {
+        "prepMinutes": 10,
+        "cookMinutes": 40,
+        "totalMinutes": 50
+      },
+      "ingredients": [
+        {
+          "ingredientId": "ingredient-day-old-bread",
+          "name": "day-old bread cubes",
+          "canonicalName": "day-old bread",
+          "quantityText": "4 cups",
+          "normalizedQuantity": {
+            "value": 4,
+            "unit": "cup"
+          },
+          "category": "BAKERY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-butter",
+          "name": "butter",
+          "canonicalName": "butter",
+          "quantityText": "7 tablespoons",
+          "normalizedQuantity": {
+            "value": 7,
+            "unit": "tablespoon"
+          },
+          "category": "REFRIGERATED",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-egg",
+          "name": "eggs",
+          "canonicalName": "egg",
+          "quantityText": "3 large eggs",
+          "normalizedQuantity": {
+            "value": 3,
+            "unit": "item"
+          },
+          "category": "REFRIGERATED",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-milk",
+          "name": "whole milk",
+          "canonicalName": "milk",
+          "quantityText": "2 3/4 cups",
+          "normalizedQuantity": {
+            "value": 2.75,
+            "unit": "cup"
+          },
+          "category": "REFRIGERATED",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-sugar",
+          "name": "granulated sugar",
+          "canonicalName": "sugar",
+          "quantityText": "5/8 cup",
+          "normalizedQuantity": {
+            "value": 0.625,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-banana",
+          "name": "bananas",
+          "canonicalName": "banana",
+          "quantityText": "1 cup",
+          "normalizedQuantity": {
+            "value": 1,
+            "unit": "cup"
+          },
+          "category": "PRODUCE",
+          "isOptional": false,
+          "preparation": "sliced"
+        },
+        {
+          "ingredientId": "ingredient-cinnamon",
+          "name": "ground cinnamon",
+          "canonicalName": "cinnamon",
+          "quantityText": "1/2 teaspoon",
+          "normalizedQuantity": {
+            "value": 0.5,
+            "unit": "teaspoon"
+          },
+          "category": "SPICES",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-nutmeg",
+          "name": "ground nutmeg",
+          "canonicalName": "nutmeg",
+          "quantityText": "1/2 teaspoon",
+          "normalizedQuantity": {
+            "value": 0.5,
+            "unit": "teaspoon"
+          },
+          "category": "SPICES",
+          "isOptional": false
+        }
+      ],
+      "instructions": {
+        "mode": "SOURCE_LINK",
+        "sourceUrl": "https://www.tasteofhome.com/recipes/banana-bread-pudding/",
+        "rightsNote": "Use the linked source for instructions. This catalog stores an original summary and structured ingredient data, not source instruction text."
+      },
+      "dietaryTags": [
+        "VEGETARIAN"
+      ],
+      "allergens": [
+        "WHEAT",
+        "MILK",
+        "EGG"
+      ],
+      "themeConnections": [
+        {
+          "theme": "RESILIENCE",
+          "explanation": "Transforming day-old bread into dessert offers a clear, welcoming example of low-waste cooking and resourcefulness.",
+          "sourceIds": [
+            "src-banana-pudding"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-banana-pudding",
+          "provider": "Taste of Home",
+          "title": "Banana Bread Pudding",
+          "url": "https://www.tasteofhome.com/recipes/banana-bread-pudding/",
+          "accessedAt": "2026-08-31T10:00:00Z",
+          "attribution": "Recipe and culinary-context source. Catalog summary, theme connection, and ingredient normalization are original.",
+          "licenseNote": "Instructions remain at the linked source; no source recipe prose or images are stored here."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Source calls for dry bread; test portion size and custard set before service."
+    },
+    {
+      "id": "recipe-ginger-molasses-cookies",
+      "title": "Ginger Molasses Cookies",
+      "summary": "Soft molasses cookies use ginger, cinnamon, cloves, nutmeg, butter, and flour for a warmly spiced finish. They complement fruit-forward desserts and can be baked ahead for an easier dinner service.",
+      "courseRoles": [
+        "DESSERT"
+      ],
+      "culturalTraditions": [
+        "New England-inspired"
+      ],
+      "servings": 6,
+      "times": {
+        "prepMinutes": 20,
+        "cookMinutes": 12,
+        "totalMinutes": 32
+      },
+      "ingredients": [
+        {
+          "ingredientId": "ingredient-all-purpose-flour",
+          "name": "all-purpose flour",
+          "canonicalName": "all-purpose flour",
+          "quantityText": "2 cups",
+          "normalizedQuantity": {
+            "value": 2,
+            "unit": "cup"
+          },
+          "category": "BAKERY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-ginger",
+          "name": "ground ginger",
+          "canonicalName": "ginger",
+          "quantityText": "1 teaspoon",
+          "normalizedQuantity": {
+            "value": 1,
+            "unit": "teaspoon"
+          },
+          "category": "SPICES",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-cinnamon",
+          "name": "ground cinnamon",
+          "canonicalName": "cinnamon",
+          "quantityText": "1 teaspoon",
+          "normalizedQuantity": {
+            "value": 1,
+            "unit": "teaspoon"
+          },
+          "category": "SPICES",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-cloves",
+          "name": "ground cloves",
+          "canonicalName": "cloves",
+          "quantityText": "1/4 teaspoon",
+          "normalizedQuantity": {
+            "value": 0.25,
+            "unit": "teaspoon"
+          },
+          "category": "SPICES",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-unsalted-butter",
+          "name": "unsalted butter",
+          "canonicalName": "unsalted butter",
+          "quantityText": "5 tablespoons",
+          "normalizedQuantity": {
+            "value": 5,
+            "unit": "tablespoon"
+          },
+          "category": "REFRIGERATED",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-sugar",
+          "name": "granulated sugar",
+          "canonicalName": "sugar",
+          "quantityText": "1/2 cup",
+          "normalizedQuantity": {
+            "value": 0.5,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-molasses",
+          "name": "molasses",
+          "canonicalName": "molasses",
+          "quantityText": "1/2 cup",
+          "normalizedQuantity": {
+            "value": 0.5,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        }
+      ],
+      "instructions": {
+        "mode": "SOURCE_LINK",
+        "sourceUrl": "https://www.gimmesomeoven.com/chewy-ginger-molasses-cookies/",
+        "rightsNote": "Use the linked source for instructions. This catalog stores an original summary and structured ingredient data, not source instruction text."
+      },
+      "dietaryTags": [
+        "VEGETARIAN"
+      ],
+      "allergens": [
+        "WHEAT",
+        "MILK"
+      ],
+      "themeConnections": [
+        {
+          "theme": "ANCESTRY",
+          "explanation": "A classic spice cookie can prompt guests to compare the aromas, rituals, and seasonal baking memories that travel through their own families.",
+          "sourceIds": [
+            "src-molasses-cookies"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-molasses-cookies",
+          "provider": "Gimme Some Oven",
+          "title": "Chewy Ginger Molasses Cookies",
+          "url": "https://www.gimmesomeoven.com/chewy-ginger-molasses-cookies/",
+          "accessedAt": "2026-08-31T18:36:00Z",
+          "attribution": "Replacement factual or instruction source. Catalog summary, theme connection, and pairing notes are original.",
+          "licenseNote": "The content is provided for personal use with all rights reserved by the original publisher."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "The linked source title differs from the planning shorthand; human review should confirm final recipe identity and any rum use."
+    },
+    {
+      "id": "recipe-coconut-date-truffles",
+      "title": "Coconut Date Truffles",
+      "summary": "Pitted dates, unsweetened coconut, cocoa, and a small amount of water are processed and rolled into no-bake truffles. This simple dessert adds a vegan option and gives the menu a make-ahead finish.",
+      "courseRoles": [
+        "DESSERT"
+      ],
+      "culturalTraditions": [
+        "Contemporary no-bake dessert"
+      ],
+      "servings": 6,
+      "times": {
+        "prepMinutes": 10,
+        "cookMinutes": 0,
+        "totalMinutes": 10
+      },
+      "ingredients": [
+        {
+          "ingredientId": "ingredient-dates",
+          "name": "pitted dates",
+          "canonicalName": "dates",
+          "quantityText": "1 cup",
+          "normalizedQuantity": {
+            "value": 1,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-coconut-flakes",
+          "name": "unsweetened coconut flakes",
+          "canonicalName": "coconut flakes",
+          "quantityText": "1/2 cup",
+          "normalizedQuantity": {
+            "value": 0.5,
+            "unit": "cup"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-cocoa-powder",
+          "name": "unsweetened cocoa powder",
+          "canonicalName": "cocoa powder",
+          "quantityText": "1 tablespoon",
+          "normalizedQuantity": {
+            "value": 1,
+            "unit": "tablespoon"
+          },
+          "category": "PANTRY",
+          "isOptional": false
+        },
+        {
+          "ingredientId": "ingredient-water",
+          "name": "water",
+          "canonicalName": "water",
+          "quantityText": "1 tablespoon",
+          "normalizedQuantity": {
+            "value": 1,
+            "unit": "tablespoon"
+          },
+          "category": "OTHER",
+          "isOptional": false
+        }
+      ],
+      "instructions": {
+        "mode": "SOURCE_LINK",
+        "sourceUrl": "https://toriavey.com/date-truffles/",
+        "rightsNote": "Use the linked source for instructions. This catalog stores an original summary and structured ingredient data, not source instruction text."
+      },
+      "dietaryTags": [
+        "VEGAN",
+        "VEGETARIAN",
+        "GLUTEN_FREE",
+        "DAIRY_FREE"
+      ],
+      "allergens": [],
+      "themeConnections": [
+        {
+          "theme": "IMAGINED_FUTURES",
+          "explanation": "A no-bake dessert shows how a small set of plant ingredients can become something celebratory without elaborate equipment or long cooking.",
+          "sourceIds": [
+            "src-date-truffles"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-date-truffles",
+          "provider": "Tori Avey",
+          "title": "Date Truffles",
+          "url": "https://toriavey.com/date-truffles/",
+          "accessedAt": "2026-08-31T10:15:00Z",
+          "attribution": "Replacement factual or instruction source. Catalog summary, theme connection, and pairing notes are original.",
+          "licenseNote": "Content is copyright protected, with sharing of the resource encouraged while full recipe reproduction is prohibited."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Confirm coconut handling for diners with individual sensitivity; no tree-nut claim is made in this record."
+    }
+  ]
+}

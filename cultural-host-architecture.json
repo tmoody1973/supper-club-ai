@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Cultural Dinner Party — Human + Agent Architecture",
+    "quality_profile": "showcase",
+    "viewBox": [1320, 720]
+  },
+  "components": [
+    {
+      "id": "creative_host",
+      "type": "external",
+      "label": "Creative Host",
+      "sublabel": "Sets theme and constraints",
+      "tag": "primary user",
+      "pos": [30, 300],
+      "size": [170, 74]
+    },
+    {
+      "id": "chatgpt_agent",
+      "type": "external",
+      "label": "ChatGPT Agent",
+      "sublabel": "Plans, reasons, and calls tools",
+      "pos": [250, 100],
+      "size": [180, 74]
+    },
+    {
+      "id": "dinner_party_ui",
+      "type": "frontend",
+      "label": "Dinner Party Board",
+      "sublabel": "Next.js visual workspace",
+      "pos": [250, 500],
+      "size": [180, 74]
+    },
+    {
+      "id": "webmcp_tools",
+      "type": "frontend",
+      "label": "WebMCP Tool Layer",
+      "sublabel": "Typed actions inside the page",
+      "tag": "agent bridge",
+      "pos": [500, 300],
+      "size": [190, 74]
+    },
+    {
+      "id": "party_plan_state",
+      "type": "database",
+      "label": "Shared Party Plan",
+      "sublabel": "Courses, wine, music, locks",
+      "pos": [500, 500],
+      "size": [190, 74]
+    },
+    {
+      "id": "next_api_routes",
+      "type": "backend",
+      "label": "Next.js API Routes",
+      "sublabel": "Normalize data + protect keys",
+      "pos": [770, 300],
+      "size": [190, 74]
+    },
+    {
+      "id": "live_recipe_sources",
+      "type": "cloud",
+      "label": "Live Recipe Discovery",
+      "sublabel": "TinyFish Search + Fetch · Recipe API",
+      "pos": [1040, 130],
+      "size": [240, 74]
+    },
+    {
+      "id": "cultural_sources",
+      "type": "database",
+      "label": "Cultural Knowledge",
+      "sublabel": "Books, wine JSON, Open Library, Wikidata",
+      "pos": [1040, 320],
+      "size": [240, 74]
+    },
+    {
+      "id": "music_sources",
+      "type": "external",
+      "label": "Music + Collection",
+      "sublabel": "Apple MusicKit · Discogs",
+      "pos": [1040, 510],
+      "size": [240, 74]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Next.js app in the browser",
+      "wraps": ["dinner_party_ui", "webmcp_tools", "party_plan_state"],
+      "pad": 22
+    },
+    {
+      "kind": "security-group",
+      "label": "Server-side integration boundary",
+      "wraps": ["next_api_routes"],
+      "pad": 22
+    },
+    {
+      "kind": "region",
+      "label": "Content and media providers",
+      "wraps": ["live_recipe_sources", "cultural_sources", "music_sources"],
+      "pad": 18
+    }
+  ],
+  "connections": [
+    {
+      "id": "host_conversation",
+      "from": "creative_host",
+      "to": "chatgpt_agent",
+      "label": "prompt ↔ summary",
+      "variant": "emphasis"
+    },
+    {
+      "id": "host_review",
+      "from": "creative_host",
+      "to": "dinner_party_ui",
+      "label": "reviews and edits",
+      "variant": "emphasis"
+    },
+    {
+      "id": "agent_tool_call",
+      "from": "chatgpt_agent",
+      "to": "webmcp_tools",
+      "label": "typed tool call ↔ result",
+      "variant": "emphasis"
+    },
+    {
+      "id": "tool_server_call",
+      "from": "webmcp_tools",
+      "to": "next_api_routes",
+      "label": "HTTPS JSON request ↔ response",
+      "labelAt": [730, 245]
+    },
+    {
+      "id": "tool_updates_plan",
+      "from": "webmcp_tools",
+      "to": "party_plan_state",
+      "label": "updates shared plan",
+      "variant": "emphasis",
+      "labelAt": [595, 388]
+    },
+    {
+      "id": "plan_renders_ui",
+      "from": "party_plan_state",
+      "to": "dinner_party_ui",
+      "label": "renders visual cards",
+      "variant": "emphasis",
+      "labelAt": [465, 588]
+    },
+    {
+      "id": "api_live_recipes",
+      "from": "next_api_routes",
+      "to": "live_recipe_sources",
+      "label": "search, fetch, normalize"
+    },
+    {
+      "id": "api_cultural_data",
+      "from": "next_api_routes",
+      "to": "cultural_sources",
+      "label": "themes + pairings",
+      "labelAt": [1100, 420]
+    },
+    {
+      "id": "api_music_data",
+      "from": "next_api_routes",
+      "to": "music_sources",
+      "label": "catalog + playlist"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Every WebMCP call has two visible outcomes",
+      "items": [
+        "The website updates the shared plan so the host sees cards, progress, and choices.",
+        "The tool returns structured JSON so ChatGPT can explain the result and choose the next action."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Trust and reliability",
+      "items": [
+        "API keys remain behind Next.js server routes; external responses are normalized before use.",
+        "Saving an Apple Music playlist or finalizing a plan can require explicit host confirmation."
+      ]
+    }
+  ]
+}

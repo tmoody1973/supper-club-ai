@@ -1,0 +1,47 @@
+{
+  "title": "Choose the Supper Club AI composition",
+  "question": "All three use the locked Speculative Salon Ledger world. Choose the structure to approve; for a combination or revision, choose the closest one and describe what should carry forward in the note.",
+  "options": [
+    {
+      "id": "editorial-working-spread",
+      "label": "Editorial Working Spread",
+      "kicker": "ORIGINAL DIRECTION COMP",
+      "lineage": "literary journal opening spread plus annotated working plate",
+      "thesis": "The dinner’s cultural thesis, full sequence, and selected course share one richly layered editorial spread.",
+      "palette": ["#161713", "#F3EBDD", "#B84D38", "#C7D36F", "#566B8B"],
+      "materials": ["uncoated folio paper", "editorial marginalia", "registration marks"],
+      "viewport": "A bold Seed & Stars overview anchors the left page, the selected course fills the working plate, and agent receipts occupy a dedicated right rail.",
+      "risk": "It has the strongest editorial identity, but the dinner overview and editing task compete for first attention.",
+      "comp": ".impeccable/mocks/decision/speculative-salon.png"
+    },
+    {
+      "id": "run-of-show-spine",
+      "label": "Run-of-Show Spine",
+      "kicker": "COMPOSITION 02",
+      "lineage": "event producer’s timed rundown inside the literary folio",
+      "thesis": "A single chronological spine makes the evening’s arc primary and lets one movement unfold into a broad editing plate.",
+      "palette": ["#161713", "#F3EBDD", "#B84D38", "#C7D36F", "#566B8B"],
+      "materials": ["uncoated folio paper", "ruled program ledger", "stamped states"],
+      "viewport": "Six timed movements stack through the center, Main Table expands across the page, and shopping, prep, completeness, and export stay fixed below.",
+      "risk": "It is clearest operationally, but could feel more like production management than cultural authorship if the editorial moments are quieted too far.",
+      "comp": ".impeccable/mocks/supper-club-ai-comp-02-run-of-show.png"
+    },
+    {
+      "id": "expanding-foldout",
+      "label": "Expanding Foldout",
+      "kicker": "COMPOSITION 03",
+      "lineage": "six-panel cultural program score with linked editorial annotations",
+      "thesis": "The whole dinner remains visible as six movements while the selected movement widens into the working surface.",
+      "palette": ["#161713", "#F3EBDD", "#B84D38", "#C7D36F", "#566B8B"],
+      "materials": ["uncoated foldout stock", "blue-pencil linking lines", "issue footer"],
+      "viewport": "Six adjacent movement columns span the folio, Main Table expands in place, and handwritten agent receipts point directly to the fields they changed.",
+      "risk": "It is the most distinctive interaction, but its narrow collapsed columns require the most deliberate tablet and mobile translation.",
+      "comp": ".impeccable/mocks/supper-club-ai-comp-03-foldout.png"
+    }
+  ],
+  "buildPath": {
+    "value": "comp",
+    "toggle": false
+  },
+  "steer": true
+}

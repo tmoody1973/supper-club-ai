@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "book-catalog.schema.json",
+  "title": "Supper Club AI book catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "catalogType", "generatedAt", "items"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "catalogType": { "const": "books" },
+    "generatedAt": { "type": "string", "format": "date-time" },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/book" }
+    }
+  },
+  "$defs": {
+    "book": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "authors",
+        "summary",
+        "subjects",
+        "themes",
+        "copyright",
+        "externalIds",
+        "sourceRefs",
+        "reviewStatus"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^book-[a-z0-9-]+$" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "subtitle": { "type": "string", "maxLength": 240 },
+        "authors": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 120 }
+        },
+        "publicationYear": { "type": "integer", "minimum": 1000, "maximum": 2100 },
+        "summary": { "type": "string", "minLength": 40, "maxLength": 1200 },
+        "subjects": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 80 }
+        },
+        "themes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["theme", "explanation", "sourceIds", "experienceIdeas"],
+            "properties": {
+              "theme": {
+                "enum": ["ADAPTATION", "COMMUNITY", "RESILIENCE", "CHANGE", "IMAGINED_FUTURES", "ANCESTRY", "CLIMATE"]
+              },
+              "explanation": { "type": "string", "minLength": 1, "maxLength": 500 },
+              "sourceIds": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{2,79}$" }
+              },
+              "experienceIdeas": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "string", "minLength": 1, "maxLength": 240 }
+              }
+            }
+          }
+        },
+        "copyright": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "mayStoreFullText", "rightsNote"],
+          "properties": {
+            "status": { "enum": ["COPYRIGHTED", "PUBLIC_DOMAIN", "UNKNOWN"] },
+            "mayStoreFullText": { "type": "boolean" },
+            "rightsNote": { "type": "string", "minLength": 1, "maxLength": 500 }
+          }
+        },
+        "isbns": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "isbn10": { "type": "string", "pattern": "^[0-9X-]{10,17}$" },
+            "isbn13": { "type": "string", "pattern": "^[0-9-]{13,17}$" }
+          }
+        },
+        "externalIds": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "openLibraryWorkId": { "type": "string" },
+            "googleBooksVolumeId": { "type": "string" },
+            "isbnDbId": { "type": "string" }
+          }
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["kind", "url", "label"],
+            "properties": {
+              "kind": { "enum": ["METADATA", "PREVIEW", "BORROW", "PURCHASE", "AUTHORITATIVE_CONTEXT"] },
+              "url": { "type": "string", "format": "uri" },
+              "label": { "type": "string", "minLength": 1, "maxLength": 120 }
+            }
+          }
+        },
+        "cover": { "$ref": "catalog-common.schema.json#/$defs/imageRef" },
+        "sourceRefs": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "catalog-common.schema.json#/$defs/sourceRef" }
+        },
+        "reviewStatus": { "$ref": "catalog-common.schema.json#/$defs/reviewStatus" },
+        "reviewNotes": { "type": "string", "maxLength": 1000 }
+      }
+    }
+  }
+}

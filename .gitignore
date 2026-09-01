@@ -1,0 +1,10 @@
+.next/
+node_modules/
+.DS_Store
+**/.DS_Store
+
+# Provider credentials belong only in local/server deployment settings.
+.env*
+!.env.example
+
+*.tsbuildinfo

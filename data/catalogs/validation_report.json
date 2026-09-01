@@ -1,0 +1,66 @@
+{
+  "generatedAt": "2026-08-31T18:53:37Z",
+  "catalogs": {
+    "books": {
+      "path": "/Users/tarikmoody/Projects/WebMCP/data/catalogs/books.json",
+      "recordCount": 10,
+      "utf8Valid": true,
+      "schemaValid": true,
+      "schemaErrors": [],
+      "integrityValid": true,
+      "integrityErrors": [],
+      "warnings": [
+        "generatedAt 2026-08-31T23:00:00Z is more than five minutes in the future."
+      ],
+      "missingOptionalFields": [
+        "images/covers omitted intentionally",
+        "dated price estimates omitted intentionally"
+      ]
+    },
+    "recipes": {
+      "path": "/Users/tarikmoody/Projects/WebMCP/data/catalogs/recipes.json",
+      "recordCount": 24,
+      "utf8Valid": true,
+      "schemaValid": true,
+      "schemaErrors": [],
+      "integrityValid": true,
+      "integrityErrors": [],
+      "warnings": [
+        "generatedAt 2026-08-31T23:15:00Z is more than five minutes in the future."
+      ],
+      "missingOptionalFields": [
+        "images/covers omitted intentionally",
+        "dated price estimates omitted intentionally"
+      ]
+    },
+    "wines": {
+      "path": "/Users/tarikmoody/Projects/WebMCP/data/catalogs/wines.json",
+      "recordCount": 30,
+      "utf8Valid": true,
+      "schemaValid": true,
+      "schemaErrors": [],
+      "integrityValid": true,
+      "integrityErrors": [],
+      "warnings": [
+        "generatedAt 2026-08-31T23:30:00Z is more than five minutes in the future."
+      ],
+      "missingOptionalFields": [
+        "images/covers omitted intentionally",
+        "dated price estimates omitted intentionally"
+      ]
+    }
+  },
+  "sourceUrlChecks": {
+    "checked": 64,
+    "passed": 63,
+    "failed": [
+      {
+        "url": "https://www.foodnetwork.com/recipes/food-network-kitchen/spiced-hibiscus-poached-pears-17688213",
+        "status": 403,
+        "error": ""
+      }
+    ]
+  },
+  "overallSchemaValid": true,
+  "overallIntegrityValid": true
+}

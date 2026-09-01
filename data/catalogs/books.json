@@ -1,0 +1,820 @@
+{
+  "schemaVersion": "1.0",
+  "catalogType": "books",
+  "generatedAt": "2026-08-31T23:00:00Z",
+  "items": [
+    {
+      "id": "book-parable-of-the-sower",
+      "title": "Parable of the Sower",
+      "authors": [
+        "Octavia E. Butler"
+      ],
+      "publicationYear": 1993,
+      "summary": "In a near-future California strained by ecological disruption and social breakdown, Lauren Olamina travels north with other survivors while shaping Earthseed, a belief system centered on purposeful change. The novel makes mutual care, practical preparation, and imagination central to survival.",
+      "subjects": [
+        "Dystopian fiction",
+        "Speculative fiction",
+        "Climate fiction",
+        "African American fiction"
+      ],
+      "themes": [
+        {
+          "theme": "ADAPTATION",
+          "explanation": "Lauren responds to a changing environment by learning, planning, and revising her path rather than waiting for stability to return.",
+          "sourceIds": [
+            "src-parable-sower"
+          ],
+          "experienceIdeas": [
+            "Invite guests to name one skill that helps a community adapt.",
+            "Offer a make-your-own spice blend station that rewards experimentation."
+          ]
+        },
+        {
+          "theme": "COMMUNITY",
+          "explanation": "The journey foregrounds cooperation among people who gradually choose shared responsibility over isolation.",
+          "sourceIds": [
+            "src-parable-sower"
+          ],
+          "experienceIdeas": [
+            "Serve dishes family-style and rotate the role of describing each course.",
+            "Create a shared table card where guests add one act of care."
+          ]
+        },
+        {
+          "theme": "RESILIENCE",
+          "explanation": "The book treats resilience as collective practice: securing food, safety, trust, and a reason to continue.",
+          "sourceIds": [
+            "src-parable-sower"
+          ],
+          "experienceIdeas": [
+            "Build a menu around pantry staples transformed through patient cooking."
+          ]
+        },
+        {
+          "theme": "CHANGE",
+          "explanation": "Earthseed frames change as an active force to shape, giving the dinner an opening to discuss how values guide action.",
+          "sourceIds": [
+            "src-parable-sower"
+          ],
+          "experienceIdeas": [
+            "Use a prompt card: What change would you tend together?"
+          ]
+        },
+        {
+          "theme": "IMAGINED_FUTURES",
+          "explanation": "The novel joins urgent material conditions to a future-facing spiritual and social vision.",
+          "sourceIds": [
+            "src-parable-sower"
+          ],
+          "experienceIdeas": [
+            "End the meal with guests sketching a hopeful neighborhood ritual."
+          ]
+        },
+        {
+          "theme": "CLIMATE",
+          "explanation": "Its California setting connects environmental instability with housing, water, mobility, and public safety.",
+          "sourceIds": [
+            "src-parable-sower"
+          ],
+          "experienceIdeas": [
+            "Highlight seasonal produce and discuss one local climate-aware food choice."
+          ]
+        }
+      ],
+      "copyright": {
+        "status": "COPYRIGHTED",
+        "mayStoreFullText": false,
+        "rightsNote": "In-copyright work. Store bibliographic metadata and original commentary only; do not store full text, cover art, or lengthy excerpts without permission."
+      },
+      "isbns": {
+        "isbn13": "9780941423991"
+      },
+      "externalIds": {
+        "openLibraryWorkId": "OL35623W",
+        "googleBooksVolumeId": "dva3QgAACAAJ"
+      },
+      "links": [
+        {
+          "kind": "METADATA",
+          "url": "https://openlibrary.org/works/OL35623W/Parable_of_the_Sower",
+          "label": "Open Library record"
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-parable-sower",
+          "provider": "Open Library",
+          "title": "Parable of the Sower by Octavia E. Butler",
+          "url": "https://openlibrary.org/works/OL35623W/Parable_of_the_Sower",
+          "accessedAt": "2026-08-31T17:43:05Z",
+          "attribution": "Bibliographic and context source; summary and theme notes are original.",
+          "licenseNote": "Do not assume the listing grants full-text or cover-image reuse rights."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Primary work. A human should review thematic framing before publication."
+    },
+    {
+      "id": "book-parable-of-the-talents",
+      "title": "Parable of the Talents",
+      "authors": [
+        "Octavia E. Butler"
+      ],
+      "publicationYear": 1998,
+      "summary": "The sequel returns to an Earthseed community tested by authoritarian politics, religious extremism, and the difficulty of preserving a shared vision. Its documentary structure asks how memory, testimony, and leadership endure under pressure.",
+      "subjects": [
+        "Dystopian fiction",
+        "Speculative fiction",
+        "Political fiction",
+        "African American fiction"
+      ],
+      "themes": [
+        {
+          "theme": "COMMUNITY",
+          "explanation": "The narrative examines how an intentional community holds together when its members face coercion and separation.",
+          "sourceIds": [
+            "src-parable-talents"
+          ],
+          "experienceIdeas": [
+            "Begin with a shared agreement about listening across differences."
+          ]
+        },
+        {
+          "theme": "RESILIENCE",
+          "explanation": "Survival is presented not as individual toughness but as continued commitments to care, memory, and rebuilding.",
+          "sourceIds": [
+            "src-parable-talents"
+          ],
+          "experienceIdeas": [
+            "Pair a slow-cooked main with a conversation about what sustains long projects."
+          ]
+        },
+        {
+          "theme": "CHANGE",
+          "explanation": "The book considers how movements change when their principles meet unequal power and public backlash.",
+          "sourceIds": [
+            "src-parable-talents"
+          ],
+          "experienceIdeas": [
+            "Use table cards inviting guests to distinguish change from progress."
+          ]
+        }
+      ],
+      "copyright": {
+        "status": "COPYRIGHTED",
+        "mayStoreFullText": false,
+        "rightsNote": "In-copyright work. Store bibliographic metadata and original commentary only; do not store full text or cover art without permission."
+      },
+      "isbns": {
+        "isbn13": "9781888363814"
+      },
+      "externalIds": {
+        "openLibraryWorkId": "OL35618W",
+        "googleBooksVolumeId": "gOy07Z1AAR8C"
+      },
+      "links": [
+        {
+          "kind": "METADATA",
+          "url": "https://openlibrary.org/works/OL35618W/Parable_of_the_Talents",
+          "label": "Open Library record"
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-parable-talents",
+          "provider": "Open Library",
+          "title": "Parable of the Talents by Octavia E. Butler",
+          "url": "https://openlibrary.org/works/OL35618W/Parable_of_the_Talents",
+          "accessedAt": "2026-08-31T17:44:24Z",
+          "attribution": "Bibliographic and context source; summary and theme notes are original.",
+          "licenseNote": "Do not assume the listing grants full-text or cover-image reuse rights."
+        }
+      ],
+      "reviewStatus": "DRAFT"
+    },
+    {
+      "id": "book-kindred",
+      "title": "Kindred",
+      "authors": [
+        "Octavia E. Butler"
+      ],
+      "publicationYear": 1979,
+      "summary": "Dana, a Black writer living in twentieth-century California, is repeatedly drawn into the early nineteenth-century Maryland plantation world connected to her family line. Butler uses time travel to confront slavery's violence and the intimate, long-lasting consequences of racial power.",
+      "subjects": [
+        "Historical fiction",
+        "Speculative fiction",
+        "African American fiction",
+        "Slavery in fiction"
+      ],
+      "themes": [
+        {
+          "theme": "ANCESTRY",
+          "explanation": "Family connection becomes a difficult route into the historical conditions that shape the present.",
+          "sourceIds": [
+            "src-kindred"
+          ],
+          "experienceIdeas": [
+            "Offer an optional prompt about a food memory passed between generations."
+          ]
+        },
+        {
+          "theme": "RESILIENCE",
+          "explanation": "The novel centers endurance while refusing to romanticize the conditions that make endurance necessary.",
+          "sourceIds": [
+            "src-kindred"
+          ],
+          "experienceIdeas": [
+            "Frame discussion around care and survival rather than trauma spectacle."
+          ]
+        },
+        {
+          "theme": "CHANGE",
+          "explanation": "By crossing time periods, the book asks how historical systems continue to influence contemporary relationships.",
+          "sourceIds": [
+            "src-kindred"
+          ],
+          "experienceIdeas": [
+            "Share a short reflection on which traditions change and which remain meaningful."
+          ]
+        }
+      ],
+      "copyright": {
+        "status": "COPYRIGHTED",
+        "mayStoreFullText": false,
+        "rightsNote": "In-copyright work. Store bibliographic metadata and original commentary only; do not store full text or cover art without permission."
+      },
+      "isbns": {
+        "isbn13": "9780807083697"
+      },
+      "externalIds": {
+        "openLibraryWorkId": "OL35616W",
+        "googleBooksVolumeId": "89-2ZXYsuAQC"
+      },
+      "links": [
+        {
+          "kind": "METADATA",
+          "url": "https://openlibrary.org/works/OL35616W/Kindred",
+          "label": "Open Library record"
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-kindred",
+          "provider": "Open Library",
+          "title": "Kindred by Octavia E. Butler",
+          "url": "https://openlibrary.org/works/OL35616W/Kindred",
+          "accessedAt": "2026-08-31T17:43:04Z",
+          "attribution": "Bibliographic and context source; summary and theme notes are original.",
+          "licenseNote": "Do not assume the listing grants full-text or cover-image reuse rights."
+        }
+      ],
+      "reviewStatus": "DRAFT"
+    },
+    {
+      "id": "book-dawn",
+      "title": "Dawn",
+      "authors": [
+        "Octavia E. Butler"
+      ],
+      "publicationYear": 1987,
+      "summary": "After a nuclear catastrophe, Lilith Iyapo awakens among the Oankali, extraterrestrials who offer humanity survival through genetic exchange. The novel probes consent, bodily autonomy, kinship, and the uneasy terms of starting again.",
+      "subjects": [
+        "Science fiction",
+        "Post-apocalyptic fiction",
+        "Genetic engineering in fiction",
+        "African American fiction"
+      ],
+      "themes": [
+        {
+          "theme": "ADAPTATION",
+          "explanation": "Human survival is tied to unfamiliar biological and social arrangements, making adaptation ethically complicated rather than simply heroic.",
+          "sourceIds": [
+            "src-dawn"
+          ],
+          "experienceIdeas": [
+            "Serve a familiar ingredient in an unexpected form and invite observations about adaptation."
+          ]
+        },
+        {
+          "theme": "IMAGINED_FUTURES",
+          "explanation": "The story imagines a future in which humanity must confront the costs of rebuilding after self-destruction.",
+          "sourceIds": [
+            "src-dawn"
+          ],
+          "experienceIdeas": [
+            "Ask guests to name one future technology that should be guided by care."
+          ]
+        },
+        {
+          "theme": "CHANGE",
+          "explanation": "Change arrives at the scale of species, body, and family, inviting a careful discussion of agency.",
+          "sourceIds": [
+            "src-dawn"
+          ],
+          "experienceIdeas": [
+            "Use a discussion card: When does help become control?"
+          ]
+        }
+      ],
+      "copyright": {
+        "status": "COPYRIGHTED",
+        "mayStoreFullText": false,
+        "rightsNote": "In-copyright work. Store bibliographic metadata and original commentary only; do not store full text or cover art without permission."
+      },
+      "isbns": {
+        "isbn13": "9780446513630"
+      },
+      "externalIds": {
+        "openLibraryWorkId": "OL35628W",
+        "googleBooksVolumeId": "f39gNO_ZqOQC"
+      },
+      "links": [
+        {
+          "kind": "METADATA",
+          "url": "https://openlibrary.org/works/OL35628W/Dawn",
+          "label": "Open Library record"
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-dawn",
+          "provider": "Open Library",
+          "title": "Dawn by Octavia E. Butler",
+          "url": "https://openlibrary.org/works/OL35628W/Dawn",
+          "accessedAt": "2026-08-31T17:45:00Z",
+          "attribution": "Bibliographic and context source; summary and theme notes are original.",
+          "licenseNote": "Do not assume the listing grants full-text or cover-image reuse rights."
+        }
+      ],
+      "reviewStatus": "DRAFT"
+    },
+    {
+      "id": "book-binti",
+      "title": "Binti",
+      "authors": [
+        "Nnedi Okorafor"
+      ],
+      "publicationYear": 2015,
+      "summary": "Binti, a young Himba student, leaves home to attend the interstellar Oomza University and becomes caught in a conflict that demands translation across cultures. The novella connects scientific curiosity with family ties, self-definition, and diplomacy.",
+      "subjects": [
+        "Africanfuturism",
+        "Science fiction",
+        "Novellas",
+        "Coming-of-age fiction"
+      ],
+      "themes": [
+        {
+          "theme": "IMAGINED_FUTURES",
+          "explanation": "The story places a young Himba scholar at the center of an interstellar future without treating her heritage as something to leave behind.",
+          "sourceIds": [
+            "src-binti"
+          ],
+          "experienceIdeas": [
+            "Invite guests to imagine a future archive that preserves local knowledge."
+          ]
+        },
+        {
+          "theme": "ANCESTRY",
+          "explanation": "Binti's connection to home and inherited practice informs how she moves through unfamiliar worlds.",
+          "sourceIds": [
+            "src-binti"
+          ],
+          "experienceIdeas": [
+            "Share an optional prompt about an inherited skill or object."
+          ]
+        },
+        {
+          "theme": "COMMUNITY",
+          "explanation": "Diplomacy depends on listening across difference and finding ways to make safety collective.",
+          "sourceIds": [
+            "src-binti"
+          ],
+          "experienceIdeas": [
+            "Pair the course with a conversation about hospitality across cultures."
+          ]
+        }
+      ],
+      "copyright": {
+        "status": "COPYRIGHTED",
+        "mayStoreFullText": false,
+        "rightsNote": "In-copyright work. Store bibliographic metadata and original commentary only; do not store full text or cover art without permission."
+      },
+      "isbns": {
+        "isbn13": "9780765385253"
+      },
+      "externalIds": {
+        "openLibraryWorkId": "OL19330487W",
+        "googleBooksVolumeId": "4jmpCQAAQBAJ"
+      },
+      "links": [
+        {
+          "kind": "METADATA",
+          "url": "https://openlibrary.org/works/OL19330487W/Binti",
+          "label": "Open Library record"
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-binti",
+          "provider": "Open Library",
+          "title": "Binti",
+          "url": "https://openlibrary.org/works/OL19330487W/Binti",
+          "accessedAt": "2026-08-31T17:48:00Z",
+          "attribution": "Bibliographic and context source; summary and theme notes are original.",
+          "licenseNote": "Do not assume the listing grants full-text or cover-image reuse rights."
+        }
+      ],
+      "reviewStatus": "DRAFT"
+    },
+    {
+      "id": "book-who-fears-death",
+      "title": "Who Fears Death",
+      "authors": [
+        "Nnedi Okorafor"
+      ],
+      "publicationYear": 2010,
+      "summary": "In a post-apocalyptic Sudanese setting, Onyesonwu grows into formidable power while confronting a legacy of violence and the person responsible for her birth. The novel brings magic, grief, and resistance into a difficult coming-of-age journey.",
+      "subjects": [
+        "Africanfuturism",
+        "Fantasy fiction",
+        "Post-apocalyptic fiction",
+        "Coming-of-age fiction"
+      ],
+      "themes": [
+        {
+          "theme": "RESILIENCE",
+          "explanation": "Onyesonwu's journey emphasizes survival, healing, and action while acknowledging the damage that violence leaves behind.",
+          "sourceIds": [
+            "src-who-fears-death"
+          ],
+          "experienceIdeas": [
+            "Use a gentle opt-in discussion prompt about sources of courage."
+          ]
+        },
+        {
+          "theme": "CHANGE",
+          "explanation": "The narrative pairs personal transformation with a challenge to inherited social violence.",
+          "sourceIds": [
+            "src-who-fears-death"
+          ],
+          "experienceIdeas": [
+            "Invite guests to write one practice that can interrupt harm in a community."
+          ]
+        },
+        {
+          "theme": "IMAGINED_FUTURES",
+          "explanation": "Speculative worldbuilding opens space to consider power, repair, and future possibility from an African-centered perspective.",
+          "sourceIds": [
+            "src-who-fears-death"
+          ],
+          "experienceIdeas": [
+            "Close with a future-facing toast centered on collective safety."
+          ]
+        }
+      ],
+      "copyright": {
+        "status": "COPYRIGHTED",
+        "mayStoreFullText": false,
+        "rightsNote": "In-copyright work. Store bibliographic metadata and original commentary only; do not store full text or cover art without permission."
+      },
+      "isbns": {
+        "isbn13": "9780756406172"
+      },
+      "externalIds": {
+        "openLibraryWorkId": "OL15935869W",
+        "googleBooksVolumeId": "EFqJEAAAQBAJ"
+      },
+      "links": [
+        {
+          "kind": "METADATA",
+          "url": "https://openlibrary.org/works/OL15935869W/Who_Fears_Death",
+          "label": "Open Library record"
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-who-fears-death",
+          "provider": "Open Library",
+          "title": "Who Fears Death",
+          "url": "https://openlibrary.org/works/OL15935869W/Who_Fears_Death",
+          "accessedAt": "2026-08-31T17:47:00Z",
+          "attribution": "Bibliographic and context source; summary and theme notes are original.",
+          "licenseNote": "Do not assume the listing grants full-text or cover-image reuse rights."
+        }
+      ],
+      "reviewStatus": "DRAFT"
+    },
+    {
+      "id": "book-the-fifth-season",
+      "title": "The Fifth Season",
+      "authors": [
+        "N. K. Jemisin"
+      ],
+      "publicationYear": 2015,
+      "summary": "On a planet shaped by recurring geological catastrophes, three women's stories reveal how a society depends on and persecutes people able to influence seismic forces. The novel links environmental precarity to systems of extraction, survival, and collective knowledge.",
+      "subjects": [
+        "Science fiction",
+        "Fantasy fiction",
+        "Climate fiction",
+        "African American fiction"
+      ],
+      "themes": [
+        {
+          "theme": "CLIMATE",
+          "explanation": "Recurring environmental disaster structures everyday life, making preparation, resource sharing, and ecological knowledge essential.",
+          "sourceIds": [
+            "src-fifth-season"
+          ],
+          "experienceIdeas": [
+            "Feature resilient grains and seasonal vegetables with a short sourcing note."
+          ]
+        },
+        {
+          "theme": "RESILIENCE",
+          "explanation": "The characters' survival is tied to skills, memory, and mutual dependence under repeated disruption.",
+          "sourceIds": [
+            "src-fifth-season"
+          ],
+          "experienceIdeas": [
+            "Ask guests which shared skill makes a neighborhood stronger."
+          ]
+        },
+        {
+          "theme": "COMMUNITY",
+          "explanation": "The book tests who is protected, who is exploited, and how communities decide what they owe one another.",
+          "sourceIds": [
+            "src-fifth-season"
+          ],
+          "experienceIdeas": [
+            "Offer a communal grain dish and a prompt about equitable sharing."
+          ]
+        }
+      ],
+      "copyright": {
+        "status": "COPYRIGHTED",
+        "mayStoreFullText": false,
+        "rightsNote": "In-copyright work. Store bibliographic metadata and original commentary only; do not store full text or cover art without permission."
+      },
+      "isbns": {
+        "isbn13": "9780316229296"
+      },
+      "externalIds": {
+        "openLibraryWorkId": "OL17363125W",
+        "googleBooksVolumeId": "J0tIAgAAQBAJ"
+      },
+      "links": [
+        {
+          "kind": "METADATA",
+          "url": "https://openlibrary.org/works/OL17363125W",
+          "label": "Open Library record"
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-fifth-season",
+          "provider": "Open Library",
+          "title": "The Fifth Season",
+          "url": "https://openlibrary.org/works/OL17363125W",
+          "accessedAt": "2026-08-31T10:15:00Z",
+          "attribution": "Bibliographic and context source; summary and theme notes are original.",
+          "licenseNote": "Do not assume the listing grants full-text or cover-image reuse rights."
+        }
+      ],
+      "reviewStatus": "DRAFT"
+    },
+    {
+      "id": "book-the-gilded-ones",
+      "title": "The Gilded Ones",
+      "authors": [
+        "Namina Forna"
+      ],
+      "publicationYear": 2021,
+      "summary": "After a purity ritual marks Deka as different, she is recruited into an army of young women with extraordinary abilities. The novel follows her shift from isolation toward solidarity, self-knowledge, and resistance to a violent social order.",
+      "subjects": [
+        "Young adult fiction",
+        "Fantasy fiction",
+        "African-inspired fantasy",
+        "Coming-of-age fiction"
+      ],
+      "themes": [
+        {
+          "theme": "CHANGE",
+          "explanation": "Deka's understanding of her place in the world changes as she learns the rules around her were made to protect power.",
+          "sourceIds": [
+            "src-gilded-ones"
+          ],
+          "experienceIdeas": [
+            "Ask guests to identify a rule they would redesign for fairness."
+          ]
+        },
+        {
+          "theme": "RESILIENCE",
+          "explanation": "The story treats resilience as the ability to seek help, develop capacity, and survive institutional harm.",
+          "sourceIds": [
+            "src-gilded-ones"
+          ],
+          "experienceIdeas": [
+            "Serve a restorative dessert and invite guests to name a form of rest that supports action."
+          ]
+        },
+        {
+          "theme": "COMMUNITY",
+          "explanation": "Relationships among the recruited girls become a source of belonging and collective strength.",
+          "sourceIds": [
+            "src-gilded-ones"
+          ],
+          "experienceIdeas": [
+            "Use a shared dessert course to celebrate chosen support networks."
+          ]
+        }
+      ],
+      "copyright": {
+        "status": "COPYRIGHTED",
+        "mayStoreFullText": false,
+        "rightsNote": "In-copyright work. Store bibliographic metadata and original commentary only; do not store full text or cover art without permission."
+      },
+      "isbns": {
+        "isbn13": "9781984848697"
+      },
+      "externalIds": {
+        "openLibraryWorkId": "OL20791719W",
+        "googleBooksVolumeId": "eOYXEAAAQBAJ"
+      },
+      "links": [
+        {
+          "kind": "METADATA",
+          "url": "https://openlibrary.org/books/OL34154286M/Gilded_Ones",
+          "label": "Open Library record"
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-gilded-ones",
+          "provider": "Open Library",
+          "title": "Gilded Ones by Namina Forna",
+          "url": "https://openlibrary.org/books/OL34154286M/Gilded_Ones",
+          "accessedAt": "2026-08-31T22:00:00Z",
+          "attribution": "Bibliographic and context source; summary and theme notes are original.",
+          "licenseNote": "Do not assume the listing grants full-text or cover-image reuse rights."
+        }
+      ],
+      "reviewStatus": "DRAFT"
+    },
+    {
+      "id": "book-an-unkindness-of-ghosts",
+      "title": "An Unkindness of Ghosts",
+      "authors": [
+        "Rivers Solomon"
+      ],
+      "publicationYear": 2017,
+      "summary": "Aster Grey works as a medic in the lower decks of the HSS Matilda, a generation ship organized by a harsh racial and class hierarchy. Their investigation into family history exposes how a closed system preserves cruelty across generations.",
+      "subjects": [
+        "Science fiction",
+        "LGBTQ+ fiction",
+        "African American fiction",
+        "Generation ships in fiction"
+      ],
+      "themes": [
+        {
+          "theme": "CHANGE",
+          "explanation": "Aster's search challenges a social order that treats inherited inequality as inevitable.",
+          "sourceIds": [
+            "src-unkindness-ghosts"
+          ],
+          "experienceIdeas": [
+            "Set a table prompt about what makes institutions changeable."
+          ]
+        },
+        {
+          "theme": "COMMUNITY",
+          "explanation": "The novel asks how care, solidarity, and knowledge circulate among people denied formal power.",
+          "sourceIds": [
+            "src-unkindness-ghosts"
+          ],
+          "experienceIdeas": [
+            "Serve a shared vegetable course and invite voluntary reflections on mutual aid."
+          ]
+        },
+        {
+          "theme": "IMAGINED_FUTURES",
+          "explanation": "Its generation-ship setting turns the future into a lens for examining what social systems people carry with them.",
+          "sourceIds": [
+            "src-unkindness-ghosts"
+          ],
+          "experienceIdeas": [
+            "Ask guests what values they would want a future community to preserve."
+          ]
+        }
+      ],
+      "copyright": {
+        "status": "COPYRIGHTED",
+        "mayStoreFullText": false,
+        "rightsNote": "In-copyright work. Store bibliographic metadata and original commentary only; do not store full text or cover art without permission."
+      },
+      "isbns": {
+        "isbn13": "9781617755880"
+      },
+      "externalIds": {
+        "openLibraryWorkId": "OL19721977W",
+        "googleBooksVolumeId": "oYa4DgAAQBAJ"
+      },
+      "links": [
+        {
+          "kind": "METADATA",
+          "url": "https://openlibrary.org/books/OL26935100M/An_unkindness_of_ghosts",
+          "label": "Open Library record"
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-unkindness-ghosts",
+          "provider": "Open Library",
+          "title": "An Unkindness of Ghosts by Rivers Solomon",
+          "url": "https://openlibrary.org/books/OL26935100M/An_unkindness_of_ghosts",
+          "accessedAt": "2026-08-31T22:00:00Z",
+          "attribution": "Bibliographic and context source; summary and theme notes are original.",
+          "licenseNote": "Do not assume the listing grants full-text or cover-image reuse rights."
+        }
+      ],
+      "reviewStatus": "DRAFT"
+    },
+    {
+      "id": "book-a-psalm-for-the-wild-built",
+      "title": "A Psalm for the Wild-Built",
+      "authors": [
+        "Becky Chambers"
+      ],
+      "publicationYear": 2021,
+      "summary": "Sibling Dex, a tea monk seeking a new purpose, meets a robot who has returned from the wilderness to ask what people need. This quiet solarpunk novella considers rest, reciprocity, and the possibility of a society organized around enough rather than endless growth.",
+      "subjects": [
+        "Solarpunk",
+        "Science fiction",
+        "Novellas",
+        "Environmental fiction"
+      ],
+      "themes": [
+        {
+          "theme": "COMMUNITY",
+          "explanation": "The book treats care as a practice that includes listening to needs that cannot be solved through productivity alone.",
+          "sourceIds": [
+            "src-psalm-wild-built"
+          ],
+          "experienceIdeas": [
+            "Offer a tea ritual before dinner and ask an opt-in question about rest."
+          ]
+        },
+        {
+          "theme": "CLIMATE",
+          "explanation": "Its ecological imagination values limits, restoration, and a less extractive relationship with the more-than-human world.",
+          "sourceIds": [
+            "src-psalm-wild-built"
+          ],
+          "experienceIdeas": [
+            "Highlight a low-waste course and share one simple preservation technique."
+          ]
+        },
+        {
+          "theme": "IMAGINED_FUTURES",
+          "explanation": "The novella imagines an alternative future where technological change coexists with wilderness and deliberate sufficiency.",
+          "sourceIds": [
+            "src-psalm-wild-built"
+          ],
+          "experienceIdeas": [
+            "Invite guests to describe one future convenience they would gladly trade for more time together."
+          ]
+        }
+      ],
+      "copyright": {
+        "status": "COPYRIGHTED",
+        "mayStoreFullText": false,
+        "rightsNote": "In-copyright work. Store bibliographic metadata and original commentary only; do not store full text or cover art without permission."
+      },
+      "isbns": {
+        "isbn13": "9781250236210"
+      },
+      "externalIds": {
+        "openLibraryWorkId": "OL22561871W",
+        "googleBooksVolumeId": "XgT6DwAAQBAJ"
+      },
+      "links": [
+        {
+          "kind": "METADATA",
+          "url": "https://us.macmillan.com/books/9781250236210/apsalmforthewildbuilt/",
+          "label": "Publisher record"
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-psalm-wild-built",
+          "provider": "Wikipedia",
+          "title": "A Psalm for the Wild-Built",
+          "url": "https://en.wikipedia.org/wiki/A_Psalm_for_the_Wild-Built",
+          "accessedAt": "2026-08-31T10:15:00Z",
+          "attribution": "Replacement factual or instruction source. Catalog summary, theme connection, and pairing notes are original.",
+          "licenseNote": "Text is available under the Creative Commons Attribution-ShareAlike License; additional terms may apply."
+        }
+      ],
+      "reviewStatus": "DRAFT"
+    }
+  ]
+}

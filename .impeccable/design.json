@@ -1,0 +1,220 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-31T22:19:34Z",
+  "title": "Design System: Supper Club AI",
+  "extensions": {
+    "colorMeta": {
+      "ledger-ink": {
+        "role": "neutral",
+        "displayName": "Ledger Ink",
+        "canonical": "#0f0f0e",
+        "tonalRamp": ["oklch(15% 0.004 95)", "oklch(27% 0.004 95)", "oklch(39% 0.004 95)", "oklch(51% 0.004 95)", "oklch(63% 0.004 95)", "oklch(75% 0.004 95)", "oklch(87% 0.004 95)", "oklch(95% 0.004 95)"]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Soft Ink",
+        "canonical": "#2d2b25",
+        "tonalRamp": ["oklch(15% 0.012 85)", "oklch(27% 0.012 85)", "oklch(39% 0.012 85)", "oklch(51% 0.012 85)", "oklch(63% 0.012 85)", "oklch(75% 0.012 85)", "oklch(87% 0.012 85)", "oklch(95% 0.012 85)"]
+      },
+      "archival-paper": {
+        "role": "neutral",
+        "displayName": "Archival Paper",
+        "canonical": "#eee6dd",
+        "tonalRamp": ["oklch(15% 0.025 70)", "oklch(27% 0.025 70)", "oklch(39% 0.025 70)", "oklch(51% 0.025 70)", "oklch(63% 0.025 70)", "oklch(75% 0.025 70)", "oklch(87% 0.025 70)", "oklch(95% 0.025 70)"]
+      },
+      "paper-deep": {
+        "role": "neutral",
+        "displayName": "Deep Paper",
+        "canonical": "#e1d8cf",
+        "tonalRamp": ["oklch(15% 0.022 70)", "oklch(27% 0.022 70)", "oklch(39% 0.022 70)", "oklch(51% 0.022 70)", "oklch(63% 0.022 70)", "oklch(75% 0.022 70)", "oklch(87% 0.022 70)", "oklch(95% 0.022 70)"]
+      },
+      "oxblood-signal": {
+        "role": "primary",
+        "displayName": "Oxblood Signal",
+        "canonical": "#983423",
+        "tonalRamp": ["oklch(15% 0.13 35)", "oklch(27% 0.13 35)", "oklch(39% 0.13 35)", "oklch(51% 0.13 35)", "oklch(63% 0.13 35)", "oklch(75% 0.13 35)", "oklch(87% 0.13 35)", "oklch(95% 0.13 35)"]
+      },
+      "oxblood-deep": {
+        "role": "primary",
+        "displayName": "Deep Oxblood",
+        "canonical": "#75271a",
+        "tonalRamp": ["oklch(15% 0.11 35)", "oklch(27% 0.11 35)", "oklch(39% 0.11 35)", "oklch(51% 0.11 35)", "oklch(63% 0.11 35)", "oklch(75% 0.11 35)", "oklch(87% 0.11 35)", "oklch(95% 0.11 35)"]
+      },
+      "seed-chartreuse": {
+        "role": "secondary",
+        "displayName": "Seed Chartreuse",
+        "canonical": "#bac467",
+        "tonalRamp": ["oklch(15% 0.11 112)", "oklch(27% 0.11 112)", "oklch(39% 0.11 112)", "oklch(51% 0.11 112)", "oklch(63% 0.11 112)", "oklch(75% 0.11 112)", "oklch(87% 0.11 112)", "oklch(95% 0.11 112)"]
+      },
+      "seed-deep": {
+        "role": "secondary",
+        "displayName": "Deep Seed",
+        "canonical": "#6d752c",
+        "tonalRamp": ["oklch(15% 0.09 112)", "oklch(27% 0.09 112)", "oklch(39% 0.09 112)", "oklch(51% 0.09 112)", "oklch(63% 0.09 112)", "oklch(75% 0.09 112)", "oklch(87% 0.09 112)", "oklch(95% 0.09 112)"]
+      },
+      "archival-cobalt": {
+        "role": "tertiary",
+        "displayName": "Archival Cobalt",
+        "canonical": "#6b6f97",
+        "tonalRamp": ["oklch(15% 0.055 278)", "oklch(27% 0.055 278)", "oklch(39% 0.055 278)", "oklch(51% 0.055 278)", "oklch(63% 0.055 278)", "oklch(75% 0.055 278)", "oklch(87% 0.055 278)", "oklch(95% 0.055 278)"]
+      },
+      "receipt-cobalt": {
+        "role": "tertiary",
+        "displayName": "Receipt Cobalt",
+        "canonical": "#7f9bbf",
+        "tonalRamp": ["oklch(15% 0.065 250)", "oklch(27% 0.065 250)", "oklch(39% 0.065 250)", "oklch(51% 0.065 250)", "oklch(63% 0.065 250)", "oklch(75% 0.065 250)", "oklch(87% 0.065 250)", "oklch(95% 0.065 250)"]
+      },
+      "folio-muted": {
+        "role": "neutral",
+        "displayName": "Folio Muted",
+        "canonical": "#6e695f",
+        "tonalRamp": ["oklch(15% 0.018 75)", "oklch(27% 0.018 75)", "oklch(39% 0.018 75)", "oklch(51% 0.018 75)", "oklch(63% 0.018 75)", "oklch(75% 0.018 75)", "oklch(87% 0.018 75)", "oklch(95% 0.018 75)"]
+      },
+      "warm-white": {
+        "role": "neutral",
+        "displayName": "Warm White",
+        "canonical": "#fff8ed",
+        "tonalRamp": ["oklch(15% 0.025 75)", "oklch(27% 0.025 75)", "oklch(39% 0.025 75)", "oklch(51% 0.025 75)", "oklch(63% 0.025 75)", "oklch(75% 0.025 75)", "oklch(87% 0.025 75)", "oklch(95% 0.025 75)"]
+      },
+      "hairline-rule": {
+        "role": "neutral",
+        "displayName": "Hairline Rule",
+        "canonical": "rgba(38, 36, 31, 0.24)",
+        "tonalRamp": ["oklch(15% 0.008 80)", "oklch(27% 0.008 80)", "oklch(39% 0.008 80)", "oklch(51% 0.008 80)", "oklch(63% 0.008 80)", "oklch(75% 0.008 80)", "oklch(87% 0.008 80)", "oklch(95% 0.008 80)"]
+      },
+      "strong-rule": {
+        "role": "neutral",
+        "displayName": "Strong Rule",
+        "canonical": "rgba(38, 36, 31, 0.48)",
+        "tonalRamp": ["oklch(15% 0.008 80)", "oklch(27% 0.008 80)", "oklch(39% 0.008 80)", "oklch(51% 0.008 80)", "oklch(63% 0.008 80)", "oklch(75% 0.008 80)", "oklch(87% 0.008 80)", "oklch(95% 0.008 80)"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Large folio and host-packet titles." },
+      "headline": { "displayName": "Headline", "purpose": "Course titles and expanded cultural moments." },
+      "title": { "displayName": "Title", "purpose": "Movement names and compact section titles." },
+      "body": { "displayName": "Body", "purpose": "Interpretive prose, descriptions, warnings, and receipt explanations." },
+      "operational": { "displayName": "Operational", "purpose": "Condensed interface copy and control text." },
+      "label": { "displayName": "Label / Mono", "purpose": "Time, state, provenance, counts, tool activity, and actions." }
+    },
+    "shadows": [
+      { "name": "status-halo", "value": "0 0 0 4px rgba(199, 211, 111, 0.12)", "purpose": "Quiet live/ready ring around a tiny status dot." },
+      { "name": "utility-overlay", "value": "8px 12px 30px rgba(0, 0, 0, 0.36)", "purpose": "Compact menus above folio chrome." },
+      { "name": "receipts-drawer", "value": "-14px 0 36px rgba(0, 0, 0, 0.38)", "purpose": "Right-side mobile receipt drawer above its scrim." },
+      { "name": "approval-dialog", "value": "12px 16px 34px rgba(10, 10, 8, 0.42)", "purpose": "Consequential host approval above a dark scrim." },
+      { "name": "transient-toast", "value": "8px 12px 28px rgba(10, 10, 8, 0.36)", "purpose": "Brief versioned feedback above the production dock." },
+      { "name": "folio-drawer", "value": "18px 0 40px rgba(0, 0, 0, 0.34)", "purpose": "Left-side off-canvas folio navigation on compact screens." }
+    ],
+    "motion": [
+      { "name": "state-fast", "value": "160ms ease", "purpose": "Button background and 1px active-press feedback." },
+      { "name": "drawer-standard", "value": "180ms ease", "purpose": "Off-canvas folio navigation transform." },
+      { "name": "live-pulse", "value": "2.3s ease-in-out infinite", "purpose": "Subtle halo pulse for live tool status only." },
+      { "name": "reduced-motion", "value": "0.01ms", "purpose": "Collapses transitions and animation when reduced motion is requested." }
+    ],
+    "breakpoints": [
+      { "name": "compact-desktop", "value": "1220px" },
+      { "name": "single-column", "value": "980px" },
+      { "name": "sequence-stack", "value": "680px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Oxblood control for consequential host actions and production transitions.",
+      "html": "<button class=\"ds-button-primary\" type=\"button\">Review host packet <svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" aria-hidden=\"true\"><path d=\"M5 12h14M13 6l6 6-6 6\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></button>",
+      "css": ".ds-button-primary { min-height: 38px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 14px; border: 0; border-radius: 0; background: var(--signal, #983423); color: #fff8ed; cursor: pointer; font-family: var(--mono, 'IBM Plex Mono', ui-monospace, monospace); font-size: 9px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; transition: background 160ms ease, transform 160ms ease; } .ds-button-primary:hover { background: var(--signal-dark, #75271a); } .ds-button-primary:active { transform: translateY(1px); } .ds-button-primary:focus-visible { outline: 3px solid var(--seed, #bac467); outline-offset: 3px; }"
+    },
+    {
+      "name": "Secondary Action",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Transparent ruled control for reversible or source-viewing actions.",
+      "html": "<button class=\"ds-button-secondary\" type=\"button\">View recipe source</button>",
+      "css": ".ds-button-secondary { min-height: 38px; display: inline-flex; align-items: center; justify-content: center; padding: 0 14px; border: 1px solid var(--rule-strong, rgba(38,36,31,.48)); border-radius: 0; background: transparent; color: var(--ink, #0f0f0e); cursor: pointer; font-family: var(--mono, 'IBM Plex Mono', ui-monospace, monospace); font-size: 9px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; transition: background 160ms ease; } .ds-button-secondary:hover { background: rgba(23,22,17,.05); } .ds-button-secondary:active { background: rgba(23,22,17,.09); } .ds-button-secondary:focus-visible { outline: 3px solid var(--seed, #bac467); outline-offset: 3px; }"
+    },
+    {
+      "name": "Confirm Action",
+      "kind": "button",
+      "refersTo": "button-confirm",
+      "description": "Seed-chartreuse control that distinguishes confirmation from oxblood primary action.",
+      "html": "<button class=\"ds-button-confirm\" type=\"button\"><svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" aria-hidden=\"true\"><path d=\"m5 12 4 4L19 6\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg> Confirm changes</button>",
+      "css": ".ds-button-confirm { min-height: 38px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 14px; border: 0; border-radius: 0; background: var(--seed, #bac467); color: var(--ink, #0f0f0e); cursor: pointer; font-family: var(--mono, 'IBM Plex Mono', ui-monospace, monospace); font-size: 9px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; transition: background 160ms ease, transform 160ms ease; } .ds-button-confirm:hover { background: #b3c058; } .ds-button-confirm:active { transform: translateY(1px); } .ds-button-confirm:focus-visible { outline: 3px solid var(--seed, #bac467); outline-offset: 3px; }"
+    },
+    {
+      "name": "Dietary Chip",
+      "kind": "chip",
+      "refersTo": "chip-dietary",
+      "description": "Compact square status label for dietary and readiness information.",
+      "html": "<span class=\"ds-chip-dietary\">Gluten free</span>",
+      "css": ".ds-chip-dietary { display: inline-flex; align-items: center; padding: 4px 6px; border-radius: 0; background: var(--seed, #bac467); color: var(--ink, #0f0f0e); font-family: var(--mono, 'IBM Plex Mono', ui-monospace, monospace); font-size: 8px; font-weight: 700; line-height: 1; letter-spacing: .04em; text-transform: uppercase; }"
+    },
+    {
+      "name": "Folio Navigation Item",
+      "kind": "nav",
+      "refersTo": "folio-navigation-active",
+      "description": "Numbered near-black index entry with an oxblood active rule and evidence-dense labels.",
+      "html": "<button class=\"ds-folio-link ds-folio-link-active\" type=\"button\"><span class=\"ds-folio-number\">02</span><span class=\"ds-folio-copy\"><strong>Run of show</strong><small>Seed &amp; Stars</small></span><span class=\"ds-folio-dot\"></span></button>",
+      "css": ".ds-folio-link { position: relative; width: 154px; min-height: 66px; display: grid; grid-template-columns: 30px 1fr 8px; align-items: start; gap: 8px; padding: 12px 14px 11px 18px; border: 0; border-bottom: 1px solid rgba(243,235,221,.13); border-radius: 0; background: #11110f; color: var(--paper, #eee6dd); text-align: left; cursor: pointer; } .ds-folio-link::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 3px; background: transparent; } .ds-folio-link:hover { background: #1a1a17; } .ds-folio-link-active { background: #1c1c19; } .ds-folio-link-active::before { background: var(--signal, #983423); } .ds-folio-number { font-family: var(--serif, 'Cormorant Garamond', serif); font-size: 17px; line-height: 1; } .ds-folio-copy strong, .ds-folio-copy small { display: block; } .ds-folio-copy strong { font-family: var(--mono, 'IBM Plex Mono', ui-monospace, monospace); font-size: 9px; font-weight: 500; line-height: 1.35; letter-spacing: .05em; text-transform: uppercase; } .ds-folio-copy small { margin-top: 3px; color: rgba(243,235,221,.62); font-family: var(--serif, 'Cormorant Garamond', serif); font-size: 10px; } .ds-folio-dot { width: 7px; height: 7px; margin-top: 3px; border-radius: 50%; background: var(--signal, #983423); } .ds-folio-link:focus-visible { outline: 3px solid var(--seed, #bac467); outline-offset: -4px; }"
+    },
+    {
+      "name": "Selected Run-of-Show Movement",
+      "kind": "custom",
+      "refersTo": "movement-selected",
+      "description": "The signature chronological row: time, movement, evidence cells, stamped state, and selection band.",
+      "html": "<button class=\"ds-movement\" type=\"button\"><span class=\"ds-movement-node\"></span><time>7:45 PM</time><span class=\"ds-movement-name\"><b>03</b><strong>Main table</strong><small>Gather + ground</small></span><span class=\"ds-movement-cell\"><small>Pairing</small>Skin-contact white</span><span class=\"ds-movement-cell\"><small>Music</small>Jlin</span><span class=\"ds-movement-stamp\">Editing</span><svg viewBox=\"0 0 24 24\" width=\"17\" height=\"17\" aria-hidden=\"true\"><path d=\"m6 15 6-6 6 6\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></button>",
+      "css": ".ds-movement { position: relative; width: min(760px, 100%); min-height: 58px; display: grid; grid-template-columns: 70px minmax(154px,1.2fr) minmax(105px,1fr) minmax(80px,.8fr) 72px 18px; gap: 9px; align-items: center; padding: 10px; border: 0; border-top: 1px solid var(--rule-strong, rgba(38,36,31,.48)); border-radius: 0; background: linear-gradient(90deg, rgba(186,196,103,.7), rgba(186,196,103,.35)); color: var(--ink, #0f0f0e); text-align: left; cursor: pointer; } .ds-movement:hover { filter: saturate(1.08); } .ds-movement-node { position: absolute; left: -10px; top: 18px; width: 17px; height: 17px; border: 5px solid var(--seed, #bac467); border-radius: 50%; background: var(--ink, #0f0f0e); box-shadow: 0 0 0 1px var(--ink, #0f0f0e); } .ds-movement time { color: var(--signal, #983423); font-family: var(--mono, 'IBM Plex Mono', ui-monospace, monospace); font-size: 10px; font-weight: 700; } .ds-movement-name { display: grid; grid-template-columns: 24px 1fr; align-items: center; column-gap: 6px; } .ds-movement-name b { grid-row: 1 / span 2; font-family: var(--serif, 'Cormorant Garamond', serif); font-size: 20px; } .ds-movement-name strong { font-family: var(--serif, 'Cormorant Garamond', serif); font-size: 16px; font-weight: 600; line-height: 1.05; } .ds-movement-name small, .ds-movement-cell, .ds-movement-cell small { font-family: var(--mono, 'IBM Plex Mono', ui-monospace, monospace); } .ds-movement-name small { margin-top: 3px; font-size: 7px; text-transform: uppercase; } .ds-movement-cell { min-width: 0; overflow: hidden; font-size: 7.5px; line-height: 1.35; text-overflow: ellipsis; } .ds-movement-cell small { display: block; margin-bottom: 3px; color: var(--muted, #6e695f); font-size: 6px; text-transform: uppercase; } .ds-movement-stamp { justify-self: end; padding: 5px 6px; border: 1px solid var(--signal, #983423); color: var(--signal, #983423); font-family: var(--mono, 'IBM Plex Mono', ui-monospace, monospace); font-size: 7px; text-transform: uppercase; transform: rotate(-2deg); } .ds-movement:focus-visible { outline: 3px solid var(--seed, #bac467); outline-offset: 3px; }"
+    },
+    {
+      "name": "Course Plate",
+      "kind": "card",
+      "refersTo": "course-plate",
+      "description": "Flat ruled paper container that unfolds from a selected movement.",
+      "html": "<article class=\"ds-course-plate\"><span class=\"ds-field-label\">Dish</span><h2>Smoked Sweet Potato &amp; Black-Eyed Peas</h2><p>with shiitake + scallion oil</p><div class=\"ds-course-rule\"><span>Prep</span><strong>20 min</strong><span>Yield</span><strong>8 guests</strong></div></article>",
+      "css": ".ds-course-plate { width: min(520px, 100%); padding: 18px; border: 1px solid var(--rule-strong, rgba(38,36,31,.48)); border-radius: 0; background: rgba(255,253,247,.28); color: var(--ink, #0f0f0e); } .ds-field-label { display: block; color: var(--signal, #983423); font-family: var(--mono, 'IBM Plex Mono', ui-monospace, monospace); font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; } .ds-course-plate h2 { margin: 7px 0 5px; font-family: var(--serif, 'Cormorant Garamond', serif); font-size: clamp(22px, 4vw, 34px); font-weight: 500; line-height: .98; } .ds-course-plate > p { margin: 0; font-family: var(--serif, 'Cormorant Garamond', serif); font-size: 13px; font-style: italic; } .ds-course-rule { display: grid; grid-template-columns: auto 1fr auto 1fr; gap: 8px; align-items: center; margin-top: 16px; padding-top: 10px; border-top: 1px solid var(--rule, rgba(38,36,31,.24)); font-family: var(--mono, 'IBM Plex Mono', ui-monospace, monospace); font-size: 8px; text-transform: uppercase; } .ds-course-rule span { color: var(--muted, #6e695f); } .ds-course-rule strong { font-weight: 500; }"
+    },
+    {
+      "name": "Agent Receipt",
+      "kind": "custom",
+      "refersTo": "agent-receipt",
+      "description": "Durable near-black evidence record for a WebMCP change, with source, explanation, and applied state.",
+      "html": "<article class=\"ds-receipt\"><span class=\"ds-receipt-icon\"><svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" aria-hidden=\"true\"><path d=\"M12 22c5-3 8-7 8-12V5l-8-3-8 3v5c0 5 3 9 8 12Z\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\"/><path d=\"m8.5 12 2.2 2.2 4.8-5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\"/></svg></span><div><div class=\"ds-receipt-meta\"><time>10:31 AM</time><span>WebMCP</span></div><h3>Recipe match found</h3><p>Matched the selected dish to three vetted recipes and preserved provenance.</p></div><span class=\"ds-receipt-check\">✓</span></article>",
+      "css": ".ds-receipt { position: relative; width: min(310px, 100%); display: grid; grid-template-columns: 28px 1fr; gap: 10px; padding: 14px 16px; border-bottom: 1px solid rgba(243,235,221,.15); border-radius: 0; background: #11110f; color: var(--paper, #eee6dd); } .ds-receipt:hover { background: #171713; } .ds-receipt-icon { width: 28px; height: 28px; display: grid; place-items: center; border: 1px solid var(--seed, #bac467); border-radius: 50%; color: var(--seed, #bac467); } .ds-receipt-meta { display: flex; justify-content: space-between; gap: 8px; color: rgba(243,235,221,.5); font-family: var(--mono, 'IBM Plex Mono', ui-monospace, monospace); font-size: 6.5px; } .ds-receipt h3 { margin: 6px 0 4px; font-family: var(--mono, 'IBM Plex Mono', ui-monospace, monospace); font-size: 8.5px; letter-spacing: .04em; text-transform: uppercase; } .ds-receipt p { margin: 0; color: rgba(243,235,221,.73); font-family: var(--serif, 'Cormorant Garamond', serif); font-size: 10px; line-height: 1.4; } .ds-receipt-check { position: absolute; right: 12px; bottom: 12px; color: var(--seed, #bac467); font-family: var(--mono, 'IBM Plex Mono', ui-monospace, monospace); font-size: 13px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Speculative Salon Ledger",
+    "overview": "Supper Club AI feels like a living literary-salon ledger prepared for a culturally fluent host: archival, deliberate, warm, and operational without becoming institutional. Near-black folio chrome contains a warm, uncoated paper working surface; editorial serif language carries the evening's cultural arc while compressed operational type and mono metadata keep timing, provenance, state, and agent activity unmistakably practical.\n\nThe defining expression is the Run-of-Show Spine. The evening reads chronologically, one movement unfolds into a ruled working plate, and agent actions appear as marginalia and receipts instead of a second conversation. The system rejects the generic rounded-card AI dashboard: density comes from editorial hierarchy, hairline rules, stamps, registration marks, and disciplined color signals—not decorative containers.",
+    "keyCharacteristics": [
+      "Warm, paper-textured working plates framed by near-black folio chrome.",
+      "A chronological spine that keeps one coherent evening visible and editable.",
+      "Literary serif storytelling paired with condensed operational sans and mono evidence.",
+      "Oxblood action, seed-chartreuse state, and archival-cobalt marginalia with tightly rationed roles.",
+      "Square ruled surfaces, stamped states, circular nodes, seals, and completion signals.",
+      "Visible provenance, warnings, versioning, and agent receipts beside the affected work."
+    ],
+    "rules": [
+      { "name": "The Signal Rationing Rule", "body": "Oxblood directs consequential action and editing; seed chartreuse marks selection, readiness, and confirmation; archival cobalt belongs to sourced marginalia. Never interchange these roles.", "section": "colors" },
+      { "name": "The Three-Voice Rule", "body": "Serif tells the evening's story, condensed sans handles operations, and mono records state, time, provenance, and tool activity.", "section": "typography" },
+      { "name": "The Spine Before Cards Rule", "body": "A plan is read chronologically along a ruled axis; supporting content unfolds from the selected movement rather than fragmenting into a dashboard tile grid.", "section": "layout" },
+      { "name": "The Flat Ledger Rule", "body": "Paper surfaces stay flat at rest; shadows are reserved for overlays, drawers, dialogs, and transient feedback.", "section": "elevation" },
+      { "name": "The Square Plate Rule", "body": "Structural surfaces and actions use square corners; circles are reserved for nodes, completion, status, and seals, while pills are limited to filters.", "section": "shapes" },
+      { "name": "The Visible Receipt Rule", "body": "Agent activity must resolve into a human-readable receipt, warning, or versioned state beside the work it changed.", "section": "components" }
+    ],
+    "dos": [
+      "Do keep the chronological evening legible before revealing supporting detail.",
+      "Do use serif type for cultural narrative and mono type for evidence, state, time, provenance, and action labels.",
+      "Do preserve square ruled surfaces and use circular geometry only when it carries node, seal, progress, or status meaning.",
+      "Do keep warnings, sources, rights notes, dietary context, and agent receipts visible where they help the Creative Host decide.",
+      "Do turn the desktop three-rail workspace into a sequence stack, explicit receipts drawer, and sticky production dock on mobile."
+    ],
+    "donts": [
+      "Don't turn the plan into a grid of rounded, floating AI-dashboard cards.",
+      "Don't use oxblood, seed chartreuse, and archival cobalt as interchangeable decoration.",
+      "Don't let an agent update disappear into a chat transcript or ephemeral toast without a durable receipt or versioned state.",
+      "Don't add shadows to resting paper sheets, rows, or plates.",
+      "Don't hide the primary host-packet action, dietary verification, or provenance when space gets tight."
+    ]
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "title": "Choose Supper Club AI’s visual world",
+  "question": "The lead direction treats dinner planning like producing a live community-radio broadcast. Keep it, choose another world, play it straight, or re-roll.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "The Community Broadcast",
+      "kicker": "THE ROLL",
+      "lineage": "Black community radio studios, jazz program logs, and live producer rundowns",
+      "thesis": "The dinner becomes a live cultural broadcast whose courses, tracks, stories, and host tasks share one timed rundown.",
+      "palette": ["#171611", "#F2E9D4", "#D95638", "#A9C86E", "#6F9FB2"],
+      "materials": ["newsprint program logs", "grease-pencil cues", "backlit studio meters"],
+      "viewport": "A dense but warm desktop rundown places Seed & Stars on a central evening timeline, with the editable plan at left and ChatGPT’s latest tool receipts in a narrow live producer rail at right.",
+      "risk": "The broadcast metaphor can feel technical unless food, guests, and hospitality remain more prominent than studio language.",
+      "raised": [
+        {
+          "from": "challenger-civic",
+          "raise": "One live signal carries the accent color while the rest of the workspace stays calm enough for dense planning."
+        },
+        {
+          "from": "challenger-origami",
+          "raise": "Every confirmed choice remains visibly connected to the earlier draft it transformed from."
+        },
+        {
+          "from": "challenger-deep-dive",
+          "raise": "A single synchronized evening clock governs courses, music, prep, and host cues."
+        }
+      ],
+      "comp": ".impeccable/mocks/decision/community-broadcast.png"
+    },
+    {
+      "id": "model-pick",
+      "label": "The Speculative Salon Ledger",
+      "kicker": "IMPECCABLE’S PICK",
+      "lineage": "Black literary salons, independent arts journals, and an event producer’s annotated run-of-show",
+      "thesis": "A living editorial folio turns the host’s cultural thesis into a dinner plan guests can experience scene by scene.",
+      "palette": ["#161713", "#F3EBDD", "#B84D38", "#C7D36F", "#566B8B"],
+      "materials": ["uncoated folio paper", "editorial marginalia", "registration marks"],
+      "viewport": "An asymmetric magazine spread opens on Seed & Stars, with the evening thesis and sequence commanding the page while recipes, wine, reading, and music sit in annotated editorial columns.",
+      "risk": "This is the most naturally tasteful direction and therefore the one most likely to resemble other premium editorial products.",
+      "comp": ".impeccable/mocks/decision/speculative-salon.png"
+    },
+    {
+      "id": "challenger-cutting-bench",
+      "label": "The Select Rail",
+      "verdict": "competitive",
+      "lineage": "film cutting benches and perforated work prints",
+      "thesis": "The evening is edited as a strip of scenes, with every kept, deferred, or replaced choice marked directly on the work print.",
+      "palette": ["#0A0A0A", "#F5A11F", "#F4F1EA"],
+      "materials": ["coarse film grain", "perforated stock", "folded tape flags"],
+      "viewport": "A perforated sequence rail crosses the planner at a fixed height; courses and cultural beats occupy frames while unused ideas hang below as reachable trims.",
+      "case": "Product clarity is excellent because planning already resembles editing, but a Creative Host identifies less strongly with a cutting room than a gathering.",
+      "risk": "The severe orange-and-black bench can overpower the warmth and cultural specificity of the dinner.",
+      "comp": ".impeccable/mocks/decision/select-rail.png",
+      "hero": "https://impeccable.style/worlds/cards/operate-a-cutting-bench-select-rail-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/operate-a-cutting-bench-select-rail.webp"
+    },
+    {
+      "id": "challenger-hypercard",
+      "label": "The Host’s Card Stack",
+      "verdict": "competitive",
+      "lineage": "HyperCard stacks and hand-authored digital shoeboxes",
+      "thesis": "Books, dishes, bottles, and songs are editable cards the host can browse, connect, and rewrite in place.",
+      "palette": ["#000000", "#FFFFFF", "#B8B8B8"],
+      "materials": ["one-bit pixels", "stipple dither", "hand-painted buttons"],
+      "viewport": "A fixed-proportion Seed & Stars card opens in the center with visible stack navigation, editable fields, and linked cards for menu, reading, wine, music, and shopping.",
+      "case": "Its authoring model makes WebMCP edits unusually legible, but the nostalgic computer identity says maker before it says host.",
+      "risk": "The one-bit interface can become retro novelty and makes food, wine, and atmosphere visually austere.",
+      "comp": ".impeccable/mocks/decision/host-card-stack.png",
+      "hero": "https://impeccable.style/worlds/cards/medium-native-hypercard-stack-shoebox-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/medium-native-hypercard-stack-shoebox.webp"
+    },
+    {
+      "id": "challenger-star-atlas",
+      "label": "The Evening Atlas",
+      "verdict": "competitive",
+      "lineage": "celestial atlas plates and coordinate charts",
+      "thesis": "Each dinner element becomes a plotted body whose size shows importance and whose lines reveal the evening’s cultural connections.",
+      "palette": ["#0A1021", "#F2F2E9", "#FF4D2E", "#FFB36B"],
+      "materials": ["matte chart ink", "chalk grain", "coordinate rules"],
+      "viewport": "Seed & Stars appears as a navigable constellation of courses, readings, tracks, and prep milestones, with the selected object opening as an editable planning plate.",
+      "case": "It strongly signals the featured Afrofuturist theme, but a constellation is a weaker planning model and risks reducing Afrofuturism to outer-space decoration.",
+      "risk": "The signature theme could trap future dinners in the same cosmic visual language.",
+      "comp": ".impeccable/mocks/decision/evening-atlas.png",
+      "hero": "https://impeccable.style/worlds/cards/notation-diagram-systems-star-atlas-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/notation-diagram-systems-star-atlas.webp"
+    },
+    {
+      "id": "challenger-civic",
+      "label": "The Cultural Prospectus",
+      "verdict": "declined",
+      "lineage": "late-modern civic bureau prospectuses",
+      "thesis": "The host’s evening reads as a polished cultural proposal with one luminous thread connecting every decision.",
+      "palette": ["#F7F7FA", "#1B1547", "#6B5CE7", "#7FD8D0"],
+      "materials": ["bone-white plate", "silk light ribbon", "lacquered controls"],
+      "viewport": "A bright prospectus introduces Seed & Stars beside a responsive ribbon, followed by clean bands for the menu, reading, music, wine, and event console.",
+      "case": "It is polished but identifies a civic or enterprise buyer, and its hero structure obscures the operating workspace.",
+      "risk": "The result would look accomplished yet interchangeable with a contemporary AI SaaS product.",
+      "kept": "Spend the strongest color on one live signal instead of distributing accents everywhere.",
+      "hero": "https://impeccable.style/worlds/cards/civic-bureau-prospectus-late-modern-hero.webp"
+    },
+    {
+      "id": "challenger-origami",
+      "label": "The Folded Evening",
+      "verdict": "declined",
+      "lineage": "single-sheet orizuru fold sequences",
+      "thesis": "One unbroken plan transforms through deliberate stages until menu, guests, timing, and atmosphere lock into a finished gathering.",
+      "palette": ["#C8342F", "#F2E6D4", "#1F1A17", "#D4A641"],
+      "materials": ["vermilion washi", "visible fiber", "sumi annotations"],
+      "viewport": "A centered plan sheet shows the current transformation beside a strict numbered sequence for theme, menu, pairings, shopping, prep, and export.",
+      "case": "The transformation story is elegant, but folding language is remote from cultural hosting and weakens scanning across parallel tasks.",
+      "risk": "A linear craft tutorial cannot comfortably hold the planner’s dense, revisable network of decisions.",
+      "kept": "Show how each confirmed state preserves the history of the draft it came from.",
+      "hero": "https://impeccable.style/worlds/cards/paper-folds-pleats-deployable-orizuru-crane-sequence-hero.webp"
+    },
+    {
+      "id": "challenger-deep-dive",
+      "label": "The Dinner Descent",
+      "verdict": "declined",
+      "lineage": "technical dive profiles and mesophotic field notes",
+      "thesis": "The host descends through preparation toward the dinner, with every choice pinned to an exact time and depth of commitment.",
+      "palette": ["#071A2C", "#0D4462", "#5FD6D8", "#F3F2E8"],
+      "materials": ["abyssal ink", "marine-snow particles", "backlit depth gauges"],
+      "viewport": "A vertical profile links research, shopping, prep, service, and follow-up while close-view panels reveal recipes, pairings, and cultural notes.",
+      "case": "Its synchronized timeline is useful, but both the audience signal and dinner-planning model depend on an unrelated expedition metaphor.",
+      "risk": "The journey becomes visually dramatic while the food and gathering become secondary annotations.",
+      "kept": "Make one synchronized time axis control every dependent plan surface.",
+      "hero": "https://impeccable.style/worlds/cards/rivers-tides-ocean-depths-mesophotic-deep-dive-hero.webp"
+    }
+  ],
+  "reroll": {
+    "registers": ["safer", "bolder"]
+  },
+  "buildPath": {
+    "value": "comp",
+    "toggle": true
+  },
+  "canon": true,
+  "canonCard": {
+    "label": "The Premium Planner",
+    "thesis": "A polished card-based planning dashboard makes every ingredient, recommendation, and action familiar on first use.",
+    "palette": ["#FCFAF5", "#191B18", "#7D4F3C", "#7A8F68"],
+    "materials": ["clean grid", "soft photography", "elevated cards"],
+    "viewport": "A left navigation, centered plan board, and right activity panel organize Seed & Stars into conventional dashboard cards.",
+    "risk": "It is easy to understand because it resembles every premium lifestyle planning product.",
+    "comp": ".impeccable/mocks/decision/canon.png"
+  },
+  "steer": true
+}

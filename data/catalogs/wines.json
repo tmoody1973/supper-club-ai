@@ -1,0 +1,1635 @@
+{
+  "schemaVersion": "1.0",
+  "catalogType": "wines",
+  "generatedAt": "2026-08-31T23:30:00Z",
+  "items": [
+    {
+      "id": "wine-cremant-dalsace-brut",
+      "kind": "WINE",
+      "name": "Crémant d'Alsace Brut",
+      "style": "Crémant d'Alsace Brut",
+      "isAlcoholic": true,
+      "color": "SPARKLING",
+      "tastingNotes": [
+        "apple",
+        "citrus",
+        "fine bubbles"
+      ],
+      "pairingTags": [
+        "welcome toast",
+        "akara-style fritters",
+        "light starters"
+      ],
+      "courseRoles": [
+        "WELCOME",
+        "STARTER"
+      ],
+      "themeConnections": [
+        {
+          "theme": "IMAGINED_FUTURES",
+          "explanation": "A fresh, celebratory pour opens the meal by making room for anticipation, conversation, and collective possibility.",
+          "sourceIds": [
+            "src-wine-cremant-dalsace-brut"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-wine-cremant-dalsace-brut",
+          "provider": "Vins d'Alsace",
+          "title": "The AOC Crémant d'Alsace",
+          "url": "https://www.vinsalsace.com/en/gouts-et-couleurs/aoc/aoc-cremant-dalsace/",
+          "accessedAt": "2026-08-31T18:29:01Z",
+          "attribution": "Style or beverage-reference source. Tasting tags, pairing guidance, and theme connection are original catalog writing.",
+          "licenseNote": "No current prices, retail availability, third-party review text, or images are stored in this record."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "The Crémant d'Alsace AOC was established in 1976 and adheres to strict production standards similar to those in Champagne.",
+      "country": "France",
+      "region": "Alsace",
+      "sweetness": "DRY",
+      "body": "MEDIUM",
+      "acidity": "HIGH",
+      "tannin": "NONE",
+      "producer": "Generic Alsace Regional Producer",
+      "grapes": [
+        "pinot blanc",
+        "auxerrois",
+        "pinot gris",
+        "pinot noir",
+        "riesling",
+        "chardonnay"
+      ],
+      "alcoholByVolume": 12,
+      "servingTemperatureCelsius": 7
+    },
+    {
+      "id": "wine-cava-brut",
+      "kind": "WINE",
+      "name": "Cava Brut",
+      "style": "Cava Brut",
+      "isAlcoholic": true,
+      "color": "SPARKLING",
+      "tastingNotes": [
+        "citrus",
+        "almond",
+        "brisk bubbles"
+      ],
+      "pairingTags": [
+        "welcome toast",
+        "spiced plantains",
+        "fried starters"
+      ],
+      "courseRoles": [
+        "WELCOME",
+        "STARTER"
+      ],
+      "themeConnections": [
+        {
+          "theme": "IMAGINED_FUTURES",
+          "explanation": "A fresh, celebratory pour opens the meal by making room for anticipation, conversation, and collective possibility.",
+          "sourceIds": [
+            "src-wine-cava-brut"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-wine-cava-brut",
+          "provider": "D.O. Cava Regulatory Board",
+          "title": "Types and varieties of Cava - Differences between the various types of Cava",
+          "url": "https://www.cava.wine/en/news-articles/types-and-varieties-of-cava-differences-between-the-various-types-of-cava/",
+          "accessedAt": "2026-08-31T10:00:00Z",
+          "attribution": "Style or beverage-reference source. Tasting tags, pairing guidance, and theme connection are original catalog writing.",
+          "licenseNote": "No current prices, retail availability, third-party review text, or images are stored in this record."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Specific grape proportions and aging durations may vary significantly between individual producers within the D.O. Cava regulatory framework.",
+      "country": "Spain",
+      "region": "Penedès",
+      "sweetness": "DRY",
+      "body": "LIGHT",
+      "acidity": "HIGH",
+      "tannin": "NONE",
+      "producer": "D.O. Cava Regional Producers",
+      "grapes": [
+        "macabeo",
+        "xarel-lo",
+        "parellada"
+      ],
+      "alcoholByVolume": 11.5,
+      "servingTemperatureCelsius": 7
+    },
+    {
+      "id": "wine-vinho-verde-branco",
+      "kind": "WINE",
+      "name": "Vinho Verde Branco",
+      "style": "Vinho Verde Branco",
+      "isAlcoholic": true,
+      "color": "WHITE",
+      "tastingNotes": [
+        "lime",
+        "green apple",
+        "light spritz"
+      ],
+      "pairingTags": [
+        "tomato cucumber salad",
+        "carrot citrus salad",
+        "plantain"
+      ],
+      "courseRoles": [
+        "WELCOME",
+        "STARTER"
+      ],
+      "themeConnections": [
+        {
+          "theme": "IMAGINED_FUTURES",
+          "explanation": "A fresh, celebratory pour opens the meal by making room for anticipation, conversation, and collective possibility.",
+          "sourceIds": [
+            "src-wine-vinho-verde-branco"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-wine-vinho-verde-branco",
+          "provider": "Wines of Portugal",
+          "title": "Vinho Verde",
+          "url": "https://winesofportugal.com/en/discover/wine-regions/vinho-verde/",
+          "accessedAt": "2026-08-31T18:28:00Z",
+          "attribution": "Style or beverage-reference source. Tasting tags, pairing guidance, and theme connection are original catalog writing.",
+          "licenseNote": "No current prices, retail availability, third-party review text, or images are stored in this record."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Traditional styles often feature a slight, natural spritz intended to enhance freshness.",
+      "country": "Portugal",
+      "region": "Vinho Verde",
+      "sweetness": "DRY",
+      "body": "LIGHT",
+      "acidity": "HIGH",
+      "tannin": "NONE",
+      "producer": "Various Minho Producers",
+      "grapes": [
+        "alvarinho",
+        "arinto",
+        "avesso",
+        "azal",
+        "loureiro",
+        "trajadura"
+      ],
+      "alcoholByVolume": 10,
+      "servingTemperatureCelsius": 9
+    },
+    {
+      "id": "wine-provence-rose",
+      "kind": "WINE",
+      "name": "Provence Rosé",
+      "style": "Provence Rosé",
+      "isAlcoholic": true,
+      "color": "ROSE",
+      "tastingNotes": [
+        "white peach",
+        "citrus",
+        "dry finish"
+      ],
+      "pairingTags": [
+        "carrot citrus salad",
+        "tomato cucumber salad",
+        "mushroom skewers"
+      ],
+      "courseRoles": [
+        "WELCOME",
+        "STARTER"
+      ],
+      "themeConnections": [
+        {
+          "theme": "IMAGINED_FUTURES",
+          "explanation": "A fresh, celebratory pour opens the meal by making room for anticipation, conversation, and collective possibility.",
+          "sourceIds": [
+            "src-wine-provence-rose"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-wine-provence-rose",
+          "provider": "Vins de Provence",
+          "title": "Tasting Rosé",
+          "url": "https://www.vinsdeprovence.com/en/le-rose/la-degustation-du-rose",
+          "accessedAt": "2026-08-31T18:30:00Z",
+          "attribution": "Style or beverage-reference source. Tasting tags, pairing guidance, and theme connection are original catalog writing.",
+          "licenseNote": "No current prices, retail availability, third-party review text, or images are stored in this record."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "The characteristic pale hue of Provence Rosé is achieved through short skin contact or direct pressing rather than blending red and white wines.",
+      "country": "France",
+      "region": "Provence",
+      "sweetness": "DRY",
+      "body": "LIGHT",
+      "acidity": "HIGH",
+      "tannin": "NONE",
+      "producer": "Various Vignerons de Provence",
+      "grapes": [
+        "grenache",
+        "cinsault",
+        "syrah",
+        "mourvèdre",
+        "tibouren"
+      ],
+      "alcoholByVolume": 13,
+      "servingTemperatureCelsius": 9
+    },
+    {
+      "id": "wine-muscadet-sevre-et-maine",
+      "kind": "WINE",
+      "name": "Muscadet Sèvre et Maine",
+      "style": "Dry White Wine",
+      "isAlcoholic": true,
+      "color": "WHITE",
+      "tastingNotes": [
+        "lemon",
+        "saline",
+        "subtle lees"
+      ],
+      "pairingTags": [
+        "caribbean pumpkin soup",
+        "tomato cucumber salad",
+        "lentils"
+      ],
+      "courseRoles": [
+        "STARTER",
+        "MAIN"
+      ],
+      "themeConnections": [
+        {
+          "theme": "ADAPTATION",
+          "explanation": "A regional wine style offers a flexible pairing bridge across vegetable, legume, spice, and grain-centered main dishes.",
+          "sourceIds": [
+            "src-wine-muscadet-sevre-et-maine"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-wine-muscadet-sevre-et-maine",
+          "provider": "Cellar Tours",
+          "title": "Muscadet Wine Region | a Guide by Cellar Tours™",
+          "url": "https://www.cellartours.com/france/french-wine-regions/muscadet",
+          "accessedAt": "2026-08-31T18:36:09Z",
+          "attribution": "Replacement factual or instruction source. Catalog summary, theme connection, and pairing notes are original.",
+          "licenseNote": "Content is property of Cellar Tours and is intended for informational and educational use."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Look for the Sur Lie designation on the label to ensure the traditional textural complexity and freshness associated with the style.",
+      "country": "France",
+      "region": "Loire Valley",
+      "sweetness": "BONE_DRY",
+      "body": "LIGHT",
+      "acidity": "HIGH",
+      "tannin": "NONE",
+      "producer": "Muscadet Sèvre et Maine Vignerons",
+      "grapes": [
+        "melon de bourgogne"
+      ],
+      "alcoholByVolume": 12,
+      "servingTemperatureCelsius": 9
+    },
+    {
+      "id": "wine-mosel-riesling-kabinett",
+      "kind": "WINE",
+      "name": "Mosel Riesling Kabinett",
+      "style": "Mosel Riesling Kabinett",
+      "isAlcoholic": true,
+      "color": "WHITE",
+      "tastingNotes": [
+        "apple",
+        "slate",
+        "gentle sweetness"
+      ],
+      "pairingTags": [
+        "berbere chickpeas",
+        "misir wat",
+        "peanut stew"
+      ],
+      "courseRoles": [
+        "STARTER",
+        "MAIN"
+      ],
+      "themeConnections": [
+        {
+          "theme": "ADAPTATION",
+          "explanation": "A regional wine style offers a flexible pairing bridge across vegetable, legume, spice, and grain-centered main dishes.",
+          "sourceIds": [
+            "src-wine-mosel-riesling-kabinett"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-wine-mosel-riesling-kabinett",
+          "provider": "Wine Scholar Guild",
+          "title": "Mosel Riesling: Kabinett Gains",
+          "url": "https://www.winescholarguild.com/blog/regions-and-producers/mosel-riesling-kabinett-gains",
+          "accessedAt": "2026-08-31T10:00:00Z",
+          "attribution": "Style or beverage-reference source. Tasting tags, pairing guidance, and theme connection are original catalog writing.",
+          "licenseNote": "No current prices, retail availability, third-party review text, or images are stored in this record."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "The specific sweetness level can vary from bone-dry to off-dry depending on the producer's choice and vintage conditions.",
+      "country": "Germany",
+      "region": "Mosel",
+      "sweetness": "OFF_DRY",
+      "body": "LIGHT",
+      "acidity": "HIGH",
+      "tannin": "NONE",
+      "producer": "Mosel Vintners",
+      "grapes": [
+        "riesling"
+      ],
+      "alcoholByVolume": 8,
+      "servingTemperatureCelsius": 10
+    },
+    {
+      "id": "wine-rias-baixas-albarino",
+      "kind": "WINE",
+      "name": "Rías Baixas Albariño",
+      "style": "Dry white wine",
+      "isAlcoholic": true,
+      "color": "WHITE",
+      "tastingNotes": [
+        "grapefruit",
+        "stone fruit",
+        "saline"
+      ],
+      "pairingTags": [
+        "pumpkin soup",
+        "plantain",
+        "mushroom skewers"
+      ],
+      "courseRoles": [
+        "STARTER",
+        "MAIN"
+      ],
+      "themeConnections": [
+        {
+          "theme": "ADAPTATION",
+          "explanation": "A regional wine style offers a flexible pairing bridge across vegetable, legume, spice, and grain-centered main dishes.",
+          "sourceIds": [
+            "src-wine-rias-baixas-albarino"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-wine-rias-baixas-albarino",
+          "provider": "Wine Folly",
+          "title": "The Comprehensive Guide to Albariño (Alvarinho)",
+          "url": "https://winefolly.com/grapes/albarino/",
+          "accessedAt": "2026-08-31T18:27:58Z",
+          "attribution": "Style or beverage-reference source. Tasting tags, pairing guidance, and theme connection are original catalog writing.",
+          "licenseNote": "No current prices, retail availability, third-party review text, or images are stored in this record."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Wines from this region are subject to strict quality control by the Rías Baixas Regulatory Council to ensure geographic and stylistic authenticity.",
+      "country": "Spain",
+      "region": "Rías Baixas",
+      "sweetness": "DRY",
+      "body": "LIGHT",
+      "acidity": "HIGH",
+      "tannin": "NONE",
+      "producer": "Rías Baixas Regional Producer",
+      "grapes": [
+        "albariño"
+      ],
+      "alcoholByVolume": 12.5,
+      "servingTemperatureCelsius": 5
+    },
+    {
+      "id": "wine-touraine-sauvignon-blanc",
+      "kind": "WINE",
+      "name": "Touraine Sauvignon Blanc",
+      "style": "Touraine Sauvignon Blanc",
+      "isAlcoholic": true,
+      "color": "WHITE",
+      "tastingNotes": [
+        "citrus",
+        "herbal",
+        "mineral"
+      ],
+      "pairingTags": [
+        "carrot citrus salad",
+        "tomato cucumber salad",
+        "collard greens"
+      ],
+      "courseRoles": [
+        "STARTER",
+        "MAIN"
+      ],
+      "themeConnections": [
+        {
+          "theme": "ADAPTATION",
+          "explanation": "A regional wine style offers a flexible pairing bridge across vegetable, legume, spice, and grain-centered main dishes.",
+          "sourceIds": [
+            "src-wine-touraine-sauvignon-blanc"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-wine-touraine-sauvignon-blanc",
+          "provider": "Vins de Loire",
+          "title": "Sauvignon Blanc",
+          "url": "https://www.vinsdeloire.fr/en/grape-varieties/sauvignon-blanc",
+          "accessedAt": "2026-08-31T18:30:00Z",
+          "attribution": "Style or beverage-reference source. Tasting tags, pairing guidance, and theme connection are original catalog writing.",
+          "licenseNote": "No current prices, retail availability, third-party review text, or images are stored in this record."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Production includes both pure Sauvignon Blanc and occasional blends under broader Touraine AOC rules, though this record focuses on the varietal style.",
+      "country": "France",
+      "region": "Loire Valley",
+      "sweetness": "DRY",
+      "body": "LIGHT",
+      "acidity": "HIGH",
+      "tannin": "NONE",
+      "producer": "Touraine AOP Vignerons",
+      "grapes": [
+        "sauvignon blanc"
+      ],
+      "alcoholByVolume": 12.5,
+      "servingTemperatureCelsius": 9
+    },
+    {
+      "id": "wine-fino-sherry",
+      "kind": "WINE",
+      "name": "Fino Sherry",
+      "style": "Fino Sherry",
+      "isAlcoholic": true,
+      "color": "FORTIFIED",
+      "tastingNotes": [
+        "almond",
+        "yeast",
+        "saline"
+      ],
+      "pairingTags": [
+        "akara-style fritters",
+        "berbere chickpeas",
+        "mushroom skewers"
+      ],
+      "courseRoles": [
+        "WELCOME",
+        "STARTER"
+      ],
+      "themeConnections": [
+        {
+          "theme": "IMAGINED_FUTURES",
+          "explanation": "A fresh, celebratory pour opens the meal by making room for anticipation, conversation, and collective possibility.",
+          "sourceIds": [
+            "src-wine-fino-sherry"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-wine-fino-sherry",
+          "provider": "SherryNotes",
+          "title": "Fino: the driest type of sherry wines",
+          "url": "https://www.sherrynotes.com/sherry-wine-types/fino/",
+          "accessedAt": "2026-08-31T12:00:00Z",
+          "attribution": "Style or beverage-reference source. Tasting tags, pairing guidance, and theme connection are original catalog writing.",
+          "licenseNote": "No current prices, retail availability, third-party review text, or images are stored in this record."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Fino Sherry should be consumed fresh after opening and kept refrigerated to maintain its delicate characteristics.",
+      "country": "Spain",
+      "region": "Jerez-Xérès-Sherry",
+      "sweetness": "BONE_DRY",
+      "body": "LIGHT",
+      "acidity": "MEDIUM",
+      "tannin": "NONE",
+      "producer": "Jerez-Xérès-Sherry Regional Producer",
+      "grapes": [
+        "palomino"
+      ],
+      "alcoholByVolume": 15,
+      "servingTemperatureCelsius": 7
+    },
+    {
+      "id": "wine-beaujolais-villages-gamay",
+      "kind": "WINE",
+      "name": "Beaujolais-Villages Gamay",
+      "style": "Beaujolais-Villages Red Wine",
+      "isAlcoholic": true,
+      "color": "RED",
+      "tastingNotes": [
+        "cherry",
+        "violet",
+        "soft tannin"
+      ],
+      "pairingTags": [
+        "jerk cauliflower",
+        "collard greens",
+        "rice and peas"
+      ],
+      "courseRoles": [
+        "MAIN"
+      ],
+      "themeConnections": [
+        {
+          "theme": "ADAPTATION",
+          "explanation": "A regional wine style offers a flexible pairing bridge across vegetable, legume, spice, and grain-centered main dishes.",
+          "sourceIds": [
+            "src-wine-beaujolais-villages-gamay"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-wine-beaujolais-villages-gamay",
+          "provider": "Wikipedia",
+          "title": "Beaujolais",
+          "url": "https://en.wikipedia.org/wiki/Beaujolais",
+          "accessedAt": "2026-08-31T18:38:14Z",
+          "attribution": "Replacement factual or instruction source. Catalog summary, theme connection, and pairing notes are original.",
+          "licenseNote": "Style-level context only; verify individual producer, vintage, and bottle facts before publication."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Best consumed within two to three years of the vintage to maintain its characteristic fresh fruit flavors.",
+      "country": "France",
+      "region": "Beaujolais",
+      "sweetness": "DRY",
+      "body": "LIGHT",
+      "acidity": "HIGH",
+      "tannin": "LOW",
+      "producer": "Beaujolais-Villages Regional Producer",
+      "grapes": [
+        "gamay"
+      ],
+      "alcoholByVolume": 12.5,
+      "servingTemperatureCelsius": 13
+    },
+    {
+      "id": "wine-cotes-du-rhone-rouge",
+      "kind": "WINE",
+      "name": "Côtes du Rhône Rouge",
+      "style": "Côtes du Rhône Rouge",
+      "isAlcoholic": true,
+      "color": "RED",
+      "tastingNotes": [
+        "red fruit",
+        "pepper",
+        "dried herbs"
+      ],
+      "pairingTags": [
+        "red beans and rice",
+        "smoky collards",
+        "yassa-style mushrooms"
+      ],
+      "courseRoles": [
+        "MAIN"
+      ],
+      "themeConnections": [
+        {
+          "theme": "ADAPTATION",
+          "explanation": "A regional wine style offers a flexible pairing bridge across vegetable, legume, spice, and grain-centered main dishes.",
+          "sourceIds": [
+            "src-wine-cotes-du-rhone-rouge"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-wine-cotes-du-rhone-rouge",
+          "provider": "Vins de Rhône",
+          "title": "AOC Côtes du Rhône",
+          "url": "https://www.vins-rhone.com/en/rhone-valley-vineyards/appellations/aoc-cotes-du-rhone",
+          "accessedAt": "2026-08-31T18:30:00Z",
+          "attribution": "Style or beverage-reference source. Tasting tags, pairing guidance, and theme connection are original catalog writing.",
+          "licenseNote": "No current prices, retail availability, third-party review text, or images are stored in this record."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Blends vary significantly between Northern and Southern styles, with the latter being more Grenache-dominant.",
+      "country": "France",
+      "region": "Rhône Valley",
+      "sweetness": "DRY",
+      "body": "MEDIUM",
+      "acidity": "MEDIUM",
+      "tannin": "MEDIUM",
+      "producer": "Côtes du Rhône Regional Producer",
+      "grapes": [
+        "grenache",
+        "syrah",
+        "mourvèdre"
+      ],
+      "alcoholByVolume": 14,
+      "servingTemperatureCelsius": 15
+    },
+    {
+      "id": "wine-chilean-carmenere",
+      "kind": "WINE",
+      "name": "Chilean Carménère",
+      "style": "Chilean Carménère",
+      "isAlcoholic": true,
+      "color": "RED",
+      "tastingNotes": [
+        "plum",
+        "paprika",
+        "green herb"
+      ],
+      "pairingTags": [
+        "jerk cauliflower",
+        "red beans and rice",
+        "peanut stew"
+      ],
+      "courseRoles": [
+        "MAIN"
+      ],
+      "themeConnections": [
+        {
+          "theme": "ADAPTATION",
+          "explanation": "A regional wine style offers a flexible pairing bridge across vegetable, legume, spice, and grain-centered main dishes.",
+          "sourceIds": [
+            "src-wine-chilean-carmenere"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-wine-chilean-carmenere",
+          "provider": "Wine Folly",
+          "title": "Carménère",
+          "url": "https://winefolly.com/grapes/carmenere/",
+          "accessedAt": "2026-08-31T12:00:00Z",
+          "attribution": "Style or beverage-reference source. Tasting tags, pairing guidance, and theme connection are original catalog writing.",
+          "licenseNote": "No current prices, retail availability, third-party review text, or images are stored in this record."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Carménère was historically mistaken for Merlot in Chile until its true identity was revealed in 1994.",
+      "country": "Chile",
+      "region": "Central Valley",
+      "sweetness": "DRY",
+      "body": "MEDIUM",
+      "acidity": "MEDIUM",
+      "tannin": "MEDIUM",
+      "producer": "Various Central Valley Producers",
+      "grapes": [
+        "carménère"
+      ],
+      "alcoholByVolume": 14.25,
+      "servingTemperatureCelsius": 17.5
+    },
+    {
+      "id": "wine-south-african-chenin-blanc",
+      "kind": "WINE",
+      "name": "South African Chenin Blanc",
+      "style": "South African Chenin Blanc",
+      "isAlcoholic": true,
+      "color": "WHITE",
+      "tastingNotes": [
+        "quince",
+        "pear",
+        "ginger"
+      ],
+      "pairingTags": [
+        "yassa-style mushrooms",
+        "channa and pumpkin",
+        "pumpkin soup"
+      ],
+      "courseRoles": [
+        "MAIN"
+      ],
+      "themeConnections": [
+        {
+          "theme": "ADAPTATION",
+          "explanation": "A regional wine style offers a flexible pairing bridge across vegetable, legume, spice, and grain-centered main dishes.",
+          "sourceIds": [
+            "src-wine-south-african-chenin-blanc"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-wine-south-african-chenin-blanc",
+          "provider": "Wine Folly",
+          "title": "The Indispensable Chenin Blanc Wine Guide",
+          "url": "https://winefolly.com/deep-dive/chenin-blanc-wine-guide/",
+          "accessedAt": "2026-08-31T18:30:00Z",
+          "attribution": "Style or beverage-reference source. Tasting tags, pairing guidance, and theme connection are original catalog writing.",
+          "licenseNote": "No current prices, retail availability, third-party review text, or images are stored in this record."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Typical alcohol content ranges from 12% to 14.5% depending on the specific producer and vintage.",
+      "country": "South Africa",
+      "region": "Western Cape",
+      "sweetness": "DRY",
+      "body": "MEDIUM",
+      "acidity": "HIGH",
+      "tannin": "NONE",
+      "producer": "Western Cape Regional Producer",
+      "grapes": [
+        "chenin blanc"
+      ],
+      "alcoholByVolume": 13.5,
+      "servingTemperatureCelsius": 10
+    },
+    {
+      "id": "wine-loire-cabernet-franc",
+      "kind": "WINE",
+      "name": "Loire Cabernet Franc",
+      "style": "Loire Cabernet Franc",
+      "isAlcoholic": true,
+      "color": "RED",
+      "tastingNotes": [
+        "raspberry",
+        "herb",
+        "graphite"
+      ],
+      "pairingTags": [
+        "mushroom yassa",
+        "collard greens",
+        "roasted cauliflower"
+      ],
+      "courseRoles": [
+        "MAIN"
+      ],
+      "themeConnections": [
+        {
+          "theme": "ADAPTATION",
+          "explanation": "A regional wine style offers a flexible pairing bridge across vegetable, legume, spice, and grain-centered main dishes.",
+          "sourceIds": [
+            "src-wine-loire-cabernet-franc"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-wine-loire-cabernet-franc",
+          "provider": "Wine Folly",
+          "title": "Big Papa: Cabernet Franc Wine Guide",
+          "url": "https://winefolly.com/deep-dive/cabernet-franc-wine-guide/",
+          "accessedAt": "2026-08-31T12:00:00Z",
+          "attribution": "Style or beverage-reference source. Tasting tags, pairing guidance, and theme connection are original catalog writing.",
+          "licenseNote": "No current prices, retail availability, third-party review text, or images are stored in this record."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "The distinctive herbaceous and bell-pepper aromas are caused by natural aroma compounds called methoxypyrazines.",
+      "country": "France",
+      "region": "Loire Valley",
+      "sweetness": "DRY",
+      "body": "MEDIUM",
+      "acidity": "HIGH",
+      "tannin": "MEDIUM",
+      "producer": "Loire Valley Producer",
+      "grapes": [
+        "cabernet franc"
+      ],
+      "alcoholByVolume": 12.5,
+      "servingTemperatureCelsius": 15
+    },
+    {
+      "id": "wine-douro-red-blend",
+      "kind": "WINE",
+      "name": "Douro Red Blend",
+      "style": "Full-Bodied Red Wine",
+      "isAlcoholic": true,
+      "color": "RED",
+      "tastingNotes": [
+        "dark berry",
+        "violet",
+        "spice"
+      ],
+      "pairingTags": [
+        "red beans and rice",
+        "smoky collards",
+        "peanut stew"
+      ],
+      "courseRoles": [
+        "MAIN"
+      ],
+      "themeConnections": [
+        {
+          "theme": "ADAPTATION",
+          "explanation": "A regional wine style offers a flexible pairing bridge across vegetable, legume, spice, and grain-centered main dishes.",
+          "sourceIds": [
+            "src-wine-douro-red-blend"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-wine-douro-red-blend",
+          "provider": "Wine Folly",
+          "title": "Portugal Wine Region",
+          "url": "https://winefolly.com/wine-regions/portugal/",
+          "accessedAt": "2026-08-31T12:00:00Z",
+          "attribution": "Style or beverage-reference source. Tasting tags, pairing guidance, and theme connection are original catalog writing.",
+          "licenseNote": "No current prices, retail availability, third-party review text, or images are stored in this record."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "High tannin levels may require decanting or pairing with protein-rich foods to soften the palate.",
+      "country": "Portugal",
+      "region": "Douro Valley",
+      "sweetness": "DRY",
+      "body": "FULL",
+      "acidity": "MEDIUM",
+      "tannin": "HIGH",
+      "producer": "Douro Valley Regional Producer",
+      "grapes": [
+        "touriga nacional",
+        "touriga franca",
+        "tinta roriz",
+        "tinta barroca",
+        "tinta cão"
+      ],
+      "alcoholByVolume": 14,
+      "servingTemperatureCelsius": 17
+    },
+    {
+      "id": "wine-santorini-assyrtiko",
+      "kind": "WINE",
+      "name": "Santorini Assyrtiko",
+      "style": "Dry white wine",
+      "isAlcoholic": true,
+      "color": "WHITE",
+      "tastingNotes": [
+        "lemon",
+        "flint",
+        "sea salt"
+      ],
+      "pairingTags": [
+        "tomato pepper soup",
+        "mushroom skewers",
+        "carrot citrus salad"
+      ],
+      "courseRoles": [
+        "MAIN"
+      ],
+      "themeConnections": [
+        {
+          "theme": "ADAPTATION",
+          "explanation": "A regional wine style offers a flexible pairing bridge across vegetable, legume, spice, and grain-centered main dishes.",
+          "sourceIds": [
+            "src-wine-santorini-assyrtiko"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-wine-santorini-assyrtiko",
+          "provider": "Wines of Greece",
+          "title": "PDO Santorini (ΠΟΠ Σαντορίνη)",
+          "url": "https://winesofgreece.org/pdo/pdo-santorini/",
+          "accessedAt": "2026-08-31T12:00:00Z",
+          "attribution": "Style or beverage-reference source. Tasting tags, pairing guidance, and theme connection are original catalog writing.",
+          "licenseNote": "No current prices, retail availability, third-party review text, or images are stored in this record."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "High alcohol levels can be deceptive given the wine's crisp, refreshing acidity.",
+      "country": "Greece",
+      "region": "Santorini",
+      "sweetness": "BONE_DRY",
+      "body": "FULL",
+      "acidity": "HIGH",
+      "tannin": "NONE",
+      "producer": "Various Santorini Producers",
+      "grapes": [
+        "assyrtiko",
+        "athiri",
+        "aidani"
+      ],
+      "alcoholByVolume": 14,
+      "servingTemperatureCelsius": 9
+    },
+    {
+      "id": "wine-late-harvest-chenin-blanc",
+      "kind": "WINE",
+      "name": "Late Harvest Chenin Blanc",
+      "style": "Late Harvest Chenin Blanc",
+      "isAlcoholic": true,
+      "color": "WHITE",
+      "tastingNotes": [
+        "apricot",
+        "honey",
+        "high acidity"
+      ],
+      "pairingTags": [
+        "hibiscus pears",
+        "sweet potato pie",
+        "coconut pudding"
+      ],
+      "courseRoles": [
+        "DESSERT"
+      ],
+      "themeConnections": [
+        {
+          "theme": "ANCESTRY",
+          "explanation": "A dessert wine closes the dinner with slow sipping and a prompt about flavors, rituals, and memories carried forward.",
+          "sourceIds": [
+            "src-wine-late-harvest-chenin-blanc"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-wine-late-harvest-chenin-blanc",
+          "provider": "Wine & Spirit Education Trust (WSET)",
+          "title": "Exploring Chenin Blanc styles",
+          "url": "https://www.wsetglobal.com/knowledge-centre/blog/2025/exploring-chenin-blanc-styles",
+          "accessedAt": "2026-08-31T18:28:10Z",
+          "attribution": "Style or beverage-reference source. Tasting tags, pairing guidance, and theme connection are original catalog writing.",
+          "licenseNote": "No current prices, retail availability, third-party review text, or images are stored in this record."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Sugar concentration and botrytis influence can vary significantly between different Loire Valley appellations and vintages.",
+      "country": "France",
+      "region": "Loire Valley",
+      "sweetness": "SWEET",
+      "body": "FULL",
+      "acidity": "HIGH",
+      "tannin": "NONE",
+      "producer": "Vignerons du Val de Loire",
+      "grapes": [
+        "chenin blanc"
+      ],
+      "alcoholByVolume": 12,
+      "servingTemperatureCelsius": 8
+    },
+    {
+      "id": "wine-moscato-dasti",
+      "kind": "WINE",
+      "name": "Moscato d'Asti",
+      "style": "Moscato d'Asti",
+      "isAlcoholic": true,
+      "color": "SPARKLING",
+      "tastingNotes": [
+        "peach",
+        "orange blossom",
+        "light fizz"
+      ],
+      "pairingTags": [
+        "mango coconut fruit salad",
+        "hibiscus pears",
+        "date truffles"
+      ],
+      "courseRoles": [
+        "DESSERT"
+      ],
+      "themeConnections": [
+        {
+          "theme": "ANCESTRY",
+          "explanation": "A dessert wine closes the dinner with slow sipping and a prompt about flavors, rituals, and memories carried forward.",
+          "sourceIds": [
+            "src-wine-moscato-dasti"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-wine-moscato-dasti",
+          "provider": "Wine Folly",
+          "title": "The Magic of Moscato d'Asti Wine",
+          "url": "https://winefolly.com/deep-dive/the-magic-of-moscato-dasti/",
+          "accessedAt": "2026-08-31T10:00:00Z",
+          "attribution": "Style or beverage-reference source. Tasting tags, pairing guidance, and theme connection are original catalog writing.",
+          "licenseNote": "No current prices, retail availability, third-party review text, or images are stored in this record."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "This wine should be consumed young to maintain its delicate floral aromatics and fresh effervescence.",
+      "country": "Italy",
+      "region": "Piedmont",
+      "sweetness": "SWEET",
+      "body": "LIGHT",
+      "acidity": "HIGH",
+      "tannin": "NONE",
+      "producer": "Asti DOCG Producer",
+      "grapes": [
+        "muscat blanc à petits grains"
+      ],
+      "alcoholByVolume": 5.5,
+      "servingTemperatureCelsius": 7
+    },
+    {
+      "id": "wine-tawny-port",
+      "kind": "WINE",
+      "name": "Tawny Port",
+      "style": "Tawny Port",
+      "isAlcoholic": true,
+      "color": "FORTIFIED",
+      "tastingNotes": [
+        "walnut",
+        "toffee",
+        "dried fruit"
+      ],
+      "pairingTags": [
+        "sweet potato pie",
+        "ginger molasses cookies",
+        "date truffles"
+      ],
+      "courseRoles": [
+        "DESSERT"
+      ],
+      "themeConnections": [
+        {
+          "theme": "ANCESTRY",
+          "explanation": "A dessert wine closes the dinner with slow sipping and a prompt about flavors, rituals, and memories carried forward.",
+          "sourceIds": [
+            "src-wine-tawny-port"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-wine-tawny-port",
+          "provider": "Wine Folly",
+          "title": "What is Port Wine?",
+          "url": "https://winefolly.com/deep-dive/what-is-port-wine/",
+          "accessedAt": "2026-08-31T18:28:00Z",
+          "attribution": "Style or beverage-reference source. Tasting tags, pairing guidance, and theme connection are original catalog writing.",
+          "licenseNote": "No current prices, retail availability, third-party review text, or images are stored in this record."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Once opened, Tawny Port should be stored in a cool place and consumed within a month to maintain its flavor profile.",
+      "country": "Portugal",
+      "region": "Douro Valley",
+      "sweetness": "SWEET",
+      "body": "FULL",
+      "acidity": "MEDIUM",
+      "tannin": "MEDIUM",
+      "producer": "Douro Valley Producer",
+      "grapes": [
+        "touriga franca",
+        "touriga nacional",
+        "tinta roriz",
+        "tinta barroca",
+        "tinta cão"
+      ],
+      "alcoholByVolume": 20,
+      "servingTemperatureCelsius": 12
+    },
+    {
+      "id": "wine-banyuls",
+      "kind": "WINE",
+      "name": "Banyuls",
+      "style": "Fortified Dessert Wine",
+      "isAlcoholic": true,
+      "color": "FORTIFIED",
+      "tastingNotes": [
+        "dark cherry",
+        "cocoa",
+        "warm spice"
+      ],
+      "pairingTags": [
+        "sweet potato pie",
+        "ginger molasses cookies",
+        "chocolate notes"
+      ],
+      "courseRoles": [
+        "DESSERT"
+      ],
+      "themeConnections": [
+        {
+          "theme": "ANCESTRY",
+          "explanation": "A dessert wine closes the dinner with slow sipping and a prompt about flavors, rituals, and memories carried forward.",
+          "sourceIds": [
+            "src-wine-banyuls"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-wine-banyuls",
+          "provider": "Wine Folly",
+          "title": "Banyuls",
+          "url": "https://winefolly.com/wines/banyuls/",
+          "accessedAt": "2026-08-31T12:30:00Z",
+          "attribution": "Style or beverage-reference source. Tasting tags, pairing guidance, and theme connection are original catalog writing.",
+          "licenseNote": "No current prices, retail availability, third-party review text, or images are stored in this record."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Oxidative aging in glass demijohns or oak barrels can create distinct Rancio notes that vary from fresh, fruit-forward styles.",
+      "country": "France",
+      "region": "Roussillon",
+      "sweetness": "SWEET",
+      "body": "FULL",
+      "acidity": "MEDIUM",
+      "tannin": "MEDIUM",
+      "producer": "Banyuls AOC Regional Producer",
+      "grapes": [
+        "grenache noir",
+        "grenache gris",
+        "grenache blanc",
+        "carignan",
+        "syrah",
+        "cinsault"
+      ],
+      "alcoholByVolume": 16,
+      "servingTemperatureCelsius": 16
+    },
+    {
+      "id": "zero-proof-hibiscus-ginger-spritz",
+      "kind": "ZERO_PROOF",
+      "name": "Hibiscus Ginger Spritz",
+      "style": "Hibiscus Ginger Spritz",
+      "isAlcoholic": false,
+      "color": "NON_ALCOHOLIC",
+      "tastingNotes": [
+        "hibiscus",
+        "ginger",
+        "bright bubbles"
+      ],
+      "pairingTags": [
+        "welcome toast",
+        "spiced plantains",
+        "tomato pepper soup"
+      ],
+      "courseRoles": [
+        "WELCOME",
+        "STARTER"
+      ],
+      "themeConnections": [
+        {
+          "theme": "COMMUNITY",
+          "explanation": "A welcoming alcohol-free option gives every guest a deliberate first-course pairing rather than an afterthought.",
+          "sourceIds": [
+            "src-zero-proof-hibiscus-ginger-spritz"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-zero-proof-hibiscus-ginger-spritz",
+          "provider": "Women's Health",
+          "title": "Try This Ginger-Hibiscus Spritzer Mocktail Recipe",
+          "url": "https://www.womenshealthmag.com/food/a30458757/ginger-hibiscus-spritzer-mocktail-recipe/",
+          "accessedAt": "2026-08-31T18:40:00Z",
+          "attribution": "Replacement factual or instruction source. Catalog summary, theme connection, and pairing notes are original.",
+          "licenseNote": "Content is provided by Hearst Digital Media and is subject to their standard terms of use for personal, non-commercial purposes."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Expectant individuals should consult a healthcare provider before consuming hibiscus due to potential health considerations.",
+      "sweetness": "OFF_DRY",
+      "body": "LIGHT",
+      "acidity": "HIGH",
+      "tannin": "MEDIUM",
+      "servingTemperatureCelsius": 6
+    },
+    {
+      "id": "zero-proof-sparkling-verjus-orange",
+      "kind": "ZERO_PROOF",
+      "name": "Sparkling Verjus and Orange",
+      "style": "Sparkling Verjus",
+      "isAlcoholic": false,
+      "color": "NON_ALCOHOLIC",
+      "tastingNotes": [
+        "verjus",
+        "orange",
+        "cardamom"
+      ],
+      "pairingTags": [
+        "welcome toast",
+        "carrot citrus salad",
+        "akara-style fritters"
+      ],
+      "courseRoles": [
+        "WELCOME",
+        "STARTER"
+      ],
+      "themeConnections": [
+        {
+          "theme": "COMMUNITY",
+          "explanation": "A welcoming alcohol-free option gives every guest a deliberate first-course pairing rather than an afterthought.",
+          "sourceIds": [
+            "src-zero-proof-sparkling-verjus-orange"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-zero-proof-sparkling-verjus-orange",
+          "provider": "Glasrose",
+          "title": "Hibiscus & Blood Orange Verjus",
+          "url": "https://glasrose.com/products/hibiscus-blood-orange-verjus",
+          "accessedAt": "2026-08-31T18:30:00Z",
+          "attribution": "Style or beverage-reference source. Tasting tags, pairing guidance, and theme connection are original catalog writing.",
+          "licenseNote": "No current prices, retail availability, third-party review text, or images are stored in this record."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Naturally alcohol-free and not dealcoholized; contains botanical infusions including birch bark and spices.",
+      "sweetness": "DRY",
+      "body": "LIGHT",
+      "acidity": "HIGH",
+      "tannin": "NONE",
+      "servingTemperatureCelsius": 8
+    },
+    {
+      "id": "zero-proof-cucumber-mint-tonic",
+      "kind": "ZERO_PROOF",
+      "name": "Cucumber Mint Tonic",
+      "style": "Cucumber Mint Tonic",
+      "isAlcoholic": false,
+      "color": "NON_ALCOHOLIC",
+      "tastingNotes": [
+        "cucumber",
+        "mint",
+        "quinine"
+      ],
+      "pairingTags": [
+        "tomato cucumber salad",
+        "pumpkin soup",
+        "mushroom skewers"
+      ],
+      "courseRoles": [
+        "WELCOME",
+        "STARTER"
+      ],
+      "themeConnections": [
+        {
+          "theme": "COMMUNITY",
+          "explanation": "A welcoming alcohol-free option gives every guest a deliberate first-course pairing rather than an afterthought.",
+          "sourceIds": [
+            "src-zero-proof-cucumber-mint-tonic"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-zero-proof-cucumber-mint-tonic",
+          "provider": "Sparkmouth",
+          "title": "Cucumber Mint Tonic",
+          "url": "https://www.sparkmouth.com/our-drinks/cucumber-mint-tonic",
+          "accessedAt": "2026-08-31T12:00:00Z",
+          "attribution": "Style or beverage-reference source. Tasting tags, pairing guidance, and theme connection are original catalog writing.",
+          "licenseNote": "No current prices, retail availability, third-party review text, or images are stored in this record."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Contains quinine which may be restricted for individuals with specific medical sensitivities.",
+      "sweetness": "MEDIUM",
+      "body": "LIGHT",
+      "acidity": "MEDIUM",
+      "tannin": "NONE",
+      "servingTemperatureCelsius": 6
+    },
+    {
+      "id": "zero-proof-tamarind-lime-agua-fresca",
+      "kind": "ZERO_PROOF",
+      "name": "Tamarind Lime Agua Fresca",
+      "style": "tamarind lime agua fresca",
+      "isAlcoholic": false,
+      "color": "NON_ALCOHOLIC",
+      "tastingNotes": [
+        "tamarind",
+        "lime",
+        "dried fruit"
+      ],
+      "pairingTags": [
+        "spiced plantains",
+        "akara-style fritters",
+        "peanut stew"
+      ],
+      "courseRoles": [
+        "WELCOME",
+        "STARTER"
+      ],
+      "themeConnections": [
+        {
+          "theme": "COMMUNITY",
+          "explanation": "A welcoming alcohol-free option gives every guest a deliberate first-course pairing rather than an afterthought.",
+          "sourceIds": [
+            "src-zero-proof-tamarind-lime-agua-fresca"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-zero-proof-tamarind-lime-agua-fresca",
+          "provider": "Isabel Eats",
+          "title": "Agua de Tamarindo (Tamarindo Drink)",
+          "url": "https://www.isabeleats.com/agua-de-tamarindo-drink/",
+          "accessedAt": "2026-08-31T18:40:32Z",
+          "attribution": "Factual and instruction source for an alcohol-free tamarind drink. Catalog pairing guidance and theme connection are original.",
+          "licenseNote": "Recipe prose and photography remain subject to the publisher’s rights; instructions are linked, not reproduced."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Tamarind-lime variation is a catalog adaptation; retain the zero-proof designation and verify individual ingredient labels before service.",
+      "sweetness": "SWEET",
+      "body": "MEDIUM",
+      "acidity": "HIGH",
+      "tannin": "NONE",
+      "servingTemperatureCelsius": 4
+    },
+    {
+      "id": "zero-proof-roasted-barley-tea",
+      "kind": "ZERO_PROOF",
+      "name": "Roasted Barley Tea",
+      "style": "Roasted Barley Tea",
+      "isAlcoholic": false,
+      "color": "NON_ALCOHOLIC",
+      "tastingNotes": [
+        "roasted grain",
+        "nutty",
+        "toasty"
+      ],
+      "pairingTags": [
+        "misir wat",
+        "mushroom yassa",
+        "rice and peas"
+      ],
+      "courseRoles": [
+        "STARTER",
+        "MAIN"
+      ],
+      "themeConnections": [
+        {
+          "theme": "RESILIENCE",
+          "explanation": "A layered, alcohol-free drink demonstrates how care and flavor can coexist in a flexible menu.",
+          "sourceIds": [
+            "src-zero-proof-roasted-barley-tea"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-zero-proof-roasted-barley-tea",
+          "provider": "Hakubaku USA",
+          "title": "How to Pair Barley Tea with Food: Top 12 Best Flavors for Every Meal",
+          "url": "https://hakubaku-usa.com/barley-tea-and-food-parings/",
+          "accessedAt": "2026-08-31T10:00:00Z",
+          "attribution": "Style or beverage-reference source. Tasting tags, pairing guidance, and theme connection are original catalog writing.",
+          "licenseNote": "No current prices, retail availability, third-party review text, or images are stored in this record."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "This beverage is brewed from barley grains and contains gluten.",
+      "sweetness": "BONE_DRY",
+      "body": "LIGHT",
+      "acidity": "LOW",
+      "tannin": "NONE",
+      "servingTemperatureCelsius": 6
+    },
+    {
+      "id": "zero-proof-ginger-lemon-soda",
+      "kind": "ZERO_PROOF",
+      "name": "Ginger Lemon Soda",
+      "style": "Ginger Lemon Soda",
+      "isAlcoholic": false,
+      "color": "NON_ALCOHOLIC",
+      "tastingNotes": [
+        "ginger",
+        "lemon",
+        "turmeric"
+      ],
+      "pairingTags": [
+        "jerk cauliflower",
+        "channa and pumpkin",
+        "collard greens"
+      ],
+      "courseRoles": [
+        "STARTER",
+        "MAIN"
+      ],
+      "themeConnections": [
+        {
+          "theme": "RESILIENCE",
+          "explanation": "A layered, alcohol-free drink demonstrates how care and flavor can coexist in a flexible menu.",
+          "sourceIds": [
+            "src-zero-proof-ginger-lemon-soda"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-zero-proof-ginger-lemon-soda",
+          "provider": "Culture Pop",
+          "title": "Ginger Lemon Soda",
+          "url": "https://drinkculturepop.com/products/culture-pop-soda?selected_product=4526609334342",
+          "accessedAt": "2026-08-31T18:29:15Z",
+          "attribution": "Style or beverage-reference source. Tasting tags, pairing guidance, and theme connection are original catalog writing.",
+          "licenseNote": "No current prices, retail availability, third-party review text, or images are stored in this record."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Contains live probiotics; store in a cool place to maintain beverage integrity.",
+      "sweetness": "MEDIUM",
+      "body": "LIGHT",
+      "acidity": "HIGH",
+      "tannin": "NONE",
+      "servingTemperatureCelsius": 6
+    },
+    {
+      "id": "zero-proof-rosemary-grapefruit-soda",
+      "kind": "ZERO_PROOF",
+      "name": "Rosemary Grapefruit Soda",
+      "style": "rosemary grapefruit soda",
+      "isAlcoholic": false,
+      "color": "NON_ALCOHOLIC",
+      "tastingNotes": [
+        "grapefruit",
+        "rosemary",
+        "fizz"
+      ],
+      "pairingTags": [
+        "red beans and rice",
+        "roasted cauliflower",
+        "mushroom yassa"
+      ],
+      "courseRoles": [
+        "MAIN"
+      ],
+      "themeConnections": [
+        {
+          "theme": "RESILIENCE",
+          "explanation": "A layered, alcohol-free drink demonstrates how care and flavor can coexist in a flexible menu.",
+          "sourceIds": [
+            "src-zero-proof-rosemary-grapefruit-soda"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-zero-proof-rosemary-grapefruit-soda",
+          "provider": "My Mocktail Forest",
+          "title": "Rosemary grapefruit mocktail recipe",
+          "url": "https://mymocktailforest.com/rosemary-grapefruit-mocktail-recipe/",
+          "accessedAt": "2026-08-31T09:40:00Z",
+          "attribution": "Style or beverage-reference source. Tasting tags, pairing guidance, and theme connection are original catalog writing.",
+          "licenseNote": "No current prices, retail availability, third-party review text, or images are stored in this record."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Grapefruit juice may interact with certain medications and the beverage contains added sugars from the herbal syrup.",
+      "sweetness": "MEDIUM",
+      "body": "LIGHT",
+      "acidity": "HIGH",
+      "tannin": "NONE",
+      "servingTemperatureCelsius": 5
+    },
+    {
+      "id": "zero-proof-hibiscus-tamarind-cooler",
+      "kind": "ZERO_PROOF",
+      "name": "Hibiscus Tamarind Cooler",
+      "style": "Hibiscus Tamarind Cooler",
+      "isAlcoholic": false,
+      "color": "NON_ALCOHOLIC",
+      "tastingNotes": [
+        "hibiscus",
+        "tamarind",
+        "tartness"
+      ],
+      "pairingTags": [
+        "peanut stew",
+        "misir wat",
+        "collard greens"
+      ],
+      "courseRoles": [
+        "MAIN"
+      ],
+      "themeConnections": [
+        {
+          "theme": "RESILIENCE",
+          "explanation": "A layered, alcohol-free drink demonstrates how care and flavor can coexist in a flexible menu.",
+          "sourceIds": [
+            "src-zero-proof-hibiscus-tamarind-cooler"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-zero-proof-hibiscus-tamarind-cooler",
+          "provider": "London Juice Company",
+          "title": "What Is Tamarindo Drink and How Is It Made?",
+          "url": "https://londonjuicecompany.com/blog/what-is-tamarindo-drink-mexican-agua-fresca",
+          "accessedAt": "2026-08-31T18:35:00Z",
+          "attribution": "Style or beverage-reference source. Tasting tags, pairing guidance, and theme connection are original catalog writing.",
+          "licenseNote": "No current prices, retail availability, third-party review text, or images are stored in this record."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "High acidity may cause digestive discomfort if consumed in large quantities on an empty stomach.",
+      "sweetness": "SWEET",
+      "body": "MEDIUM",
+      "acidity": "HIGH",
+      "tannin": "LOW",
+      "servingTemperatureCelsius": 6
+    },
+    {
+      "id": "zero-proof-coconut-water-lime",
+      "kind": "ZERO_PROOF",
+      "name": "Coconut Water and Lime",
+      "style": "Zero-proof coconut water and lime beverage",
+      "isAlcoholic": false,
+      "color": "NON_ALCOHOLIC",
+      "tastingNotes": [
+        "coconut water",
+        "lime",
+        "clean finish"
+      ],
+      "pairingTags": [
+        "mango coconut fruit salad",
+        "coconut pudding",
+        "hibiscus pears"
+      ],
+      "courseRoles": [
+        "DESSERT"
+      ],
+      "themeConnections": [
+        {
+          "theme": "IMAGINED_FUTURES",
+          "explanation": "A zero-proof finish makes the shared table hospitable to many kinds of celebration without treating alcohol as the default.",
+          "sourceIds": [
+            "src-zero-proof-coconut-water-lime"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-zero-proof-coconut-water-lime",
+          "provider": "VA News",
+          "title": "Live Whole Health #287: Coconut lime hydration",
+          "url": "https://news.va.gov/142229/live-whole-health-287-coconut-lime-hydration/",
+          "accessedAt": "2026-08-31T18:45:00Z",
+          "attribution": "Replacement factual or instruction source. Catalog summary, theme connection, and pairing notes are original.",
+          "licenseNote": "This health and wellness resource is provided for public information by the U.S. Department of Veterans Affairs."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Ensure the use of unsweetened coconut water to maintain the intended flavor balance.",
+      "sweetness": "OFF_DRY",
+      "body": "LIGHT",
+      "acidity": "HIGH",
+      "tannin": "NONE",
+      "servingTemperatureCelsius": 6
+    },
+    {
+      "id": "zero-proof-rooibos-vanilla-cooler",
+      "kind": "ZERO_PROOF",
+      "name": "Rooibos Vanilla Cooler",
+      "style": "Zero-proof rooibos vanilla cooler",
+      "isAlcoholic": false,
+      "color": "NON_ALCOHOLIC",
+      "tastingNotes": [
+        "rooibos",
+        "vanilla",
+        "honeyed"
+      ],
+      "pairingTags": [
+        "sweet potato pie",
+        "ginger molasses cookies",
+        "banana bread pudding"
+      ],
+      "courseRoles": [
+        "DESSERT"
+      ],
+      "themeConnections": [
+        {
+          "theme": "IMAGINED_FUTURES",
+          "explanation": "A zero-proof finish makes the shared table hospitable to many kinds of celebration without treating alcohol as the default.",
+          "sourceIds": [
+            "src-zero-proof-rooibos-vanilla-cooler"
+          ]
+        }
+      ],
+      "sourceRefs": [
+        {
+          "sourceId": "src-zero-proof-rooibos-vanilla-cooler",
+          "provider": "Lux Coffee Brew",
+          "title": "Pairing Rooibos Tea with Desserts: A Connoisseur's Guide to Flavor",
+          "url": "https://luxcoffeebrew.com/blogs/news/pairing-rooibos-tea-with-desserts-a-connoisseurs-guide-to-flavor",
+          "accessedAt": "2026-08-31T10:00:00Z",
+          "attribution": "Style or beverage-reference source. Tasting tags, pairing guidance, and theme connection are original catalog writing.",
+          "licenseNote": "No current prices, retail availability, third-party review text, or images are stored in this record."
+        }
+      ],
+      "reviewStatus": "DRAFT",
+      "reviewNotes": "Ensure the rooibos is steeped at the correct temperature to maintain its characteristic smoothness and avoid any bitterness.",
+      "sweetness": "OFF_DRY",
+      "body": "MEDIUM",
+      "acidity": "LOW",
+      "tannin": "LOW",
+      "servingTemperatureCelsius": 6
+    }
+  ]
+}
