@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "apple-music:token": "node scripts/generate-apple-music-token.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

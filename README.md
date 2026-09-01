@@ -27,6 +27,18 @@ DISCOGS_USER_AGENT=SupperClubAI/0.1
 
 Keep credentials in `.env.local` or encrypted deployment settings. Never prefix them with `NEXT_PUBLIC_`.
 
+Generate the Apple Music developer token locally from a downloaded Media Services `.p8` key:
+
+```bash
+npm run apple-music:token -- \
+  --team-id YOUR_TEAM_ID \
+  --key-id YOUR_KEY_ID \
+  --private-key /absolute/path/to/AuthKey_KEY_ID.p8 \
+  --write-env .env.local
+```
+
+The generator signs an ES256 JWT, verifies its signature locally, writes the token directly to the ignored `.env.local`, and never prints the token. Keep the `.p8` file outside this repository.
+
 ## Verify
 
 ```bash
