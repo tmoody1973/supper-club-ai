@@ -1,0 +1,65 @@
+import type { PartyPlan } from "@/lib/types";
+
+export type PlanStoreErrorCode =
+  | "PLAN_NOT_FOUND"
+  | "PLAN_ALREADY_EXISTS"
+  | "VERSION_CONFLICT"
+  | "VALIDATION_ERROR";
+
+export class PlanStoreError extends Error {
+  readonly code: PlanStoreErrorCode;
+  readonly status: number;
+  readonly details?: Record<string, unknown>;
+
+  constructor(
+    code: PlanStoreErrorCode,
+    message: string,
+    status: number,
+    details?: Record<string, unknown>,
+  ) {
+    super(message);
+    this.name = "PlanStoreError";
+    this.code = code;
+    this.status = status;
+    this.details = details;
+  }
+}
+
+export type PlanStoreMetadata = {
+  storage: "MEMORY";
+  durable: boolean;
+  expiresAt: string;
+};
+
+export type StoredPartyPlan = {
+  plan: PartyPlan;
+  metadata: PlanStoreMetadata;
+};
+
+export interface PlanStore {
+  create(initialPlan?: PartyPlan): Promise<StoredPartyPlan>;
+  get(planId: string): Promise<StoredPartyPlan>;
+  replace(
+    planId: string,
+    expectedPlanVersion: number,
+    nextPlan: PartyPlan,
+  ): Promise<StoredPartyPlan>;
+}
+
+export type PlanApiError = {
+  ok: false;
+  error: {
+    code: PlanStoreErrorCode | "BAD_REQUEST" | "FORBIDDEN" | "STORE_UNAVAILABLE";
+    message: string;
+    retryable: boolean;
+    details?: Record<string, unknown>;
+  };
+};
+
+export type PlanApiSuccess = {
+  ok: true;
+  plan: PartyPlan;
+  storage: PlanStoreMetadata;
+};
+
+export type PlanApiResponse = PlanApiSuccess | PlanApiError;

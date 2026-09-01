@@ -9,3 +9,8 @@ node_modules/
 
 *.tsbuildinfo
 .vercel
+
+# ChatGPT app build output and package installation.
+chatgpt-app/node_modules/
+chatgpt-app/dist/
+chatgpt-app/web/dist/

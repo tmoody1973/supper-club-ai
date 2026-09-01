@@ -1,0 +1,29 @@
+{
+  "name": "supper-club-ai-chatgpt-app",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:widget": "esbuild web/src/main.tsx --bundle --format=esm --outfile=web/dist/widget.js",
+    "build:server": "esbuild server.ts --bundle --platform=node --format=esm --outfile=dist/server.js",
+    "build": "npm run build:widget && npm run build:server",
+    "dev": "tsx server.ts",
+    "start": "node dist/server.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/ext-apps": "latest",
+    "@modelcontextprotocol/sdk": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "zod": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "esbuild": "latest",
+    "tsx": "latest",
+    "typescript": "latest"
+  }
+}

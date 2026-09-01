@@ -28,6 +28,12 @@ import {
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { downloadHostPacket } from "@/lib/export-pdf";
 import {
+  createSharedPlan,
+  PlanClientError,
+  readSharedPlan,
+  replaceSharedPlan,
+} from "@/lib/plan-store-client";
+import {
   buildPrepTasks,
   buildShoppingList,
   courseFromRecipe,
@@ -37,6 +43,7 @@ import type { MenuCourse, PartyPlan, Receipt } from "@/lib/types";
 import { registerSupperClubTools } from "@/lib/webmcp-tools";
 
 type ActiveView = "RUN_OF_SHOW" | "SHOPPING" | "HOST_PACKET";
+type PlanStoreMode = "BOOTING" | "SHARED" | "LOCAL";
 
 const navItems = [
   { number: "01", label: "Overview", detail: "Seed & Stars", view: "RUN_OF_SHOW" as const, movementId: "movement-arrival" },
@@ -114,6 +121,7 @@ export function SupperClubWorkspace() {
   const [utilityMenuOpen, setUtilityMenuOpen] = useState(false);
   const [confirmingFinalize, setConfirmingFinalize] = useState(false);
   const [webmcpStatus, setWebmcpStatus] = useState<"CONNECTING" | "READY" | "PREVIEW" | "ERROR">("CONNECTING");
+  const [planStoreMode, setPlanStoreMode] = useState<PlanStoreMode>("BOOTING");
   const [toast, setToast] = useState<string | null>(null);
 
   const updatePlan = useCallback((next: PartyPlan) => {
@@ -132,22 +140,81 @@ export function SupperClubWorkspace() {
   }, []);
 
   useEffect(() => {
-    try {
-      const saved = window.localStorage.getItem("supper-club-ai-plan-v2");
-      if (saved) updatePlan(JSON.parse(saved) as PartyPlan);
-    } catch {
-      // Keep the reviewed seed plan when stored state cannot be read.
-    }
+    let active = true;
+
+    const initializePlan = async () => {
+      let candidate = makeSeedPlan();
+      try {
+        const saved = window.localStorage.getItem("supper-club-ai-plan-v2");
+        if (saved) candidate = JSON.parse(saved) as PartyPlan;
+      } catch {
+        // Keep the reviewed seed plan when stored state cannot be read.
+      }
+
+      const requestedPlanId = new URL(window.location.href).searchParams.get("plan");
+      try {
+        let result;
+        if (requestedPlanId) {
+          try {
+            result = await readSharedPlan(requestedPlanId);
+          } catch (error) {
+            if (!(error instanceof PlanClientError) || error.code !== "PLAN_NOT_FOUND") throw error;
+            result = await createSharedPlan(candidate);
+          }
+        } else {
+          result = await createSharedPlan(candidate);
+        }
+        if (!active) return;
+        updatePlan(result.plan);
+        const url = new URL(window.location.href);
+        url.searchParams.set("plan", result.plan.planId);
+        window.history.replaceState({}, "", url);
+        setPlanStoreMode("SHARED");
+      } catch (error) {
+        console.warn("[Supper Club AI] Shared PlanStore unavailable; using local state.", error);
+        if (!active) return;
+        updatePlan(candidate);
+        setPlanStoreMode("LOCAL");
+      }
+    };
+
+    void initializePlan();
+    return () => {
+      active = false;
+    };
   }, [updatePlan]);
 
+  const persistPlan = useCallback(
+    async (next: PartyPlan, expectedPlanVersion: number) => {
+      if (planStoreMode !== "SHARED") {
+        updatePlan(next);
+        return next;
+      }
+      try {
+        const result = await replaceSharedPlan(next, expectedPlanVersion);
+        updatePlan(result.plan);
+        return result.plan;
+      } catch (error) {
+        if (error instanceof PlanClientError && error.code === "VERSION_CONFLICT") {
+          const current = await readSharedPlan(next.planId);
+          updatePlan(current.plan);
+          announce(`A newer plan was loaded · v${current.plan.planVersion}`);
+        }
+        throw error;
+      }
+    },
+    [announce, planStoreMode, updatePlan],
+  );
+
   useEffect(() => {
+    if (planStoreMode === "BOOTING") return;
     const controller = new AbortController();
     let active = true;
     registerSupperClubTools({
       getPlan: () => planRef.current,
-      setPlan: (next) => {
-        updatePlan(next);
-        announce(`${next.receipts[0]?.title ?? "Plan updated"} · v${next.planVersion}`);
+      setPlan: async (next) => {
+        const saved = await persistPlan(next, next.planVersion - 1);
+        announce(`${saved.receipts[0]?.title ?? "Plan updated"} · v${saved.planVersion}`);
       },
       exportHostPacket: downloadHostPacket,
     }, controller)
@@ -170,7 +237,7 @@ export function SupperClubWorkspace() {
       active = false;
       controller.abort();
     };
-  }, [announce, updatePlan]);
+  }, [announce, persistPlan, planStoreMode]);
 
   const selectedMovement =
     plan.movements.find((movement) => movement.movementId === selectedMovementId) ?? plan.movements[2];
@@ -207,10 +274,14 @@ export function SupperClubWorkspace() {
         },
         ...next.receipts,
       ].slice(0, 12);
-      updatePlan(next);
-      announce(`${receipt.title} · v${next.planVersion}`);
+      void persistPlan(next, current.planVersion)
+        .then((saved) => announce(`${receipt.title} · v${saved.planVersion}`))
+        .catch((error) => {
+          console.error("[Supper Club AI] Plan update failed", error);
+          announce("That change could not be saved. Please try again.");
+        });
     },
-    [announce, updatePlan],
+    [announce, persistPlan],
   );
 
   const navigate = (item: (typeof navItems)[number]) => {
@@ -367,12 +438,22 @@ export function SupperClubWorkspace() {
   };
 
   const resetDemo = () => {
-    const seed = makeSeedPlan();
-    updatePlan(seed);
+    const current = planRef.current;
+    const seed: PartyPlan = {
+      ...makeSeedPlan(),
+      planId: current.planId,
+      planVersion: current.planVersion + 1,
+      updatedAt: new Date().toISOString(),
+    };
+    void persistPlan(seed, current.planVersion)
+      .then(() => announce("Seed & Stars restored to the reviewed demo state."))
+      .catch((error) => {
+        console.error("[Supper Club AI] Demo reset failed", error);
+        announce("The demo could not be reset. Please try again.");
+      });
     setActiveView("RUN_OF_SHOW");
     setSelectedMovementId("movement-main");
     setUtilityMenuOpen(false);
-    announce("Seed & Stars restored to the reviewed demo state.");
   };
 
   return (

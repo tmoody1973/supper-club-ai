@@ -1,0 +1,57 @@
+:root {
+  font-family: Georgia, "Times New Roman", serif;
+  color: #171612;
+  background: #f1ead8;
+  font-synthesis: none;
+}
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; background: radial-gradient(circle at 8% 0%, #f9f3e5, transparent 40%), #eee5d0; }
+button, input, select { font: inherit; }
+.shell { max-width: 920px; margin: 0 auto; border: 1px solid #a99f86; background: rgba(248, 242, 225, .92); }
+.masthead { display: flex; justify-content: space-between; gap: 24px; padding: 28px 32px; border-bottom: 4px solid #171612; background: #c9d963; }
+.masthead h1 { margin: 4px 0 0; font-size: clamp(2rem, 6vw, 4rem); line-height: .92; font-weight: 500; letter-spacing: -.04em; }
+.eyebrow, .kicker, label, .version, .overview span, footer { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; text-transform: uppercase; letter-spacing: .08em; }
+.eyebrow, .kicker, .version, .overview span { font-size: 12px; }
+.version { text-align: right; line-height: 1.6; }
+.version strong { font-size: 18px; }
+.intro { display: grid; grid-template-columns: 220px 1fr; gap: 28px; padding: 24px 32px; border-bottom: 1px solid #a99f86; }
+.intro p { margin: 0; font-size: 18px; line-height: 1.5; }
+.kicker { color: #a83220; font-weight: 700; }
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; padding: 28px 32px; }
+label { display: grid; gap: 8px; font-size: 12px; font-weight: 700; }
+label.wide { grid-column: 1 / -1; }
+input, select { width: 100%; min-height: 46px; border: 1px solid #8f876f; border-radius: 0; padding: 10px 12px; background: #fffaf0; color: #171612; font-size: 17px; }
+input:focus, select:focus, button:focus-visible { outline: 3px solid #a83220; outline-offset: 2px; }
+.overview { display: grid; grid-template-columns: repeat(4, 1fr); border-block: 1px solid #a99f86; }
+.overview div { display: grid; gap: 8px; padding: 18px; border-right: 1px solid #a99f86; }
+.overview div:last-child { border: 0; }
+.overview strong { font-size: 18px; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; padding: 24px 32px; }
+button { min-height: 46px; border: 1px solid #171612; padding: 10px 16px; background: transparent; cursor: pointer; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px; font-weight: 700; text-transform: uppercase; }
+button:hover:not(:disabled) { background: #171612; color: #f8f2e1; }
+button:disabled { opacity: .5; cursor: wait; }
+button.primary { background: #171612; color: #f8f2e1; }
+button.primary:hover:not(:disabled) { background: #a83220; }
+.confirmation { margin: 0 32px 28px; border: 2px solid #a83220; padding: 22px; background: #fff7e9; }
+.confirmation strong { font-size: 24px; }
+.confirmation p { font-size: 17px; line-height: 1.5; }
+.confirmation div { display: flex; gap: 10px; justify-content: flex-end; }
+button.danger { background: #a83220; color: white; border-color: #a83220; }
+footer { display: grid; grid-template-columns: 1fr auto; gap: 8px 16px; padding: 18px 32px; border-top: 1px solid #a99f86; background: #171612; color: #eee5d0; font-size: 11px; }
+footer small { grid-column: 1 / -1; color: #aaa48f; }
+footer code { text-transform: none; letter-spacing: 0; }
+.loading { min-height: 360px; display: grid; place-content: center; text-align: center; padding: 40px; }
+.loading h1 { margin-bottom: 4px; font-size: 38px; }
+.loading p { font-size: 17px; }
+.orb { width: 46px; height: 46px; margin: auto; border-radius: 50%; background: #c9d963; box-shadow: 26px -8px 0 #a83220; }
+@media (max-width: 640px) {
+  .masthead, .intro, .form-grid, .actions { padding-inline: 20px; }
+  .intro, .form-grid { grid-template-columns: 1fr; }
+  label.wide { grid-column: auto; }
+  .overview { grid-template-columns: repeat(2, 1fr); }
+  .overview div:nth-child(2) { border-right: 0; }
+  .overview div:nth-child(-n+2) { border-bottom: 1px solid #a99f86; }
+  footer { grid-template-columns: 1fr; padding-inline: 20px; }
+  footer code, footer small { grid-column: auto; overflow-wrap: anywhere; }
+  .confirmation { margin-inline: 20px; }
+}

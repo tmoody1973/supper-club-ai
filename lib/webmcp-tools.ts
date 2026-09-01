@@ -24,7 +24,7 @@ import type { WebMCPTool } from "@/types/webmcp";
 
 type ToolRuntime = {
   getPlan: () => PartyPlan;
-  setPlan: (plan: PartyPlan) => void;
+  setPlan: (plan: PartyPlan) => Promise<void> | void;
   exportHostPacket: (plan: PartyPlan) => Promise<{ filename: string }>;
 };
 
@@ -149,19 +149,19 @@ const makeReceipt = (
   status,
 });
 
-const commit = (
+const commit = async (
   runtime: ToolRuntime,
   current: PartyPlan,
   next: PartyPlan,
   receipt: Receipt,
-) => {
+): Promise<PartyPlan> => {
   const committed: PartyPlan = {
     ...next,
     planVersion: current.planVersion + 1,
     receipts: [receipt, ...next.receipts].slice(0, 12),
     updatedAt: new Date().toISOString(),
   };
-  runtime.setPlan(committed);
+  await runtime.setPlan(committed);
   return committed;
 };
 
@@ -318,7 +318,7 @@ export async function registerSupperClubTools(
           eventDate: typeof input.eventDate === "string" ? input.eventDate : plan.eventDate,
           status: "BUILDING" as const,
         };
-        const committed = commit(
+        const committed = await commit(
           runtime,
           plan,
           next,
@@ -380,7 +380,7 @@ export async function registerSupperClubTools(
           ...current.theme,
           ...curation.data,
         };
-        const committed = commit(
+        const committed = await commit(
           runtime,
           current,
           next,
@@ -476,7 +476,7 @@ export async function registerSupperClubTools(
         });
         next.status = "BUILDING";
         next.completion = Math.max(current.completion, 62);
-        const committed = commit(
+        const committed = await commit(
           runtime,
           current,
           next,
@@ -561,7 +561,7 @@ export async function registerSupperClubTools(
           ? [...current.pairings.filter((pairing) => !ids.has(pairing.courseId)), ...pairings]
           : pairings;
         next.completion = Math.max(current.completion, 70);
-        const committed = commit(
+        const committed = await commit(
           runtime,
           current,
           next,
@@ -631,7 +631,7 @@ export async function registerSupperClubTools(
         const next = structuredClone(current);
         next.soundtrack = tracks;
         next.completion = Math.max(current.completion, 74);
-        const committed = commit(
+        const committed = await commit(
           runtime,
           current,
           next,
@@ -686,7 +686,7 @@ export async function registerSupperClubTools(
         next.shopping = shopping;
         next.prep = buildPrepTasks(plan.courses);
         next.completion = Math.max(plan.completion, 78);
-        const committed = commit(
+        const committed = await commit(
           runtime,
           plan,
           next,
@@ -737,7 +737,7 @@ export async function registerSupperClubTools(
         next.status = "FINALIZED";
         next.completion = 100;
         next.movements = next.movements.map((movement) => ({ ...movement, status: "SET" }));
-        const committed = commit(
+        const committed = await commit(
           runtime,
           plan,
           next,
@@ -789,7 +789,7 @@ export async function registerSupperClubTools(
             createdAt: new Date().toISOString(),
           };
           next.exports.unshift(exportRecord);
-          const committed = commit(
+          const committed = await commit(
             runtime,
             plan,
             next,
