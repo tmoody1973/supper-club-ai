@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "apple-music:token": "node scripts/generate-apple-music-token.mjs",
+    "catalogs:xwines": "node scripts/import-xwines.mjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
