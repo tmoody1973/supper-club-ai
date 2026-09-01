@@ -143,6 +143,7 @@ function TrackPreviewPlayer({
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [hasError, setHasError] = useState(false);
+  const progress = duration ? Math.min(100, (currentTime / duration) * 100) : 0;
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -171,7 +172,7 @@ function TrackPreviewPlayer({
   };
 
   return (
-    <div className={`track-preview-player${hasError ? " track-preview-player--error" : ""}`}>
+    <div className={`track-preview-player${isPlaying ? " track-preview-player--playing" : ""}${hasError ? " track-preview-player--error" : ""}`}>
       <audio
         ref={audioRef}
         preload="metadata"
@@ -202,9 +203,12 @@ function TrackPreviewPlayer({
         {isPlaying ? <Pause size={15} fill="currentColor" aria-hidden="true" /> : <Play size={15} fill="currentColor" aria-hidden="true" />}
       </button>
       <div className="track-preview-progress">
-        <span role="status" aria-live="polite">
-          {hasError ? "Preview could not be played" : isPlaying ? "Playing preview" : "Apple Music preview"}
-        </span>
+        <div className="track-preview-meta">
+          <span role="status" aria-live="polite">
+            {hasError ? "Preview unavailable" : isPlaying ? "Now playing" : "Apple Music preview"}
+          </span>
+          <em>30-second excerpt</em>
+        </div>
         <input
           type="range"
           min="0"
@@ -214,16 +218,19 @@ function TrackPreviewPlayer({
           disabled={!duration || hasError}
           aria-label={`Seek preview of ${title} by ${artist}`}
           aria-valuetext={`${formatPreviewTime(currentTime)} of ${formatPreviewTime(duration)}`}
+          style={{ "--preview-progress": `${progress}%` } as React.CSSProperties}
           onChange={(event) => {
             const nextTime = Number(event.currentTarget.value);
             if (audioRef.current) audioRef.current.currentTime = nextTime;
             setCurrentTime(nextTime);
           }}
         />
+        <div className="track-preview-timing">
+          <output aria-label="Current preview time">{formatPreviewTime(currentTime)}</output>
+          <span aria-hidden="true">Excerpt</span>
+          <output aria-label="Preview duration">{duration ? formatPreviewTime(duration) : "–:––"}</output>
+        </div>
       </div>
-      <output className="track-preview-time" aria-label="Preview time">
-        {formatPreviewTime(currentTime)} / {duration ? formatPreviewTime(duration) : "–:––"}
-      </output>
     </div>
   );
 }
@@ -1231,19 +1238,6 @@ function CulturalPlate({
                     </div>
                   </details>
                 ) : null}
-                {track.previewUrl ? (
-                  <TrackPreviewPlayer
-                    key={track.previewUrl}
-                    src={track.previewUrl}
-                    title={track.title}
-                    artist={track.artist}
-                  />
-                ) : (
-                  <span className="track-preview-unavailable">
-                    Preview unavailable for this storefront.
-                    {track.sourceUrl ? <a href={track.sourceUrl} target="_blank" rel="noreferrer">Open in Apple Music <ExternalLink size={11} aria-hidden="true" /></a> : null}
-                  </span>
-                )}
               </div>
               <div className="track-actions">
                 <em>{track.status}</em>
@@ -1263,6 +1257,21 @@ function CulturalPlate({
                     Open in Apple Music <ExternalLink size={12} aria-hidden="true" />
                   </a>
                 ) : null}
+              </div>
+              <div className="track-preview-slot">
+                {track.previewUrl ? (
+                  <TrackPreviewPlayer
+                    key={track.previewUrl}
+                    src={track.previewUrl}
+                    title={track.title}
+                    artist={track.artist}
+                  />
+                ) : (
+                  <span className="track-preview-unavailable">
+                    Preview unavailable for this storefront.
+                    {track.sourceUrl ? <a href={track.sourceUrl} target="_blank" rel="noreferrer">Open in Apple Music <ExternalLink size={11} aria-hidden="true" /></a> : null}
+                  </span>
+                )}
               </div>
             </article>
           )})}
