@@ -12,8 +12,8 @@ You do **not** need Codex CLI or `deskagent` for this workflow.
 - Canvas: `1920 × 1080`, 16:9
 - Source: ChatGPT desktop app plus Supper Club AI in its in-app browser
 - Main story: create one new cultural dinner with genuine WebMCP tools, revise
-  one course, synchronize the practical work, price groceries, inspect sources,
-  and show where the product can go next
+  one course, synchronize the practical work, preview source-aware recipe cards,
+  price groceries, inspect sources, and show where the product can go next
 - Demo dinner: *Kindred* by Octavia E. Butler, eight guests, budget near $220,
   one gluten-free guest, and GrapeMinds-sourced wine pairings for every food
   course
@@ -69,7 +69,7 @@ source clips so HyperFrames can remove waits and preserve readable results.
 | 04 | `04-provider-results.mov` | A new plan, provider receipts, and transparent fallbacks |
 | 05a | `05a-search-recipes.mov` | Search and host review happen before mutation |
 | 05b | `05b-replace-main-course.mov` | One selected course changes without rebuilding the evening |
-| 06 | `06-shopping-and-prep.mov` | Shopping and prep synchronize with the revised menu |
+| 06 | `06-shopping-and-prep.mov` | Shopping, prep, and source-aware recipe cards synchronize with the revised menu |
 | 07a | `07a-find-grocery-store.mov` | The host chooses a real store before pricing |
 | 07b | `07b-grocery-pricing.mov` | Local estimate, coverage, promotions, confidence, unmatched items |
 | 08 | `08-atmosphere-provenance.mov` | GrapeMinds wines, Apple Music, and Agent Marginalia stay inspectable |
@@ -247,16 +247,23 @@ Paste and send:
 ```text
 Use create_shopping_list to rebuild the current plan's ingredients and organize
 the result by dish and aisle. Then use create_prep_timeline to create a practical
-cooking schedule from the revised menu. Do not finalize the plan.
+cooking schedule from the revised menu. Finally, use prepare_recipe_cards to
+preview one kitchen card per dish with scaled ingredients, functional steps,
+dietary warnings, wine pairings, and authoritative source links. Do not finalize
+the plan and do not download a file yet.
 ```
 
 Do not record the wait. Once finished, record the shopping-list total, several
-readable dish/aisle groups, and the prep timeline. Scroll slowly. The revised
-main course should be reflected in both outputs.
+readable dish/aisle groups, the prep timeline, and at least one readable recipe
+card. Show its scaling or source-required label and authoritative source link.
+Scroll slowly. The revised main course should be reflected in all three outputs.
 
 Save as `06-shopping-and-prep.mov`.
 
-HyperFrames label: `THE PLAN BECOMES PRACTICAL WORK`
+HyperFrames labels:
+
+- `THE PLAN BECOMES PRACTICAL WORK`
+- `WEBMCP TOOL 27 · PREPARE_RECIPE_CARDS`
 
 ## Clip 07a — Find a nearby grocery store
 
@@ -328,12 +335,16 @@ Paste and send:
 
 ```text
 Review the current plan's provider receipts, dietary warnings, and Agent
-Marginalia. Explain what still requires host review. Do not finalize the plan
-and do not export or download a host packet.
+Marginalia. Include the recipe-card source and quantity-scaling warnings, and
+explain what still requires host review. Do not finalize the plan. Do not call
+export_recipe_packet or export_host_packet, and do not download any file.
 ```
 
-Show the warnings and the still-unpressed finalization or export control. Do not
-click Finalize, Export, Download, or purchase anything.
+Show the warnings and the still-unpressed finalization, Download recipe packet,
+and host-packet export controls. Explain that `export_recipe_packet` creates a
+combined kitchen PDF, one PDF per dish, and a provenance manifest only after
+explicit confirmation. Do not click Finalize, Export, Download, or purchase
+anything.
 
 Save as `09-host-control-close.mov`.
 

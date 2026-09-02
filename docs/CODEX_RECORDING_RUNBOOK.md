@@ -142,7 +142,10 @@ zero-proof or non-alcoholic pairing.
 ```text
 Use create_shopping_list to rebuild the current plan's ingredients and organize
 the result by dish and aisle. Then use create_prep_timeline to create a practical
-cooking schedule from the revised menu. Do not finalize the plan.
+cooking schedule from the revised menu. Finally, use prepare_recipe_cards to
+preview one kitchen card per dish with scaled ingredients, functional steps,
+dietary warnings, wine pairings, and authoritative source links. Do not finalize
+the plan and do not download a file yet.
 ```
 
 ### Prompt F — choose a grocery location before pricing
@@ -169,8 +172,9 @@ which unmatched items still require host review.
 
 ```text
 Review the current plan's provider receipts, dietary warnings, and Agent
-Marginalia. Explain what still requires host review. Do not finalize the plan
-and do not export or download a host packet.
+Marginalia. Include the recipe-card source and quantity-scaling warnings, and
+explain what still requires host review. Do not finalize the plan. Do not call
+export_recipe_packet or export_host_packet, and do not download any file.
 ```
 
 ### Prompt I — open the retailer opportunity section
@@ -285,19 +289,21 @@ tail after each line. Do not add a background-music bed.
 > ChatGPT searches for gluten-free mains, keeps the budget preference visibly
 > unverified, and replaces only the option the host selects.
 
-### Clip 06 — Shopping list and preparation timeline
+### Clip 06 — Shopping, preparation, and recipe cards
 
 - Target picture: `01:24–01:42` (18 seconds)
 - Source file: `recording/raw/06-shopping-and-prep.mov`
-- Show: Prompt E, shopping list by dish and aisle, then the synchronized prep
-  timeline. Feature readable totals rather than every line item.
+- Show: Prompt E, shopping list by dish and aisle, the synchronized prep
+  timeline, then the `prepare_recipe_cards` receipt and one readable card with
+  scaling status and source link. Feature readable totals rather than every line item.
 - On-screen label: `THE PLAN BECOMES PRACTICAL WORK`
+- Secondary label: `WEBMCP TOOL 27 · PREPARE_RECIPE_CARDS`
 - ElevenLabs file: `narration/clips/06-shopping-and-prep.wav`
 - Narration:
 
-> That revision flows downstream. Ingredients are reconciled across every dish,
-> organized by aisle and course, then translated into a preparation timeline
-> the host can actually follow.
+> That revision flows downstream. Ingredients are reconciled by dish, translated
+> into a practical preparation timeline, and assembled into source-aware kitchen
+> cards with visible scaling and safety review.
 
 ### Clip 07 — Nearby grocery pricing
 
@@ -332,15 +338,16 @@ tail after each line. Do not add a background-music bed.
 
 - Target picture: `02:16–02:30` (14 seconds)
 - Source file: `recording/raw/09-host-control-close.mov`
-- Show: Prompt H, review warnings, the unpressed finalization/export control,
-  and a final wide view of the shared plan.
+- Show: Prompt H, review warnings, the unpressed finalization, recipe-packet,
+  and host-packet export controls, then a final wide view of the shared plan.
 - On-screen label: `THE AGENT COORDINATES · THE HOST DECIDES`
 - ElevenLabs file: `narration/clips/09-host-control-close.wav`
 - Narration:
 
 > The agent can research and coordinate, but the host stays in control.
-> Finalization and export wait for explicit confirmation. Cultural inspiration
-> becomes a coordinated, hostable experience for people and agents together.
+> Finalization and every artifact download wait for explicit confirmation.
+> Cultural inspiration becomes a coordinated, hostable experience for people
+> and agents together.
 
 ### Clip 10 — Where this can go
 
