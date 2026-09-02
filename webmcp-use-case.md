@@ -37,7 +37,7 @@ Before WebMCP, this collaboration was difficult because websites and agents had 
 
 ## How We Implemented WebMCP
 
-Supper Club AI registers twenty-six typed website tools with `document.modelContext.registerTool`:
+Supper Club AI registers twenty-eight typed website tools with `document.modelContext.registerTool`:
 
 1. `get_party_plan`
 2. `configure_party`
@@ -65,12 +65,16 @@ Supper Club AI registers twenty-six typed website tools with `document.modelCont
 24. `export_host_packet`
 25. `create_party_plan`
 26. `price_recipe_candidates`
+27. `prepare_recipe_cards`
+28. `export_recipe_packet`
 
 `create_party_plan` starts from the host's inspiration, guest count, budget, dietary requirements, and wine and zero-proof preferences. It creates a fresh plan through the dynamic-plan endpoint, changes the website to the returned plan ID, and leaves the previous plan untouched. Its structured result includes provider receipts for the theme, menu, pairings, and soundtrack so the host can see which provider and operating mode produced each section.
 
 `price_recipe_candidates` accepts up to three recipe IDs returned by `search_recipes`, one host-selected Kroger location, and a course cap. It returns store-specific package estimates, ingredient coverage, confidence, unpriced ingredients, and a cap status without changing the menu. Partial coverage cannot be labeled within cap; a partial subtotal already over cap can still be labeled over cap.
 
-The website's twenty-six WebMCP tools are separate from the ChatGPT MCP App's seventeen focused tools. Both operate on the same versioned plan model, but the website exposes the broader composition and artifact toolkit. Every tool has a focused description, a JSON input schema, behavioral annotations, and a structured success or error response. A response can include the updated plan version, affected interface sections, source references, provider receipts, warnings, a human-readable summary, and suggested next actions.
+`prepare_recipe_cards` returns a compact preview of each dish card, including scaled quantities, dietary warnings, instruction status, and the authoritative source. After the plan is finalized and the Creative Host explicitly confirms, `export_recipe_packet` downloads a ZIP with a combined kitchen PDF, one PDF per dish, and a provenance manifest. Source-linked dishes receive an original functional preparation outline and a clear source-required warning instead of copied headnotes, photographs, or expressive recipe prose.
+
+The website's twenty-eight WebMCP tools are separate from the ChatGPT MCP App's eighteen focused tools. Both operate on the same versioned plan model, but the website exposes the broader composition and artifact toolkit. Every tool has a focused description, a JSON input schema, behavioral annotations, and a structured success or error response. A response can include the updated plan version, affected interface sections, source references, provider receipts, warnings, a human-readable summary, and suggested next actions.
 
 The WebMCP tools operate on the same React plan state that renders the Supper Club AI workspace. When a tool succeeds, it commits a new version of the plan, updates the relevant interface sections, and adds a visible receipt. State-changing tools require `expectedPlanVersion`, which prevents an agent from overwriting newer host changes with stale information. Provider requests also perform a second version check before their results are applied.
 
@@ -78,7 +82,7 @@ Research and curation run through a same-origin server gateway so private creden
 
 For music, Perplexity proposes 6–8 sourced candidates across arrival, first course, main table, reflection, and closing. The gateway requires actual result IDs from the same Agent API response, rejects generic background and wellness audio, and uses Apple Music as the authoritative exact artist/title verifier. It then ranks verified candidates against the theme, energy arc, and strength of editorial or institutional sourcing before selecting four. Reviewed anchors fill only unverified or missing slots, and Discogs adds release context when available. Per-track receipts distinguish Perplexity discovery, Apple Music verification, and reviewed fallback provenance. Other normalized sources include Open Library, GrapeMinds with X-Wines fallback, and Perplexity-backed zero-proof discovery with a reviewed catalog fallback. Provider receipts expose selected providers, modes, sources, and warnings without exposing credentials or raw payloads.
 
-Finally, tool permissions match the consequence of each action. Reading the plan and previewing the redacted guest kit are read-only. Curation tools can revise specified sections. Finalization, host-packet export, and guest-share export require explicit approval because they lock state or create downloaded files. This gives the agent useful agency without removing the Creative Host from the decisions that matter.
+Finally, tool permissions match the consequence of each action. Reading the plan and previewing the redacted guest kit or recipe cards are read-only. Curation tools can revise specified sections. Finalization, host-packet export, guest-share export, and recipe-packet export require explicit approval because they lock state or create downloaded files. This gives the agent useful agency without removing the Creative Host from the decisions that matter.
 
 ## Short Summary
 

@@ -68,7 +68,7 @@ const planningSteps = [
 const appSteps = [
   "In ChatGPT, enable Developer mode under Settings → Security and login.",
   "Open ChatGPT Plugins, select the plus button, and add the public Supper Club AI endpoint ending in /mcp.",
-  "Review the 16 discovered tools, then enable the Supper Club AI connection in a new conversation.",
+  "Review the 18 discovered tools, then enable the Supper Club AI connection in a new conversation.",
   "Ask ChatGPT to create a plan from your book, artist, place, era, question, or feeling.",
   "Use the interactive form to revise guests, budget, dietary needs, date, and tone without editing JSON.",
   "Open the full workspace from the app whenever you want the complete run of show, shopping ledger, or host packet.",
@@ -94,7 +94,7 @@ const beginnerPaths = [
     steps: [
       "Ask ChatGPT to open thesupperclub.app in the in-app browser.",
       "Open the plan you want to revise, or begin with the reviewed example already on the page.",
-      "Check the black header for 26 tools live. Preview mode means that browser does not expose WebMCP tools.",
+      "Check the black header for 28 tools live. Preview mode means that browser does not expose WebMCP tools.",
       "Ask ChatGPT to use the tools on the Supper Club AI page and describe one specific change.",
       "Watch the workspace update and read the receipt in Agent Marginalia before making the next change.",
     ],
@@ -124,8 +124,8 @@ const examplePrompts = [
   },
   {
     label: "Prepare to host",
-    prompt: "Rebuild the prep timeline, organize the shopping list by dish, and review every dietary and sourcing warning. Do not finalize or export anything until I explicitly approve it.",
-    outcome: "Coordinates practical tasks while leaving consequential approval with the Creative Host.",
+    prompt: "Rebuild the prep timeline, organize the shopping list by dish, and prepare recipe cards for every course. Show me the ingredient scaling, dietary warnings, and authoritative sources before I approve any download.",
+    outcome: "Coordinates practical tasks and previews cook-ready cards while leaving downloads and final approval with the Creative Host.",
   },
 ];
 
@@ -142,7 +142,7 @@ const liveTools = [
   ["Pairings", "Attach wine and substantial zero-proof choices to each course."],
   ["Soundtrack", "Discover sourced candidates with Perplexity, verify them with Apple Music, and show each track’s origin and evidence."],
   ["Shopping", "Reconcile ingredients, find nearby Kroger-family stores, and estimate a course-linked basket with visible price confidence."],
-  ["Host + guest artifacts", "Export the private host packet or preview and download a redacted guest program with social cards after approval."],
+  ["Host + guest artifacts", "Preview cook-ready recipe cards, then export the private kitchen packet or a redacted guest program with social cards after approval."],
 ];
 
 const websiteTools = [
@@ -172,6 +172,8 @@ const websiteTools = [
   "export_host_packet",
   "create_party_plan",
   "price_recipe_candidates",
+  "prepare_recipe_cards",
+  "export_recipe_packet",
 ];
 
 const chatgptTools = [
@@ -182,6 +184,7 @@ const chatgptTools = [
   "price_shopping_list",
   "search_recipes",
   "price_recipe_candidates",
+  "prepare_recipe_cards",
   "set_menu_course",
   "replace_menu_course",
   "suggest_ingredient_substitutions",
@@ -277,7 +280,7 @@ export default function AboutPage() {
             <span className={styles.statusLive}>Available now</span>
             <h3>The WebMCP website</h3>
             <p>
-              Open the full visual workspace. The page exposes 25 typed WebMCP tools so an
+              Open the full visual workspace. The page exposes 28 typed WebMCP tools so an
               agent can create a fresh plan or update the board while you watch, review, and edit.
             </p>
             <ul>
@@ -297,7 +300,7 @@ export default function AboutPage() {
             </p>
             <ul>
               <li>Best for starting and revising a plan in chat</li>
-              <li>16 focused tools share the same versioned plan</li>
+              <li>18 focused tools share the same versioned plan</li>
               <li>Public Cloudflare MCP endpoint is live</li>
             </ul>
             <a href="#mcp-app-guide" className={styles.inlineLinkDark}>Connection instructions <ArrowRight size={15} /></a>
@@ -390,20 +393,20 @@ export default function AboutPage() {
               <h2 id="tool-ledger-title">Every capability, named in plain sight.</h2>
             </div>
             <p>
-              The website has 26 tools for creating, composing, and exporting a plan. The
-              ChatGPT App keeps 17 focused tools for creating, revising, pricing, and approving
+              The website has 28 tools for creating, composing, and exporting a plan. The
+              ChatGPT App keeps 18 focused tools for creating, revising, pricing, and approving
               the same versioned plan.
             </p>
           </div>
           <div className={styles.toolColumns}>
             <article className={styles.toolColumn}>
-              <header><span>Website / WebMCP</span><strong>26 tools</strong></header>
+              <header><span>Website / WebMCP</span><strong>28 tools</strong></header>
               <ol className={styles.toolList}>
                 {websiteTools.map((name, index) => <li key={name}><span>{String(index + 1).padStart(2, "0")}</span><code>{name}</code></li>)}
               </ol>
             </article>
             <article className={`${styles.toolColumn} ${styles.toolColumnDark}`}>
-              <header><span>ChatGPT / MCP App</span><strong>17 tools</strong></header>
+              <header><span>ChatGPT / MCP App</span><strong>18 tools</strong></header>
               <ol className={styles.toolList}>
                 {chatgptTools.map((name, index) => <li key={name}><span>{String(index + 1).padStart(2, "0")}</span><code>{name}</code></li>)}
               </ol>
@@ -419,7 +422,10 @@ export default function AboutPage() {
             context and per-track origin and verification receipts remain visible. Tool 26,
             <code>price_recipe_candidates</code>, tests searched recipes against a host-selected
             Kroger location and only marks an estimate within cap when every ingredient is priced.
-            Search, lookup,
+            Tools 27 and 28 prepare and export source-aware recipe cards: a combined kitchen PDF,
+            one card per dish, and a provenance manifest. Source-linked recipes retain an original
+            functional preparation outline and send the host to the authoritative source for exact
+            method, heat, timing, and doneness. Search, lookup,
             and guest-share preview tools are read-only. Plan changes use version checks;
             finalization and artifact downloads wait for explicit host approval.
           </p>
@@ -430,7 +436,7 @@ export default function AboutPage() {
             <p className={styles.sectionLabel}>07 / Connect the ChatGPT App</p>
             <h2 id="mcp-title">The interactive app is live inside ChatGPT.</h2>
             <p>
-              The Cloudflare endpoint delivers the interactive widget and 17 tools through MCP
+              The Cloudflare endpoint delivers the interactive widget and 18 tools through MCP
               Apps. Add the endpoint in ChatGPT Developer mode; opening `widget.html` directly
               with a `file://` URL still leaves it without a host or tool results.
             </p>

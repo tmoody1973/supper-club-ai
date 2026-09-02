@@ -238,7 +238,7 @@ tail after each line. Do not add a background-music bed.
 - Narration:
 
 > We begin in a clean ChatGPT conversation and open thesupperclub dot app. Once
-> the page loads, its twenty-six Web M-C-P tools become available to the agent.
+> the page loads, its twenty-eight Web M-C-P tools become available to the agent.
 
 ### Clip 03 — `create_party_plan` invocation
 

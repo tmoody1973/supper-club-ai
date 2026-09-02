@@ -1,6 +1,7 @@
 import { checkPlanRequest, noStoreHeaders, planError, planStoreErrorResponse } from "@/lib/plan-api.server";
 import { getPlanStore } from "@/lib/plan-store.server";
 import { findKrogerStores, pricePlanAtKroger, priceRecipeCandidatesAtKroger } from "@/lib/kroger.server";
+import { buildRecipeCardPreview } from "@/lib/recipe-cards";
 import {
   createPrepTimeline,
   createZeroProofPairings,
@@ -114,6 +115,33 @@ export async function POST(request: Request, context: Context) {
       const candidates = recipeCandidatesByIds(plan, body.role, recipeIds);
       const data = await priceRecipeCandidatesAtKroger(plan, candidates, locationId, courseBudgetCap, request.signal);
       return Response.json({ ok: true, planId, planVersion: plan.planVersion, data, storage: stored.metadata }, { headers: noStoreHeaders });
+    }
+
+    if (operation === "PREPARE_RECIPE_CARDS") {
+      const preview = buildRecipeCardPreview(plan);
+      return Response.json({
+        ok: true,
+        planId,
+        planVersion: plan.planVersion,
+        data: {
+          title: preview.title,
+          cardCount: preview.cards.length,
+          cards: preview.cards.map((card) => ({
+            courseId: card.courseId,
+            role: card.role,
+            title: card.title,
+            servings: card.servings,
+            ingredientCount: card.ingredients.length,
+            stepCount: card.steps.length,
+            instructionStatus: card.instructionStatus,
+            scalingStatus: card.scaling.status,
+            sourceProvider: card.source.provider,
+            sourceUrl: card.source.url,
+          })),
+          warnings: [...new Set(preview.cards.flatMap((card) => card.warnings))],
+        },
+        storage: stored.metadata,
+      }, { headers: noStoreHeaders });
     }
 
     if (operation === "SUGGEST_INGREDIENT_SUBSTITUTIONS") {

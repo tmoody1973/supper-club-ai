@@ -56,16 +56,18 @@ The featured hackathon demo is **Seed & Stars**, a hopeful Afrofuturist supper i
 8. `finalize_party_plan`
 9. `export_host_packet`
 
-The implemented website inventory contains twenty-six tools: the previous twenty-five plus
-`price_recipe_candidates`. `create_party_plan` accepts the host's inspiration, guest count, budget, dietary
+The implemented website inventory contains twenty-eight tools: the previous twenty-six plus
+`prepare_recipe_cards` and `export_recipe_packet`. `create_party_plan` accepts the host's inspiration, guest count, budget, dietary
 requirements, wine preference, and zero-proof preference; creates a fresh plan through the
 dynamic-plan endpoint; switches the website to the returned plan ID; and reports provider
 provenance for every curation stage. `price_recipe_candidates` then compares searched recipes
 against a course cap at one host-selected Kroger location, returning package-price coverage,
-confidence, and an honest cap status without changing the menu. The earlier twenty-three-tool scope is documented in
+confidence, and an honest cap status without changing the menu. `prepare_recipe_cards` returns a concise
+source and scaling preview; `export_recipe_packet` downloads a ZIP containing a combined kitchen PDF,
+one card per dish, and a provenance manifest after the host explicitly confirms a finalized plan. The earlier twenty-three-tool scope is documented in
 `docs/plans/2026-08-31-supper-club-ai-webmcp-design.md`.
 
-The website's twenty-six WebMCP tools are distinct from the ChatGPT MCP App's seventeen focused
+The website's twenty-eight WebMCP tools are distinct from the ChatGPT MCP App's eighteen focused
 tools. Both surfaces can create a plan and operate on the same versioned plan model, while the
 website exposes the broader composition and export toolkit.
 

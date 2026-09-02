@@ -117,10 +117,33 @@ export type MenuCourse = {
       value: number;
       unit: string;
     };
+    scalingStatus?: "EXACT_NORMALIZED" | "PROVIDER_SCALED" | "UNSCALED_UNNORMALIZED";
     category: string;
     isOptional: boolean;
   }>;
   instructionsUrl: string;
+  instructions?: {
+    mode: "SOURCE_LINK" | "EMBEDDED";
+    status:
+      | "LICENSED_PROVIDER_INSTRUCTIONS"
+      | "REVIEWED_CATALOG_INSTRUCTIONS"
+      | "SOURCE_LINK_REQUIRED";
+    rightsNote: string;
+    steps?: string[];
+    license?: string;
+    attribution?: string;
+  };
+  quantityScaling?: {
+    status:
+      | "EXACT_NORMALIZED"
+      | "PROVIDER_SCALED"
+      | "UNSCALED_UNNORMALIZED"
+      | "NOT_SCALED";
+    sourceServings: number;
+    targetServings: number;
+    factor?: number;
+    note: string;
+  };
   prepMinutes: number;
   cookMinutes: number;
   dietaryTags: string[];

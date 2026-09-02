@@ -25,6 +25,7 @@ The browser workspace opens the same plan through `/?plan=<planId>`. Both interf
 - `configure_party` — saves inspiration, guests, budget, dietary needs, tone, and date.
 - `search_recipes` — returns reviewed course alternatives with diet, time, and unverified budget preferences.
 - `price_recipe_candidates` — compares up to three searched recipes against a course cap using package prices from one selected Kroger location, with coverage and confidence.
+- `prepare_recipe_cards` — previews one source-aware kitchen card per dish, including ingredient scaling, instruction mode, warnings, and the authoritative recipe link; the full website performs the confirmed download.
 - `set_menu_course` — selects one searched recipe and rebuilds dependent shopping and prep data.
 - `replace_menu_course` — replaces only one course while preserving the rest of the evening.
 - `suggest_ingredient_substitutions` — returns host-reviewed swaps for allergies, diets, availability, or cost.

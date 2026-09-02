@@ -14,7 +14,7 @@ import {
   discoverSoundtrackWithPerplexity,
   type PerplexitySoundtrackCandidate,
 } from "@/lib/perplexity-soundtrack.server";
-import { courseFromRecipe } from "@/lib/seed-plan";
+import { courseFromRecipe, scaleCourseToServings } from "@/lib/seed-plan";
 import type {
   CurationRequest,
   CurationResponse,
@@ -108,6 +108,15 @@ type SpoonacularIngredient = {
   name?: string;
   original?: string;
   aisle?: string;
+  amount?: number;
+  unit?: string;
+};
+
+type SpoonacularInstructionStep = {
+  number?: number;
+  step?: string;
+  ingredients?: Array<{ id?: number; name?: string }>;
+  equipment?: Array<{ id?: number; name?: string }>;
 };
 
 type SpoonacularRecipe = {
@@ -125,9 +134,28 @@ type SpoonacularRecipe = {
   dairyFree?: boolean;
   diets?: string[];
   extendedIngredients?: SpoonacularIngredient[];
+  license?: string;
+  creditsText?: string;
+  analyzedInstructions?: Array<{
+    name?: string;
+    steps?: SpoonacularInstructionStep[];
+  }>;
 };
 
 type SpoonacularSearch = { results?: SpoonacularRecipe[] };
+
+const permitsInstructionRedistribution = (license?: string) => {
+  if (!license?.trim()) return false;
+  const normalized = license.trim().toLowerCase().replaceAll("_", "-");
+  return [
+    "cc0",
+    "public domain",
+    "creative commons zero",
+    "cc-by",
+    "cc by",
+    "creativecommons.org/licenses/by/",
+  ].some((marker) => normalized.includes(marker));
+};
 
 type DiscogsSearch = {
   results?: Array<{
@@ -303,28 +331,58 @@ const recipeToCourse = (
     title: normalizeText(recipe.title),
     url,
     accessedAt: accessedAt(),
-    attribution: "Recipe discovery metadata supplied by Spoonacular; host must review the original source.",
-    licenseNote: "Instructions and images remain at the linked source unless separate rights are confirmed.",
+    attribution: recipe.creditsText?.trim()
+      ? `Recipe discovery metadata supplied by Spoonacular. Credit: ${recipe.creditsText.trim()}.`
+      : "Recipe discovery metadata supplied by Spoonacular; host must review the original source.",
+    licenseNote: permitsInstructionRedistribution(recipe.license)
+      ? `Provider returned the permissive license “${recipe.license?.trim()}” for this recipe record; embedded analyzed instruction steps are attributed accordingly.`
+      : "Instructions and images remain at the linked source unless separate rights are confirmed.",
   };
   const total = Math.max(1, recipe.readyInMinutes ?? 45);
   const prep = recipe.preparationMinutes ?? Math.min(20, Math.round(total / 3));
   const cook = recipe.cookingMinutes ?? Math.max(1, total - prep);
-  return {
+  const licensedSteps = permitsInstructionRedistribution(recipe.license)
+    ? (recipe.analyzedInstructions ?? [])
+      .flatMap((section) => section.steps ?? [])
+      .sort((left, right) => (left.number ?? 0) - (right.number ?? 0))
+      .map((step) => normalizeText(step.step ?? ""))
+      .filter(Boolean)
+      .slice(0, 30)
+    : [];
+  const baseCourse: MenuCourse = {
     courseId,
     recipeId: `spoonacular-${recipe.id}`,
     role,
     title: normalizeText(recipe.title),
     subtitle: "Live recipe discovery for host review",
     description: `A ${role.toLowerCase()} candidate discovered for the current guest and dietary constraints. Review the source before confirming it for the table.`,
-    servings,
+    servings: Math.max(1, recipe.servings ?? servings),
     ingredients: ingredients.slice(0, 24).map((ingredient, index) => ({
       ingredientId: `ingredient-${ingredient.id ?? slug(ingredient.name ?? String(index))}`,
       name: normalizeText(ingredient.name ?? "ingredient"),
       quantityText: normalizeText(ingredient.original ?? ingredient.name ?? "quantity at source"),
+      ...(typeof ingredient.amount === "number" && Number.isFinite(ingredient.amount) && ingredient.unit?.trim()
+        ? { normalizedQuantity: { value: ingredient.amount, unit: normalizeText(ingredient.unit) } }
+        : {}),
       category: ingredientCategory(ingredient),
       isOptional: false,
     })),
     instructionsUrl: url,
+    instructions: licensedSteps.length
+      ? {
+          mode: "EMBEDDED",
+          status: "LICENSED_PROVIDER_INSTRUCTIONS",
+          rightsNote: `Provider instruction steps are included under the supplied license: ${recipe.license?.trim()}.`,
+          steps: licensedSteps,
+          license: recipe.license?.trim(),
+          attribution: recipe.creditsText?.trim() || "Recipe metadata and licensed instructions supplied by Spoonacular.",
+        }
+      : {
+          mode: "SOURCE_LINK",
+          status: "SOURCE_LINK_REQUIRED",
+          rightsNote: "Use the linked source for authoritative instructions. No instruction prose is embedded without an explicit provider license.",
+          attribution: recipe.creditsText?.trim() || "Recipe discovery metadata supplied by Spoonacular.",
+        },
     prepMinutes: prep,
     cookMinutes: cook,
     dietaryTags: dietaryTags(recipe),
@@ -336,6 +394,7 @@ const recipeToCourse = (
     source,
     confirmed: false,
   };
+  return scaleCourseToServings(baseCourse, servings);
 };
 
 const recipes = recipesCatalog.items as RecipeRecord[];
@@ -394,10 +453,9 @@ const localCourse = (
   if (!candidate) {
     throw new Error(`No reviewed ${role.toLowerCase()} satisfies the dietary requirements.`);
   }
-  const course = courseFromRecipe(candidate.id, courseId, role, courseSubtitle(candidate, brief));
+  const course = courseFromRecipe(candidate.id, courseId, role, courseSubtitle(candidate, brief), servings);
   const themeConnection = candidate.themeConnections.find((connection) => brief?.themes.includes(connection.theme));
   if (themeConnection) course.themeConnection = themeConnection.explanation;
-  course.servings = servings;
   return course;
 };
 

@@ -38,7 +38,14 @@ type RecipeRecord = {
     category: string;
     isOptional: boolean;
   }>;
-  instructions: { sourceUrl: string };
+  instructions: {
+    mode: "SOURCE_LINK" | "EMBEDDED";
+    sourceUrl: string;
+    rightsNote: string;
+    steps?: string[];
+    license?: string;
+    attribution?: string;
+  };
   dietaryTags: string[];
   allergens: string[];
   themeConnections: Array<{ theme?: string; explanation: string; sourceIds: string[] }>;
@@ -60,6 +67,82 @@ const beverages = winesCatalog.items as BeverageRecord[];
 
 const source = (record: CatalogSource): SourceRef => ({ ...record });
 
+const formatScaledQuantity = (value: number, unit: string) => {
+  const rounded = Math.round((value + Number.EPSILON) * 100) / 100;
+  const whole = Math.floor(rounded);
+  const remainder = rounded - whole;
+  const commonFractions = [
+    [1 / 8, "1/8"],
+    [1 / 4, "1/4"],
+    [1 / 3, "1/3"],
+    [3 / 8, "3/8"],
+    [1 / 2, "1/2"],
+    [5 / 8, "5/8"],
+    [2 / 3, "2/3"],
+    [3 / 4, "3/4"],
+    [7 / 8, "7/8"],
+  ] as const;
+  const fraction = commonFractions.find(([numeric]) => Math.abs(remainder - numeric) <= 0.02);
+  const quantity = Number.isInteger(rounded)
+    ? String(rounded)
+    : fraction
+      ? `${whole ? `${whole} ` : ""}${fraction[1]}`
+      : rounded.toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
+  return `${quantity} ${unit}`.trim();
+};
+
+/**
+ * Scales only normalized quantities. Unnormalized provider text is retained and
+ * explicitly labelled so callers never present it as an exact conversion.
+ */
+export const scaleCourseToServings = (
+  course: MenuCourse,
+  targetServings: number,
+): MenuCourse => {
+  const sourceServings = Math.max(1, course.servings);
+  const safeTarget = Math.max(1, Math.round(targetServings));
+  const factor = safeTarget / sourceServings;
+  const hasUnnormalized = course.ingredients.some((ingredient) => !ingredient.normalizedQuantity);
+  const hasNormalized = course.ingredients.some((ingredient) => Boolean(ingredient.normalizedQuantity));
+  const ingredients = course.ingredients.map((ingredient) => {
+    if (!ingredient.normalizedQuantity) {
+      return { ...ingredient, scalingStatus: "UNSCALED_UNNORMALIZED" as const };
+    }
+    const normalizedQuantity = {
+      ...ingredient.normalizedQuantity,
+      value: Math.round((ingredient.normalizedQuantity.value * factor + Number.EPSILON) * 100) / 100,
+    };
+    return {
+      ...ingredient,
+      normalizedQuantity,
+      quantityText: formatScaledQuantity(normalizedQuantity.value, normalizedQuantity.unit),
+      scalingStatus: "EXACT_NORMALIZED" as const,
+    };
+  });
+  const status = hasUnnormalized
+    ? "UNSCALED_UNNORMALIZED" as const
+    : hasNormalized
+      ? "EXACT_NORMALIZED" as const
+      : "NOT_SCALED" as const;
+  const note = hasUnnormalized
+    ? "Normalized quantities were scaled; unnormalized source quantities were retained for host review."
+    : hasNormalized
+      ? "All normalized quantities were scaled deterministically."
+      : "No normalized quantities were available; source quantities were retained for host review.";
+  return {
+    ...course,
+    servings: safeTarget,
+    ingredients,
+    quantityScaling: {
+      status,
+      sourceServings,
+      targetServings: safeTarget,
+      factor,
+      note,
+    },
+  };
+};
+
 export const recipeById = (id: string) => recipes.find((item) => item.id === id);
 export const beverageById = (id: string) => beverages.find((item) => item.id === id);
 
@@ -68,20 +151,31 @@ export const courseFromRecipe = (
   courseId: string,
   role: MenuCourse["role"],
   subtitle: string,
+  targetServings = 8,
 ): MenuCourse => {
   const recipe = recipeById(recipeId);
   if (!recipe) throw new Error(`Missing recipe ${recipeId}`);
   const firstSource = recipe.sourceRefs[0];
-  return {
+  const course: MenuCourse = {
     courseId,
     recipeId,
     role,
     title: recipe.title,
     subtitle,
     description: recipe.summary,
-    servings: 8,
+    servings: recipe.servings,
     ingredients: recipe.ingredients,
     instructionsUrl: recipe.instructions.sourceUrl,
+    instructions: {
+      mode: recipe.instructions.mode,
+      status: recipe.instructions.mode === "EMBEDDED"
+        ? "REVIEWED_CATALOG_INSTRUCTIONS"
+        : "SOURCE_LINK_REQUIRED",
+      rightsNote: recipe.instructions.rightsNote,
+      ...(recipe.instructions.steps?.length ? { steps: recipe.instructions.steps } : {}),
+      ...(recipe.instructions.license ? { license: recipe.instructions.license } : {}),
+      ...(recipe.instructions.attribution ? { attribution: recipe.instructions.attribution } : {}),
+    },
     prepMinutes: recipe.times.prepMinutes,
     cookMinutes: recipe.times.cookMinutes,
     dietaryTags: recipe.dietaryTags,
@@ -93,6 +187,7 @@ export const courseFromRecipe = (
     source: source(firstSource),
     confirmed: true,
   };
+  return scaleCourseToServings(course, targetServings);
 };
 
 export const pairingFromBeverage = (

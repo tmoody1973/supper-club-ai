@@ -8,6 +8,7 @@ import {
   buildGuestShareKitPreview,
   type GuestShareKitOptions,
 } from "@/lib/guest-share-kit";
+import { buildRecipeCardPreview } from "@/lib/recipe-cards";
 import type {
   MenuCurationData,
   PairingCurationData,
@@ -45,6 +46,9 @@ type ToolRuntime = {
     plan: PartyPlan,
     options: GuestShareKitOptions,
   ) => Promise<{ filename: string; files: string[] }>;
+  exportRecipePacket: (
+    plan: PartyPlan,
+  ) => Promise<{ filename: string; cardCount: number; manifest: unknown }>;
   showToolData?: (operation: string, data: unknown) => void;
 };
 
@@ -1516,6 +1520,143 @@ export async function registerSupperClubTools(
           );
         } catch (error) {
           return failure(plan, "EXPORT_FAILED", error instanceof Error ? error.message : "The guest share kit could not be created.", true);
+        }
+      },
+    }),
+    tool({
+      name: "prepare_recipe_cards",
+      title: "Prepare kitchen recipe cards",
+      description:
+        "Preview one provenance-safe kitchen card per dish with ingredients, functional preparation steps, scaling status, allergens, pairings, and source links. Creates no file.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          planId: { type: "string" },
+        },
+        required: ["planId"],
+        additionalProperties: false,
+      },
+      annotations: {
+        readOnlyHint: true,
+        idempotentHint: true,
+        openWorldHint: false,
+        untrustedContentHint: true,
+      },
+      execute: async (input) => {
+        const plan = runtime.getPlan();
+        if (input.planId !== plan.planId) {
+          return failure(undefined, "PLAN_NOT_FOUND", "That party plan is not open.", false);
+        }
+        const preview = buildRecipeCardPreview(plan);
+        const warnings: ToolWarning[] = [];
+        if (preview.cards.some((card) => card.instructionStatus === "STRUCTURED_PREPARATION_OUTLINE" || card.instructionStatus === "SOURCE_LINK_REQUIRED")) {
+          warnings.push({
+            code: "SOURCE_LINK_REQUIRED",
+            message: "One or more cards contain an original functional preparation outline; follow the linked source for authoritative heat, timing, doneness, and safety details.",
+            affectedIds: preview.cards.filter((card) => card.instructionStatus === "STRUCTURED_PREPARATION_OUTLINE" || card.instructionStatus === "SOURCE_LINK_REQUIRED").map((card) => card.courseId),
+          });
+        }
+        if (preview.cards.some((card) => card.scaling.status === "UNSCALED_UNNORMALIZED" || card.scaling.status === "NOT_SCALED")) {
+          warnings.push({
+            code: "QUANTITY_SCALING_REVIEW",
+            message: "One or more cards contain source quantities that could not be safely recalculated; review them against the authoritative recipe before cooking.",
+            affectedIds: preview.cards.filter((card) => card.scaling.status === "UNSCALED_UNNORMALIZED" || card.scaling.status === "NOT_SCALED").map((card) => card.courseId),
+          });
+        }
+        runtime.showToolData?.("PREPARE_RECIPE_CARDS", preview);
+        return success(
+          plan,
+          ["MENU", "EXPORTS"],
+          {
+            title: preview.title,
+            cardCount: preview.cards.length,
+            embeddedInstructionCards: preview.cards.filter((card) => card.instructionStatus === "LICENSED_PROVIDER_INSTRUCTIONS" || card.instructionStatus === "REVIEWED_CATALOG_INSTRUCTIONS").length,
+            sourceLinkedCards: preview.cards.filter((card) => card.instructionStatus === "STRUCTURED_PREPARATION_OUTLINE" || card.instructionStatus === "SOURCE_LINK_REQUIRED").length,
+            scalingReviewCards: preview.cards.filter((card) => card.scaling.status === "UNSCALED_UNNORMALIZED" || card.scaling.status === "NOT_SCALED").length,
+            sourceUrls: preview.cards.map((card) => card.source.url),
+          },
+          `Prepared ${preview.cards.length} kitchen recipe cards for review; no files were created.`,
+          {
+            updated: false,
+            warnings,
+            sources: [],
+            nextActions: [{
+              tool: "export_recipe_packet",
+              label: "Download the recipe packet",
+              reason: "Create one combined kitchen PDF, individual dish cards, and a provenance manifest.",
+              requiresConfirmation: true,
+            }],
+          },
+        );
+      },
+    }),
+    tool({
+      name: "export_recipe_packet",
+      title: "Export the kitchen recipe packet",
+      description:
+        "Download a ZIP containing one combined kitchen PDF, individual dish-card PDFs, and a provenance manifest. Requires explicit host confirmation.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          planId: { type: "string" },
+          expectedPlanVersion: { type: "number" },
+          confirm: {
+            type: "boolean",
+            description: "True only after the host explicitly approves creating the local download.",
+          },
+        },
+        required: ["planId", "expectedPlanVersion", "confirm"],
+        additionalProperties: false,
+      },
+      annotations: {
+        readOnlyHint: false,
+        destructiveHint: false,
+        idempotentHint: false,
+        openWorldHint: false,
+        untrustedContentHint: true,
+      },
+      execute: async (input) => {
+        const plan = runtime.getPlan();
+        if (input.planId !== plan.planId) {
+          return failure(undefined, "PLAN_NOT_FOUND", "That party plan is not open.", false);
+        }
+        const versionError = checkVersion(plan, input);
+        if (versionError) return versionError;
+        if (input.confirm !== true) {
+          return failure(plan, "CONFIRMATION_REQUIRED", "Ask the host to approve downloading the kitchen recipe packet, then retry with confirm: true.");
+        }
+        if (plan.status !== "FINALIZED") {
+          return failure(plan, "PLAN_NOT_READY", "Finalize the party plan before exporting kitchen recipe cards.");
+        }
+        try {
+          const artifact = await runtime.exportRecipePacket(plan);
+          const next = structuredClone(plan);
+          const exportRecord = {
+            exportId: `export-${Date.now()}`,
+            filename: artifact.filename,
+            createdAt: new Date().toISOString(),
+          };
+          next.exports.unshift(exportRecord);
+          const committed = await commit(
+            runtime,
+            plan,
+            next,
+            makeReceipt("export_recipe_packet", "Kitchen recipe packet exported", `${artifact.filename} · ${artifact.cardCount} dish cards`, "SYSTEM"),
+          );
+          return success(
+            committed,
+            ["EXPORTS"],
+            {
+              export: exportRecord,
+              downloaded: true,
+              cardCount: artifact.cardCount,
+              files: artifact.cardCount + 2,
+            },
+            `Downloaded ${artifact.filename} with a combined packet, ${artifact.cardCount} dish cards, and a provenance manifest.`,
+            { warnings: [], sources: committed.courses.map((course) => course.source) },
+          );
+        } catch (error) {
+          return failure(plan, "EXPORT_FAILED", error instanceof Error ? error.message : "The kitchen recipe packet could not be created.", true);
         }
       },
     }),

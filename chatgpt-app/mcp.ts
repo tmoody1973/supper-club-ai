@@ -418,6 +418,26 @@ export const createSupperClubMcpServer = async (config: SupperClubMcpConfig) => 
 
   registerAppTool(
     mcp,
+    "prepare_recipe_cards",
+    {
+      title: "Prepare kitchen recipe cards",
+      description: "Preview one provenance-safe kitchen card per dish with ingredients, functional preparation steps, scaling status, allergens, pairings, and authoritative source links. Does not create a file.",
+      inputSchema: {
+        planId: planIdSchema,
+      },
+      _meta: uiMeta,
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    },
+    async ({ planId }) => {
+      try {
+        const payload = await planToolRequest(config, planId, { operation: "PREPARE_RECIPE_CARDS" });
+        return toolDataSuccess("Prepared a concise recipe-card preview. Open the shared workspace to review and download the combined packet plus individual cards.", payload);
+      } catch (error) { return toolFailure(error); }
+    },
+  );
+
+  registerAppTool(
+    mcp,
     "set_menu_course",
     {
       title: "Select a menu course",

@@ -45,6 +45,11 @@ import {
   type GuestShareKitPreview,
 } from "@/lib/guest-share-kit";
 import {
+  buildRecipeCardPreview,
+  downloadRecipePacket,
+  type RecipeCardPacketPreview,
+} from "@/lib/recipe-cards";
+import {
   createDynamicSharedPlan,
   createSharedPlan,
   PlanClientError,
@@ -322,6 +327,8 @@ export function SupperClubWorkspace() {
   const [guestSharePreview, setGuestSharePreview] = useState<GuestShareKitPreview | null>(null);
   const [guestShareIncludeLocation, setGuestShareIncludeLocation] = useState(false);
   const [guestShareBusy, setGuestShareBusy] = useState(false);
+  const [recipeCardPreview, setRecipeCardPreview] = useState<RecipeCardPacketPreview | null>(null);
+  const [recipeCardBusy, setRecipeCardBusy] = useState(false);
   const createPlanInFlightRef = useRef(false);
 
   const updatePlan = useCallback((next: PartyPlan) => {
@@ -356,6 +363,11 @@ export function SupperClubWorkspace() {
       setGuestShareIncludeLocation(Boolean(preview.location));
       setActiveView("HOST_PACKET");
       announce("The guest share kit is ready for review");
+    }
+    if (operation === "PREPARE_RECIPE_CARDS") {
+      setRecipeCardPreview(data as RecipeCardPacketPreview);
+      setActiveView("HOST_PACKET");
+      announce("The kitchen recipe cards are ready for review");
     }
   }, [announce]);
 
@@ -446,6 +458,7 @@ export function SupperClubWorkspace() {
       setGroceryStores(null);
       setGroceryPricing(null);
       setGuestSharePreview(null);
+      setRecipeCardPreview(null);
       setGuestShareIncludeLocation(false);
       setConfirmingFinalize(false);
       setMobileNavOpen(false);
@@ -478,6 +491,7 @@ export function SupperClubWorkspace() {
       },
       exportHostPacket: downloadHostPacket,
       exportGuestShareKit: downloadGuestShareKit,
+      exportRecipePacket: downloadRecipePacket,
       showToolData: showGroceryToolData,
     }, controller)
       .then((registration) => {
@@ -792,6 +806,46 @@ export function SupperClubWorkspace() {
     }
   };
 
+  const previewRecipeCards = useCallback(() => {
+    setRecipeCardPreview(buildRecipeCardPreview(planRef.current));
+    setActiveView("HOST_PACKET");
+    announce("The kitchen recipe cards are ready for review");
+  }, [announce]);
+
+  const exportRecipeCards = async () => {
+    if (planRef.current.status !== "FINALIZED") {
+      setConfirmingFinalize(true);
+      announce("Finalize the plan before exporting kitchen recipe cards");
+      return;
+    }
+    setRecipeCardBusy(true);
+    try {
+      const result = await downloadRecipePacket(planRef.current);
+      localCommit(
+        (next) => {
+          next.exports.unshift({
+            exportId: `export-${Date.now()}`,
+            filename: result.filename,
+            createdAt: new Date().toISOString(),
+          });
+        },
+        {
+          tool: "export_recipe_packet",
+          title: "Kitchen recipe packet exported",
+          detail: `${result.filename} · ${result.cardCount} dish cards`,
+          kind: "SYSTEM",
+          status: "APPLIED",
+        },
+      );
+      announce("Kitchen recipe packet downloaded");
+    } catch (error) {
+      console.error("[Supper Club AI] Recipe packet export failed", error);
+      announce("The kitchen recipe packet could not be created. Please try again.");
+    } finally {
+      setRecipeCardBusy(false);
+    }
+  };
+
   const resetDemo = () => {
     const current = planRef.current;
     const seed: PartyPlan = {
@@ -948,6 +1002,10 @@ export function SupperClubWorkspace() {
               onPreviewGuestShare={() => previewGuestShare()}
               onExportGuestShare={exportGuestShare}
               onGuestShareLocationChange={changeGuestShareLocation}
+              recipeCardPreview={recipeCardPreview}
+              recipeCardBusy={recipeCardBusy}
+              onPreviewRecipeCards={previewRecipeCards}
+              onExportRecipeCards={exportRecipeCards}
             />
           ) : null}
         </section>
@@ -1492,6 +1550,10 @@ function HostPacketReview({
   onPreviewGuestShare,
   onExportGuestShare,
   onGuestShareLocationChange,
+  recipeCardPreview,
+  recipeCardBusy,
+  onPreviewRecipeCards,
+  onExportRecipeCards,
 }: {
   plan: PartyPlan;
   onFinalize: () => void;
@@ -1502,6 +1564,10 @@ function HostPacketReview({
   onPreviewGuestShare: () => void;
   onExportGuestShare: () => void;
   onGuestShareLocationChange: (includeLocation: boolean) => void;
+  recipeCardPreview: RecipeCardPacketPreview | null;
+  recipeCardBusy: boolean;
+  onPreviewRecipeCards: () => void;
+  onExportRecipeCards: () => void;
 }) {
   const winePairings = plan.pairings.filter((pairing) => pairing.kind === "WINE").length;
   const zeroProofPairings = plan.pairings.filter((pairing) => pairing.kind === "ZERO_PROOF").length;
@@ -1542,6 +1608,75 @@ function HostPacketReview({
           {plan.exports.length ? <div className="export-history"><span className="field-label">Recent exports</span>{plan.exports.slice(0, 3).map((item) => <div key={item.exportId}><FileText size={15} /><span>{item.filename}</span><small>{new Date(item.createdAt).toLocaleString()}</small></div>)}</div> : null}
         </section>
       </div>
+      <section className="recipe-card-studio" data-recipe-card-preview aria-labelledby="recipe-card-title">
+        <header className="recipe-card-heading">
+          <div>
+            <span className="eyebrow">Kitchen edition</span>
+            <h2 id="recipe-card-title">Recipe cards</h2>
+            <p>One cook-ready card per dish, with quantities, functional steps, wine pairings, dietary review, and the authoritative recipe source kept visible.</p>
+          </div>
+          <span className="recipe-card-count">{recipeCardPreview?.cards.length ?? plan.courses.length} cards</span>
+        </header>
+
+        {recipeCardPreview ? (
+          <div className="recipe-card-grid">
+            {recipeCardPreview.cards.map((card, index) => (
+              <article className="recipe-card-sheet" key={card.courseId}>
+                <header>
+                  <span>{String(index + 1).padStart(2, "0")} · {card.role.replaceAll("_", " ")}</span>
+                  <strong>{card.title}</strong>
+                  <small>{card.subtitle}</small>
+                </header>
+                <dl className="recipe-card-meta">
+                  <div><dt>Serves</dt><dd>{card.servings}</dd></div>
+                  <div><dt>Prep</dt><dd>{card.prepMinutes} min</dd></div>
+                  <div><dt>Cook</dt><dd>{card.cookMinutes} min</dd></div>
+                </dl>
+                <div className="recipe-card-labels">
+                  {card.dietaryTags.slice(0, 4).map((tag) => <span key={tag}>{tag.replaceAll("_", " ")}</span>)}
+                </div>
+                <div className="recipe-card-columns">
+                  <div>
+                    <span className="field-label">Ingredients</span>
+                    <ul>{card.ingredients.slice(0, 6).map((ingredient, ingredientIndex) => <li key={`${ingredient.name}-${ingredientIndex}`}><strong>{ingredient.name}</strong><span>{ingredient.quantityText}</span></li>)}</ul>
+                    {card.ingredients.length > 6 ? <small>+ {card.ingredients.length - 6} more in the download</small> : null}
+                  </div>
+                  <div>
+                    <span className="field-label">Kitchen outline</span>
+                    <ol>{card.steps.slice(0, 4).map((step, stepIndex) => <li key={`${card.courseId}-step-${stepIndex}`}>{step}</li>)}</ol>
+                  </div>
+                </div>
+                <footer>
+                  <div>
+                    <span>{card.instructionStatus.replaceAll("_", " ")}</span>
+                    <small>{card.scaling.status.replaceAll("_", " ")}</small>
+                  </div>
+                  <a href={card.source.url} target="_blank" rel="noreferrer">Authoritative source <ExternalLink size={14} /></a>
+                </footer>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div className="recipe-card-empty">
+            <ReceiptText size={28} />
+            <div><strong>Preview before download</strong><p>The preview identifies which cards contain licensed instructions and which use an original preparation outline that still requires the source.</p></div>
+          </div>
+        )}
+
+        <div className="recipe-card-actions">
+          <button className="button-secondary" type="button" onClick={onPreviewRecipeCards}>
+            <Eye size={17} /> Preview recipe cards
+          </button>
+          <button className="button-primary" type="button" onClick={onExportRecipeCards} disabled={recipeCardBusy}>
+            <Download size={17} /> {recipeCardBusy ? "Building packet…" : "Download recipe packet"}
+          </button>
+        </div>
+        <p className="recipe-card-status" aria-live="polite">
+          {recipeCardPreview
+            ? "Preview ready. The ZIP contains a combined kitchen PDF, one PDF per dish, and a provenance manifest."
+            : "No recipe-card files have been created."}
+        </p>
+      </section>
       <section className="guest-share-studio" data-guest-share-preview aria-labelledby="guest-share-title">
         <header className="guest-share-heading">
           <div>
