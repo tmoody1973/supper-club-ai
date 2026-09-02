@@ -68,6 +68,25 @@ export function searchRecipeCandidates(plan: PartyPlan, input: RecipeSearchInput
   };
 }
 
+export function recipeCandidatesByIds(
+  plan: PartyPlan,
+  role: MenuCourse["role"],
+  recipeIds: string[],
+) {
+  const courseId = role === "STARTER" ? "course-first" : role === "MAIN" ? "course-main" : "course-dessert";
+  const required = requiredDietaryTags(plan.dietaryRequirements);
+  return [...new Set(recipeIds)].map((recipeId) => {
+    const recipe = RECIPE_CATALOG.find((item) => item.id === recipeId);
+    if (!recipe) throw new Error("RECIPE_NOT_FOUND");
+    if (!recipe.courseRoles.includes(role)) throw new Error("INVALID_RECIPE_ROLE");
+    if (required.some((tag) => !recipe.dietaryTags.includes(tag))) throw new Error("DIETARY_MISMATCH");
+    const course = courseFromRecipe(recipe.id, courseId, role, "Reviewed alternative for host selection");
+    course.servings = plan.guestCount;
+    course.confirmed = false;
+    return course;
+  });
+}
+
 const nowLabel = () => new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-digit" }).format(new Date());
 const receipt = (tool: string, title: string, detail: string, kind: Receipt["kind"]): Receipt => ({
   receiptId: `receipt-${tool}-${crypto.randomUUID()}`,
@@ -94,6 +113,18 @@ export function replaceCourseWithRecipe(plan: PartyPlan, expectedPlanVersion: nu
   const replacement = courseFromRecipe(recipeId, current.courseId, current.role, current.subtitle);
   replacement.servings = plan.guestCount;
   replacement.confirmed = false;
+  const replacedPairingKinds = new Set(
+    plan.pairings
+      .filter((pairing) => pairing.courseId === courseId)
+      .map((pairing) => pairing.kind),
+  );
+  const pairingReviewLabel = replacedPairingKinds.has("WINE") && replacedPairingKinds.has("ZERO_PROOF")
+    ? "fresh wine and zero-proof pairings"
+    : replacedPairingKinds.has("WINE")
+      ? "a new wine pairing"
+      : replacedPairingKinds.has("ZERO_PROOF")
+        ? "a new zero-proof pairing"
+        : "a new pairing";
   const courses = plan.courses.map((course) => course.courseId === courseId ? replacement : course);
   const next: PartyPlan = {
     ...structuredClone(plan),
@@ -109,7 +140,7 @@ export function replaceCourseWithRecipe(plan: PartyPlan, expectedPlanVersion: nu
       : movement),
     warnings: mergeWarnings([
       ...plan.warnings,
-      warning("PAIRING_REVIEW_REQUIRED", `${replacement.title} needs new wine and zero-proof pairings before finalization.`, [courseId]),
+      warning("PAIRING_REVIEW_REQUIRED", `${replacement.title} needs ${pairingReviewLabel} before finalization.`, [courseId]),
     ]),
     receipts: [
       receipt("replace_menu_course", "Course replaced", `${current.title} was replaced with ${replacement.title}; other courses were preserved and shopping/prep were rebuilt.`, "RECIPE"),

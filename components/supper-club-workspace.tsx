@@ -1103,6 +1103,7 @@ function RunOfShow({
                   <CoursePlate
                     course={selectedCourse}
                     pairings={selectedPairings}
+                    showZeroProof={plan.pairings.some((pairing) => pairing.kind === "ZERO_PROOF")}
                     musicCue={movementTrack ? `${movementTrack.artist} — ${movementTrack.title}` : movement.musicLabel}
                     onConfirm={() => onConfirmCourse(selectedCourse.courseId)}
                     onReplace={() => onReplaceCourse(selectedCourse)}
@@ -1119,7 +1120,7 @@ function RunOfShow({
   );
 }
 
-function CoursePlate({ course, pairings, musicCue, onConfirm, onReplace }: { course: MenuCourse; pairings: PartyPlan["pairings"]; musicCue: string; onConfirm: () => void; onReplace: () => void }) {
+function CoursePlate({ course, pairings, showZeroProof, musicCue, onConfirm, onReplace }: { course: MenuCourse; pairings: PartyPlan["pairings"]; showZeroProof: boolean; musicCue: string; onConfirm: () => void; onReplace: () => void }) {
   const wine = pairings.find((pairing) => pairing.kind === "WINE");
   const zero = pairings.find((pairing) => pairing.kind === "ZERO_PROOF");
   return (
@@ -1135,7 +1136,7 @@ function CoursePlate({ course, pairings, musicCue, onConfirm, onReplace }: { cou
       <div className="course-column">
         <span className="field-label">Pairings + cultural links</span>
         <div className="plate-field"><Grape size={15} /><span><small>Wine</small><strong>{wine?.name ?? "Not selected"}</strong><p>{wine?.pairingReason}</p></span></div>
-        <div className="plate-field"><Leaf size={15} /><span><small>Zero-proof</small><strong>{zero?.name ?? "Not selected"}</strong><p>{zero?.pairingReason}</p>{zero?.recipeDetails ? <><p>{zero.recipeDetails.prepMinutes} min · {zero.recipeDetails.ingredients.slice(0, 4).map((ingredient) => ingredient.name).join(", ")}</p><a className="source-link" href={zero.recipeDetails.instructionsUrl} target="_blank" rel="noreferrer"><FileText size={14} /> View zero-proof recipe <ChevronRight size={14} /></a></> : null}</span></div>
+        {showZeroProof ? <div className="plate-field"><Leaf size={15} /><span><small>Zero-proof</small><strong>{zero?.name ?? "Not selected"}</strong><p>{zero?.pairingReason}</p>{zero?.recipeDetails ? <><p>{zero.recipeDetails.prepMinutes} min · {zero.recipeDetails.ingredients.slice(0, 4).map((ingredient) => ingredient.name).join(", ")}</p><a className="source-link" href={zero.recipeDetails.instructionsUrl} target="_blank" rel="noreferrer"><FileText size={14} /> View zero-proof recipe <ChevronRight size={14} /></a></> : null}</span></div> : null}
         <div className="plate-field"><Music2 size={15} /><span><small>Music cue</small><strong>{musicCue}</strong></span></div>
         <div className="plate-field"><BookOpen size={15} /><span><small>Theme connection</small><p>{course.themeConnection}</p></span></div>
       </div>
@@ -1502,11 +1503,23 @@ function HostPacketReview({
   onExportGuestShare: () => void;
   onGuestShareLocationChange: (includeLocation: boolean) => void;
 }) {
+  const winePairings = plan.pairings.filter((pairing) => pairing.kind === "WINE").length;
+  const zeroProofPairings = plan.pairings.filter((pairing) => pairing.kind === "ZERO_PROOF").length;
+  const expectsWine = winePairings > 0;
+  const expectsZeroProof = zeroProofPairings > 0;
+  const expectedPairings = plan.courses.length * (Number(expectsWine) + Number(expectsZeroProof));
+  const pairingDetail = expectsWine && expectsZeroProof
+    ? `${plan.pairings.length} of ${expectedPairings} wine + zero-proof options`
+    : expectsWine
+      ? `${winePairings} of ${plan.courses.length} wine pairings`
+      : expectsZeroProof
+        ? `${zeroProofPairings} of ${plan.courses.length} zero-proof pairings`
+        : "No drink pairings selected";
   const checks = [
     { label: "Theme framing", ready: plan.theme.ideas.length > 0, detail: `${plan.theme.ideas.length} interpreted themes` },
     { label: "Book briefing", ready: Boolean(plan.theme.bookBriefing?.summary), detail: plan.theme.bookBriefing ? `Spoiler-light · ${plan.theme.bookBriefing.sources.length} research sources` : "Summary and context not researched yet" },
     { label: "Menu", ready: plan.courses.length === 3, detail: `${plan.courses.length} food courses` },
-    { label: "Drink pairings", ready: plan.pairings.length >= 6, detail: `${plan.pairings.length} wine + zero-proof options` },
+    { label: "Drink pairings", ready: expectedPairings > 0 && plan.pairings.length >= expectedPairings, detail: pairingDetail },
     { label: "Soundtrack", ready: plan.soundtrack.length >= 4, detail: `${plan.soundtrack.length} listening anchors` },
     { label: "Shopping + prep", ready: plan.shopping.length > 0 && plan.prep.length > 0, detail: `${plan.shopping.length} items · ${plan.prep.length} tasks` },
   ];
@@ -1607,7 +1620,7 @@ function AgentMarginalia({ receipts, warnings, planVersion }: { receipts: Receip
             </article>
           );
         })}
-        {warnings.map((warning) => <article className="conflict-note" key={warning.code}><CircleAlert size={18} /><div><span>{warning.code.replaceAll("_", " ")}</span><p>{warning.message}</p></div></article>)}
+        {warnings.map((warning) => <article className="conflict-note" key={`${warning.code}:${warning.message}`}><CircleAlert size={18} /><div><span>{warning.code.replaceAll("_", " ")}</span><p>{warning.message}</p></div></article>)}
       </div>
       <div className="rail-foot"><span><PenLine size={14} /> Marginalia is saved with plan v{planVersion}</span></div>
     </aside>

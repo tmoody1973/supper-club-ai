@@ -34,23 +34,24 @@ The demo is complete when a host can begin with one prompt, review the populated
 
 ## Full toolset
 
-If time permits, add these thirteen focused tools to reach twenty-two total:
+If time permits, add these fourteen focused tools to reach twenty-three total:
 
 10. `search_recipes`
-11. `set_menu_course`
-12. `replace_menu_course`
-13. `suggest_ingredient_substitutions`
-14. `optimize_party_budget`
-15. `search_wines`
-16. `set_wine_pairing`
-17. `create_zero_proof_pairings`
-18. `search_music`
-19. `edit_soundtrack`
-20. `save_apple_music_playlist`
-21. `create_prep_timeline`
-22. `generate_conversation_cards`
+11. `price_recipe_candidates`
+12. `set_menu_course`
+13. `replace_menu_course`
+14. `suggest_ingredient_substitutions`
+15. `optimize_party_budget`
+16. `search_wines`
+17. `set_wine_pairing`
+18. `create_zero_proof_pairings`
+19. `search_music`
+20. `edit_soundtrack`
+21. `save_apple_music_playlist`
+22. `create_prep_timeline`
+23. `generate_conversation_cards`
 
-Future tools outside the locked full scope may create invitations, export a calendar event, share a guest packet, or connect to a retailer. They should not displace the twenty-two tools above during the hackathon.
+Future tools outside the locked full scope may create invitations, export a calendar event, share a guest packet, or connect to a retailer. They should not displace the twenty-three tools above during the hackathon.
 
 ## Provider strategy
 

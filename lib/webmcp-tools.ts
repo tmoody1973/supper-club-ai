@@ -1080,7 +1080,7 @@ export async function registerSupperClubTools(
     tool({
       name: "search_recipes",
       title: "Search reviewed recipes",
-      description: "Find reviewed recipe alternatives for one course by theme, diet, preparation time, and budget preference without changing the plan.",
+      description: "Find reviewed recipe alternatives for one course by theme, diet, preparation time, and budget preference without changing the plan. Use price_recipe_candidates for store-specific cost estimates.",
       inputSchema: {
         type: "object",
         properties: {
@@ -1097,6 +1097,25 @@ export async function registerSupperClubTools(
       },
       annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
       execute: (input, options) => runReadOperation("SEARCH_RECIPES", input, toolSignal(options), ["MENU"], "Returned reviewed recipe choices; current local prices remain unverified."),
+    }),
+    tool({
+      name: "price_recipe_candidates",
+      title: "Price recipe candidates",
+      description: "Compare up to three searched recipes against a course cap using package prices from one host-selected Kroger location. Read-only and never adds items to a cart.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          planId: { type: "string" },
+          locationId: { type: "string", pattern: "^\\d{5,12}$" },
+          role: { type: "string", enum: ["STARTER", "MAIN", "DESSERT"] },
+          recipeIds: { type: "array", items: { type: "string", maxLength: 60 }, minItems: 1, maxItems: 3 },
+          courseBudgetCap: { type: "number", exclusiveMinimum: 0, maximum: 10000 },
+        },
+        required: ["planId", "locationId", "role", "recipeIds", "courseBudgetCap"],
+        additionalProperties: false,
+      },
+      annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: true, untrustedContentHint: true },
+      execute: (input, options) => runReadOperation("PRICE_RECIPE_CANDIDATES", input, toolSignal(options), ["MENU", "SHOPPING_LIST"], "Returned store-specific recipe estimates with coverage, confidence, and an honest cap status; the plan was not changed."),
     }),
     tool({
       name: "set_menu_course",

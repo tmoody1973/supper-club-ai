@@ -2054,7 +2054,9 @@ html[data-theme="dark"] .mobile-receipts-jump {
   padding: 8px 16px;
   border: 1px solid var(--ink);
   background: var(--ink);
-  color: #171510;
+  color: var(--paper);
+  -webkit-text-fill-color: var(--paper);
+  appearance: none;
   cursor: pointer;
   font-family: var(--mono);
   font-size: 11px;
@@ -2068,6 +2070,11 @@ html[data-theme="dark"] .mobile-receipts-jump {
 .price-pagination button:disabled {
   cursor: wait;
   opacity: 0.5;
+}
+
+.store-locator button:disabled {
+  color: var(--paper);
+  -webkit-text-fill-color: var(--paper);
 }
 
 .store-locator > small {

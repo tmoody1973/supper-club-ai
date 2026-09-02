@@ -4,7 +4,7 @@ Supper Club AI is an **agent-readable cultural hosting workspace** for Creative 
 
 > Supper Club AI turns cultural inspiration into a coordinated, hostable experience by giving people and agents one shared, agent-readable workspace—reducing the fragmented research and manual reconciliation that make ambitious gatherings difficult to produce.
 
-The website exposes twenty-five typed WebMCP tools so an agent can create, read, and update the same structured plan the host sees in the browser. Unlike a chat that leaves the host reconciling disconnected suggestions, Supper Club AI makes each change part of a durable, versioned plan with visible sources, warnings, and tool receipts. The repository also includes a separate MCP App for ChatGPT with sixteen focused tools and an interactive host-brief form.
+The website exposes twenty-six typed WebMCP tools so an agent can create, read, and update the same structured plan the host sees in the browser. Unlike a chat that leaves the host reconciling disconnected suggestions, Supper Club AI makes each change part of a durable, versioned plan with visible sources, warnings, and tool receipts. The repository also includes a separate MCP App for ChatGPT with seventeen focused tools and an interactive host-brief form.
 
 - **Live application:** [thesupperclub.app](https://www.thesupperclub.app/)
 - **License:** [MIT](./LICENSE)
@@ -27,7 +27,7 @@ This turns the browser from a page the agent merely looks at into a collaborativ
 
 ## WebMCP implementation
 
-The twenty-five website tool definitions live in [`lib/webmcp-tools.ts`](./lib/webmcp-tools.ts). Each tool declares a name, description, JSON input schema, annotations, and an `execute` function. The application registers every definition with the browser's model context:
+The twenty-six website tool definitions live in [`lib/webmcp-tools.ts`](./lib/webmcp-tools.ts). Each tool declares a name, description, JSON input schema, annotations, and an `execute` function. The application registers every definition with the browser's model context:
 
 ```ts
 const tools: WebMCPTool[] = [
@@ -47,7 +47,7 @@ const tools: WebMCPTool[] = [
   },
   // configure_party, research_theme, curate_menu, curate_pairings,
   // curate_soundtrack, enrich_soundtrack_context, create_shopping_list,
-  // search_recipes, set_menu_course, replace_menu_course,
+  // search_recipes, price_recipe_candidates, set_menu_course, replace_menu_course,
   // suggest_ingredient_substitutions, create_prep_timeline,
   // search_wines, set_wine_pairing, create_zero_proof_pairings,
   // search_music, refresh_music_metadata, find_grocery_stores, price_shopping_list,
@@ -62,7 +62,7 @@ for (const definition of tools) {
 }
 ```
 
-The twenty-fifth website tool, `create_party_plan`, accepts an inspiration, guest count, budget, dietary requirements, and wine and zero-proof preferences. It sends that brief to the dynamic-plan endpoint, activates the returned plan ID in the website, and reports the provider and mode used for each curation stage. Each menu course is resolved independently through Spoonacular → Perplexity Agent API → reviewed recipe fallback, so one missing dessert does not discard a successful live starter or main. Pairings use GrapeMinds with X-Wines fallback and Perplexity-backed zero-proof discovery with a reviewed fallback. The soundtrack uses Perplexity discovery, Apple Music verification, optional Discogs context, and reviewed anchors only for unfilled slots. The executable implementation also includes version-conflict protection, structured success and error responses, visible change receipts, source attribution, and explicit confirmation for finalization and PDF download.
+The twenty-fifth website tool, `create_party_plan`, accepts an inspiration, guest count, budget, dietary requirements, and wine and zero-proof preferences. Tool twenty-six, `price_recipe_candidates`, compares up to three searched recipes against a course cap using one host-selected Kroger location and refuses to label partial ingredient coverage as within budget. The dynamic-plan endpoint activates the returned plan ID in the website and reports the provider and mode used for each curation stage. Each menu course is resolved independently through Spoonacular → Perplexity Agent API → reviewed recipe fallback, so one missing dessert does not discard a successful live starter or main. Pairings use GrapeMinds with X-Wines fallback and Perplexity-backed zero-proof discovery with a reviewed fallback. The soundtrack uses Perplexity discovery, Apple Music verification, optional Discogs context, and reviewed anchors only for unfilled slots. The executable implementation also includes version-conflict protection, structured success and error responses, visible change receipts, source attribution, and explicit confirmation for finalization and PDF download.
 
 ### How live menu and soundtrack curation work
 
@@ -76,7 +76,7 @@ The twenty-fifth website tool, `create_party_plan`, accepts an inspiration, gues
 - `app/api/plans/` — anonymous, versioned PlanStore HTTP boundary shared by the website and MCP app.
 - `chatgpt-app/` — MCP server and self-contained interactive ChatGPT App.
 - `components/` — the Creative Host workspace and shared WebMCP-driven interface.
-- `lib/webmcp-tools.ts` — all twenty-five website WebMCP tool definitions and registration.
+- `lib/webmcp-tools.ts` — all twenty-six website WebMCP tool definitions and registration.
 - `lib/guest-share-kit.ts` — redacted guest-program PDF, social cards, captions, alt text, and ZIP export.
 - `lib/apple-music.server.ts` — validated Apple Music search, per-track matching, artwork, previews, and source metadata.
 - `lib/plan-tools.server.ts` — shared recipe, substitution, prep, wine, zero-proof, and music tool logic.

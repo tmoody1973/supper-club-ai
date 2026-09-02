@@ -1,6 +1,7 @@
 import "server-only";
 
-import type { PartyPlan } from "@/lib/types";
+import { buildShoppingList } from "@/lib/seed-plan";
+import type { MenuCourse, PartyPlan } from "@/lib/types";
 
 type KrogerTokenResponse = { access_token?: string; expires_in?: number; token_type?: string; error?: string; error_description?: string };
 type KrogerLocation = {
@@ -307,4 +308,66 @@ export async function pricePlanAtKroger(plan: PartyPlan, locationId: string, pag
   };
   pricingCache.set(cacheKey, { expiresAt: Date.now() + 5 * 60_000, snapshot });
   return pageSnapshot(snapshot, page, pageSize);
+}
+
+export async function priceRecipeCandidatesAtKroger(
+  plan: PartyPlan,
+  candidates: MenuCourse[],
+  locationId: string,
+  courseBudgetCap: number,
+  signal: AbortSignal,
+) {
+  if (!candidates.length || candidates.length > 3) throw new Error("INVALID_RECIPE_CANDIDATES");
+  if (!Number.isFinite(courseBudgetCap) || courseBudgetCap <= 0 || courseBudgetCap > 10_000) {
+    throw new Error("INVALID_COURSE_BUDGET_CAP");
+  }
+
+  const results = [];
+  let selectedStore: PricingSnapshot["store"] | undefined;
+  for (const course of candidates) {
+    const candidatePlan: PartyPlan = {
+      ...structuredClone(plan),
+      planId: `${plan.planId}:candidate:${course.recipeId}`,
+      courses: [course],
+      shopping: buildShoppingList([course]),
+      budget: { amount: courseBudgetCap, currency: "USD" },
+    };
+    const firstPage = await pricePlanAtKroger(candidatePlan, locationId, 1, 5, signal);
+    selectedStore ??= firstPage.store;
+    const allLines = [...firstPage.lines];
+    for (let page = 2; page <= firstPage.page.totalPages; page += 1) {
+      const nextPage = await pricePlanAtKroger(candidatePlan, locationId, page, 5, signal);
+      allLines.push(...nextPage.lines);
+    }
+
+    const isComplete = firstPage.estimate.status === "COMPLETE";
+    const isOverCap = firstPage.estimate.subtotal > courseBudgetCap;
+    const capStatus = isOverCap
+      ? "ESTIMATED_OVER_CAP" as const
+      : isComplete
+        ? "ESTIMATED_WITHIN_CAP" as const
+        : "INCONCLUSIVE_PARTIAL_COVERAGE" as const;
+    results.push({
+      recipeId: course.recipeId,
+      title: course.title,
+      estimatedSubtotal: firstPage.estimate.subtotal,
+      capStatus,
+      matchedIngredients: `${firstPage.estimate.pricedItems}/${firstPage.estimate.totalItems}`,
+      coveragePercent: firstPage.estimate.coveragePercent,
+      confidence: firstPage.estimate.confidence,
+      unpricedIngredients: allLines
+        .filter((line) => line.status === "UNPRICED")
+        .map((line) => String(line.ingredient))
+        .slice(0, 8),
+    });
+  }
+
+  return {
+    provider: "Kroger" as const,
+    store: selectedStore,
+    requestedCap: { amount: courseBudgetCap, currency: "USD" as const },
+    candidates: results,
+    retrievedAt: new Date().toISOString(),
+    note: "Kroger package estimate. Within-cap status requires 100% ingredient coverage. Excludes tax, delivery, fees, loyalty pricing, and substitutions.",
+  };
 }

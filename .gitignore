@@ -18,3 +18,5 @@ chatgpt-app/node_modules/
 chatgpt-app/dist/
 chatgpt-app/web/dist/
 chatgpt-app/.wrangler/
+videos/**/recording/
+videos/**/.media/

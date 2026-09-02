@@ -94,7 +94,7 @@ const beginnerPaths = [
     steps: [
       "Ask ChatGPT to open thesupperclub.app in the in-app browser.",
       "Open the plan you want to revise, or begin with the reviewed example already on the page.",
-      "Check the black header for 25 tools live. Preview mode means that browser does not expose WebMCP tools.",
+      "Check the black header for 26 tools live. Preview mode means that browser does not expose WebMCP tools.",
       "Ask ChatGPT to use the tools on the Supper Club AI page and describe one specific change.",
       "Watch the workspace update and read the receipt in Agent Marginalia before making the next change.",
     ],
@@ -171,6 +171,7 @@ const websiteTools = [
   "export_guest_share_kit",
   "export_host_packet",
   "create_party_plan",
+  "price_recipe_candidates",
 ];
 
 const chatgptTools = [
@@ -180,6 +181,7 @@ const chatgptTools = [
   "find_grocery_stores",
   "price_shopping_list",
   "search_recipes",
+  "price_recipe_candidates",
   "set_menu_course",
   "replace_menu_course",
   "suggest_ingredient_substitutions",
@@ -388,20 +390,20 @@ export default function AboutPage() {
               <h2 id="tool-ledger-title">Every capability, named in plain sight.</h2>
             </div>
             <p>
-              The website has 25 tools for creating, composing, and exporting a plan. The
-              ChatGPT App keeps 16 focused tools for creating, revising, pricing, and approving
+              The website has 26 tools for creating, composing, and exporting a plan. The
+              ChatGPT App keeps 17 focused tools for creating, revising, pricing, and approving
               the same versioned plan.
             </p>
           </div>
           <div className={styles.toolColumns}>
             <article className={styles.toolColumn}>
-              <header><span>Website / WebMCP</span><strong>25 tools</strong></header>
+              <header><span>Website / WebMCP</span><strong>26 tools</strong></header>
               <ol className={styles.toolList}>
                 {websiteTools.map((name, index) => <li key={name}><span>{String(index + 1).padStart(2, "0")}</span><code>{name}</code></li>)}
               </ol>
             </article>
             <article className={`${styles.toolColumn} ${styles.toolColumnDark}`}>
-              <header><span>ChatGPT / MCP App</span><strong>16 tools</strong></header>
+              <header><span>ChatGPT / MCP App</span><strong>17 tools</strong></header>
               <ol className={styles.toolList}>
                 {chatgptTools.map((name, index) => <li key={name}><span>{String(index + 1).padStart(2, "0")}</span><code>{name}</code></li>)}
               </ol>
@@ -414,7 +416,10 @@ export default function AboutPage() {
             does not erase successful live choices. For music, Perplexity proposes 6–8 candidates
             tied to real search-result IDs; Apple Music verifies artist and title, four tracks are
             selected for the dinner arc, and reviewed anchors fill only open slots. Optional Discogs
-            context and per-track origin and verification receipts remain visible. Search, lookup,
+            context and per-track origin and verification receipts remain visible. Tool 26,
+            <code>price_recipe_candidates</code>, tests searched recipes against a host-selected
+            Kroger location and only marks an estimate within cap when every ingredient is priced.
+            Search, lookup,
             and guest-share preview tools are read-only. Plan changes use version checks;
             finalization and artifact downloads wait for explicit host approval.
           </p>
@@ -425,7 +430,7 @@ export default function AboutPage() {
             <p className={styles.sectionLabel}>07 / Connect the ChatGPT App</p>
             <h2 id="mcp-title">The interactive app is live inside ChatGPT.</h2>
             <p>
-              The Cloudflare endpoint delivers the interactive widget and 16 tools through MCP
+              The Cloudflare endpoint delivers the interactive widget and 17 tools through MCP
               Apps. Add the endpoint in ChatGPT Developer mode; opening `widget.html` directly
               with a `file://` URL still leaves it without a host or tool results.
             </p>

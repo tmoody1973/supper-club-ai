@@ -61,6 +61,7 @@ const dynamicMovements = (
   menu: MenuCurationData,
   pairings: PairingCurationData,
   soundtrack: SoundtrackCurationData,
+  includeZeroProof: boolean,
 ): Movement[] => {
   const courses = new Map(menu.courses.map((course) => [course.courseId, course]));
   const themeLabels = theme.ideas.map((idea) => idea.name).filter(Boolean);
@@ -73,7 +74,7 @@ const dynamicMovements = (
             title: "Arrival / welcome ritual",
             subtitle: "Gather + ground",
             recipeLabel: "Opening bite",
-            pairingLabel: "Opening zero-proof sip",
+            pairingLabel: includeZeroProof ? "Opening zero-proof sip" : "Wine service",
             hostCue: "Welcome circle",
           }
         : movement.movementId === "movement-reading"
@@ -81,14 +82,14 @@ const dynamicMovements = (
               title: "Reading / reflection",
               subtitle: themeLabels[0] ?? "Theme + conversation",
               recipeLabel: "Original theme note",
-              pairingLabel: "Herbal infusion",
+              pairingLabel: includeZeroProof ? "Herbal infusion" : "Wine pause",
               hostCue: "Read + reflect",
             }
           : {
               title: "Listening interval",
               subtitle: "Music + reflection",
               recipeLabel: "Table reset",
-              pairingLabel: "Sparkling water",
+              pairingLabel: includeZeroProof ? "Sparkling water" : "Table wine",
               hostCue: "Sit with it",
             };
       return {
@@ -239,7 +240,7 @@ export async function buildDynamicPartyPlan(
       copyrightNotice:
         "This plan uses original thematic interpretation and bibliographic metadata. It does not reproduce the source work or imply endorsement by its creator or estate.",
     },
-    movements: dynamicMovements(skeleton.movements, themeResult.data, menuResult.data, pairingResult.data, soundtrackResult.data),
+    movements: dynamicMovements(skeleton.movements, themeResult.data, menuResult.data, pairingResult.data, soundtrackResult.data, includeZeroProof),
     courses,
     pairings: pairingResult.data.pairings,
     soundtrack: soundtrackResult.data.soundtrack,
@@ -248,7 +249,12 @@ export async function buildDynamicPartyPlan(
     receipts: [
       receipt("create_shopping_list", "Shopping list reconciled", `${shopping.length} ingredients grouped by aisle.`, "SHOPPING"),
       receipt("curate_soundtrack", "Soundtrack sequenced", `${soundtrackResult.data.trackReceipts.filter((item) => item.provenance.discovery.origin === "PERPLEXITY").length} Perplexity discoveries verified by Apple Music; ${soundtrackResult.data.trackReceipts.filter((item) => item.provenance.discovery.origin === "REVIEWED_SEED").length} reviewed fallbacks. ${soundtrackResult.sources.length} source${soundtrackResult.sources.length === 1 ? "" : "s"} retained.`, "MUSIC"),
-      receipt("curate_pairings", "Pairings curated", `${pairingResult.provider} (${pairingResult.mode.toLowerCase()}): ${pairingResult.data.pairings.length} wine or zero-proof choices matched from ${pairingResult.sources.length} source${pairingResult.sources.length === 1 ? "" : "s"}.`, "PAIRING"),
+      receipt(
+        "curate_pairings",
+        "Pairings curated",
+        `${pairingResult.provider} (${pairingResult.mode.toLowerCase()}): ${pairingResult.data.pairings.length} ${includeWine && includeZeroProof ? "wine and zero-proof" : includeWine ? "wine" : "zero-proof"} choices matched from ${pairingResult.sources.length} source${pairingResult.sources.length === 1 ? "" : "s"}.`,
+        "PAIRING",
+      ),
       receipt("curate_menu", "Menu curated", `${menuResult.provider} (${menuResult.mode.toLowerCase()}): ${courses.length} courses selected from ${menuResult.sources.length} source${menuResult.sources.length === 1 ? "" : "s"} for ${guestCount} guests.`, "RECIPE"),
       receipt("research_theme", "Theme researched", `${themeResult.provider} (${themeResult.mode.toLowerCase()}): a fresh cultural brief for ${configuration.inspirationTitle} used ${themeResult.sources.length} source${themeResult.sources.length === 1 ? "" : "s"}.`, "THEME"),
     ],

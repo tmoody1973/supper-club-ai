@@ -371,7 +371,7 @@ export const createSupperClubMcpServer = async (config: SupperClubMcpConfig) => 
     "search_recipes",
     {
       title: "Search reviewed recipes",
-      description: "Find reviewed recipe alternatives for one course using theme, dietary, time, and budget preferences. Price caps are reported as unverified when current ingredient pricing is unavailable.",
+      description: "Find reviewed recipe alternatives for one course using theme, dietary, time, and budget preferences. Use price_recipe_candidates after choosing a Kroger location to test a real store-specific cap.",
       inputSchema: {
         planId: planIdSchema,
         role: z.enum(["STARTER", "MAIN", "DESSERT"]),
@@ -388,6 +388,30 @@ export const createSupperClubMcpServer = async (config: SupperClubMcpConfig) => 
       try {
         const payload = await planToolRequest(config, planId, { operation: "SEARCH_RECIPES", ...input });
         return toolDataSuccess("Returned reviewed recipe choices. Use set_menu_course to select one, or replace_menu_course to choose a qualifying alternative automatically.", payload);
+      } catch (error) { return toolFailure(error); }
+    },
+  );
+
+  registerAppTool(
+    mcp,
+    "price_recipe_candidates",
+    {
+      title: "Price recipe candidates",
+      description: "Compare up to three searched recipes against a course cap using package prices from one host-selected Kroger location. Read-only; does not change the menu or create a cart.",
+      inputSchema: {
+        planId: planIdSchema,
+        locationId: z.string().regex(/^\d{5,12}$/),
+        role: z.enum(["STARTER", "MAIN", "DESSERT"]),
+        recipeIds: z.array(z.string().trim().min(1).max(60)).min(1).max(3),
+        courseBudgetCap: z.number().gt(0).max(10000),
+      },
+      _meta: uiMeta,
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true },
+    },
+    async ({ planId, ...input }) => {
+      try {
+        const payload = await planToolRequest(config, planId, { operation: "PRICE_RECIPE_CANDIDATES", ...input });
+        return toolDataSuccess("Returned store-specific candidate estimates. Only complete ingredient coverage can be labeled estimated within the cap; partial coverage remains inconclusive.", payload);
       } catch (error) { return toolFailure(error); }
     },
   );

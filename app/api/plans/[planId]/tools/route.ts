@@ -1,9 +1,10 @@
 import { checkPlanRequest, noStoreHeaders, planError, planStoreErrorResponse } from "@/lib/plan-api.server";
 import { getPlanStore } from "@/lib/plan-store.server";
-import { findKrogerStores, pricePlanAtKroger } from "@/lib/kroger.server";
+import { findKrogerStores, pricePlanAtKroger, priceRecipeCandidatesAtKroger } from "@/lib/kroger.server";
 import {
   createPrepTimeline,
   createZeroProofPairings,
+  recipeCandidatesByIds,
   refreshSoundtrackMetadata,
   replaceCourseWithRecipe,
   searchMusic,
@@ -98,6 +99,21 @@ export async function POST(request: Request, context: Context) {
         },
         storage: stored.metadata,
       }, { headers: noStoreHeaders });
+    }
+
+    if (operation === "PRICE_RECIPE_CANDIDATES") {
+      if (!isRole(body.role)) return planError("BAD_REQUEST", "role must be STARTER, MAIN, or DESSERT.", 422);
+      const locationId = text(body.locationId, 12);
+      const recipeIds = stringArray(body.recipeIds, 3);
+      const courseBudgetCap = typeof body.courseBudgetCap === "number" ? body.courseBudgetCap : Number.NaN;
+      if (!locationId) return planError("BAD_REQUEST", "locationId is required.", 422);
+      if (!recipeIds?.length) return planError("BAD_REQUEST", "One to three recipeIds are required.", 422);
+      if (!Number.isFinite(courseBudgetCap) || courseBudgetCap <= 0 || courseBudgetCap > 10_000) {
+        return planError("BAD_REQUEST", "courseBudgetCap must be greater than zero and no more than 10000.", 422);
+      }
+      const candidates = recipeCandidatesByIds(plan, body.role, recipeIds);
+      const data = await priceRecipeCandidatesAtKroger(plan, candidates, locationId, courseBudgetCap, request.signal);
+      return Response.json({ ok: true, planId, planVersion: plan.planVersion, data, storage: stored.metadata }, { headers: noStoreHeaders });
     }
 
     if (operation === "SUGGEST_INGREDIENT_SUBSTITUTIONS") {
@@ -221,7 +237,7 @@ export async function POST(request: Request, context: Context) {
     const saved = await getPlanStore().replace(planId, expectedPlanVersion, next);
     return Response.json({ ok: true, plan: saved.plan, storage: saved.metadata, data }, { headers: noStoreHeaders });
   } catch (error) {
-    if (error instanceof Error && ["INVALID_ZIP_CODE", "INVALID_LOCATION_ID", "KROGER_LOCATION_NOT_FOUND"].includes(error.message)) {
+    if (error instanceof Error && ["INVALID_ZIP_CODE", "INVALID_LOCATION_ID", "KROGER_LOCATION_NOT_FOUND", "INVALID_RECIPE_CANDIDATES", "INVALID_COURSE_BUDGET_CAP"].includes(error.message)) {
       return planError("BAD_REQUEST", error.message.replaceAll("_", " ").toLowerCase(), 422);
     }
     if (error instanceof Error && (error.message === "KROGER_NOT_CONFIGURED" || error.message.startsWith("KROGER_"))) {
