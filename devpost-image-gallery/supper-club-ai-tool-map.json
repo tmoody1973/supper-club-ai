@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Supper Club AI · 28 WebMCP Tools, One Shared Plan",
+    "quality_profile": "showcase",
+    "viewBox": [1360, 1040]
+  },
+  "components": [
+    {
+      "id": "creative-host",
+      "type": "external",
+      "label": "Creative Host",
+      "sublabel": "Brief · judgment · approval",
+      "pos": [70, 390],
+      "size": [165, 76]
+    },
+    {
+      "id": "tool-registry",
+      "type": "frontend",
+      "label": "WebMCP Tool Registry",
+      "sublabel": "28 typed capabilities",
+      "pos": [565, 390],
+      "size": [195, 76],
+      "tag": "document.modelContext"
+    },
+    {
+      "id": "party-plan",
+      "type": "database",
+      "label": "Shared Party Plan",
+      "sublabel": "Versioned source of truth",
+      "pos": [1010, 390],
+      "size": [195, 76],
+      "tag": "visible receipts"
+    },
+    {
+      "id": "creation-tools",
+      "type": "cloud",
+      "label": "Create + Orient",
+      "sublabel": "4 tools · turn a brief into a plan",
+      "pos": [280, 135],
+      "size": [190, 76]
+    },
+    {
+      "id": "menu-tools",
+      "type": "frontend",
+      "label": "Menu + Recipe Intelligence",
+      "sublabel": "5 tools · select and replace courses",
+      "pos": [575, 135],
+      "size": [205, 76]
+    },
+    {
+      "id": "pairing-tools",
+      "type": "backend",
+      "label": "Drink Pairings",
+      "sublabel": "4 tools · wine + zero-proof",
+      "pos": [875, 135],
+      "size": [190, 76]
+    },
+    {
+      "id": "soundtrack-tools",
+      "type": "cloud",
+      "label": "Soundtrack",
+      "sublabel": "4 tools · energy arc + context",
+      "pos": [280, 640],
+      "size": [190, 76]
+    },
+    {
+      "id": "shopping-tools",
+      "type": "backend",
+      "label": "Shopping + Prep",
+      "sublabel": "5 tools · price and sequence work",
+      "pos": [575, 640],
+      "size": [205, 76]
+    },
+    {
+      "id": "review-tools",
+      "type": "security",
+      "label": "Review + Export",
+      "sublabel": "6 tools · host-approved artifacts",
+      "pos": [875, 640],
+      "size": [190, 76]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Supper Club AI WebMCP surface",
+      "wraps": ["tool-registry", "party-plan", "creation-tools", "menu-tools", "pairing-tools", "soundtrack-tools", "shopping-tools", "review-tools"],
+      "pad": 42
+    }
+  ],
+  "connections": [
+    {
+      "id": "host-to-registry",
+      "from": "creative-host",
+      "to": "tool-registry",
+      "label": "natural-language brief",
+      "variant": "emphasis"
+    },
+    {
+      "id": "registry-to-plan",
+      "from": "tool-registry",
+      "to": "party-plan",
+      "label": "structured plan updates",
+      "variant": "emphasis",
+      "labelAt": [880, 520]
+    },
+    {
+      "id": "creation-to-registry",
+      "from": "creation-tools",
+      "to": "tool-registry",
+      "label": "configure",
+      "variant": "dashed"
+    },
+    {
+      "id": "menu-to-registry",
+      "from": "menu-tools",
+      "to": "tool-registry",
+      "label": "curate",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "pairings-to-registry",
+      "from": "pairing-tools",
+      "to": "tool-registry",
+      "label": "pair",
+      "variant": "dashed"
+    },
+    {
+      "id": "soundtrack-to-registry",
+      "from": "soundtrack-tools",
+      "to": "tool-registry",
+      "label": "sequence",
+      "variant": "dashed"
+    },
+    {
+      "id": "shopping-to-registry",
+      "from": "shopping-tools",
+      "to": "tool-registry",
+      "label": "reconcile",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "review-to-plan",
+      "from": "review-tools",
+      "to": "party-plan",
+      "label": "approve + export",
+      "variant": "security",
+      "fromSide": "top",
+      "toSide": "bottom"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Create + Menu",
+      "items": [
+        "create_party_plan · get_party_plan · configure_party · research_theme",
+        "curate_menu · search_recipes · set_menu_course · replace_menu_course · suggest_ingredient_substitutions"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Pairings + Soundtrack",
+      "items": [
+        "curate_pairings · search_wines · set_wine_pairing · create_zero_proof_pairings",
+        "curate_soundtrack · enrich_soundtrack_context · search_music · refresh_music_metadata"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Shopping + Approval",
+      "items": [
+        "find_grocery_stores · price_shopping_list · price_recipe_candidates · create_shopping_list · create_prep_timeline",
+        "finalize_party_plan · preview_guest_share_kit · export_guest_share_kit · prepare_recipe_cards · export_recipe_packet · export_host_packet"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+[serious] The agent stops at consequential actions. Only after explicit host approval does Web M-C-P finalize the plan and download a kitchen packet with recipe cards and provenance.

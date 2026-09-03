@@ -20,3 +20,14 @@ chatgpt-app/web/dist/
 chatgpt-app/.wrangler/
 videos/**/recording/
 videos/**/.media/
+
+# HyperFrames working files and locally rendered demo media. The public source,
+# captions, thumbnails, and assembly instructions remain versioned separately.
+videos/**/.hyperframes/
+videos/**/assets/
+videos/**/renders/
+videos/**/snapshots/
+videos/**/analysis/
+videos/**/capture/
+videos/**/narration/clips/
+videos/**/narration/*.wav

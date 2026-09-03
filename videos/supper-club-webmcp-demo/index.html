@@ -1,56 +1,55 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=1920, height=1080" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920, height=1080">
+    <title>Supper Club AI — WebMCP Demo</title>
+    <link rel="stylesheet" href="compositions/shared.css">
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      html,
-      body {
-        margin: 0;
-        width: 1920px;
-        height: 1080px;
-        overflow: hidden;
-        background: #000;
-      }
-      body {
-        font-family: "Inter", sans-serif;
-      }
-      code,
-      pre,
-      .monospace {
-        font-family: "JetBrains Mono", monospace;
-      }
+      * { box-sizing: border-box; }
+      html, body { margin:0; width:1920px; height:1080px; overflow:hidden; background:#0d0d0b; }
+      #root { position:relative; width:1920px; height:1080px; overflow:hidden; background:#0d0d0b; }
+      #root > [data-composition-src] { position:absolute; inset:0; width:1920px; height:1080px; }
     </style>
   </head>
   <body>
-    <div
-      id="root"
-      data-composition-id="main"
-      data-start="0"
-      data-duration="10"
-      data-width="1920"
-      data-height="1080"
-    >
-      <!--
-        Add your clips here. Example:
-        <div id="title" class="clip" data-start="0" data-duration="5" data-track-index="1"
-             style="font-size: 64px; color: #fff; padding: 40px">
-          Hello World
-        </div>
-      -->
+    <div id="root" data-composition-id="main" data-width="1920" data-height="1080" data-duration="163.9">
+      <div id="el-01-finished-jazz-plan" class="clip" data-composition-id="01-finished-jazz-plan" data-composition-src="compositions/frames/01-finished-jazz-plan.html" data-start="0" data-duration="10" data-track-index="0"></div>
+      <div id="el-02-page-native-tools" class="clip" data-composition-id="02-page-native-tools" data-composition-src="compositions/frames/02-page-native-tools.html" data-start="10" data-duration="10.7" data-track-index="1"></div>
+      <div id="el-03-create-jazz-plan" class="clip" data-composition-id="03-create-jazz-plan" data-composition-src="compositions/frames/03-create-jazz-plan.html" data-start="20.2" data-duration="12.53" data-track-index="0"></div>
+      <div id="el-04-provider-receipts" class="clip" data-composition-id="04-provider-receipts" data-composition-src="compositions/frames/04-provider-receipts.html" data-start="32.23" data-duration="14.67" data-track-index="1"></div>
+      <div id="el-05-search-price-replace" class="clip" data-composition-id="05-search-price-replace" data-composition-src="compositions/frames/05-search-price-replace.html" data-start="46.4" data-duration="22.43" data-track-index="0"></div>
+      <div id="el-06-shopping-prep-cards" class="clip" data-composition-id="06-shopping-prep-cards" data-composition-src="compositions/frames/06-shopping-prep-cards.html" data-start="68.33" data-duration="18.5" data-track-index="1"></div>
+      <div id="el-07-local-grocery-estimate" class="clip" data-composition-id="07-local-grocery-estimate" data-composition-src="compositions/frames/07-local-grocery-estimate.html" data-start="86.33" data-duration="13.3" data-track-index="0"></div>
+      <div id="el-08-atmosphere-provenance" class="clip" data-composition-id="08-atmosphere-provenance" data-composition-src="compositions/frames/08-atmosphere-provenance.html" data-start="99.13" data-duration="21.5" data-track-index="1"></div>
+      <div id="el-09-host-control-export" class="clip" data-composition-id="09-host-control-export" data-composition-src="compositions/frames/09-host-control-export.html" data-start="120.13" data-duration="24.17" data-track-index="0"></div>
+      <div id="el-10-storefront-future" class="clip" data-composition-id="10-storefront-future" data-composition-src="compositions/frames/10-storefront-future.html" data-start="143.9" data-duration="20" data-track-index="1"></div>
+      <audio id="narration-master" src="narration/supper-club-demo-master.wav" data-start="0" data-duration="163.9" data-track-index="10" data-volume="1"></audio>
     </div>
-
     <script>
       window.__timelines = window.__timelines || {};
-      const tl = gsap.timeline({ paused: true });
-      // Example: tl.from("#title", { opacity: 0, y: -50, duration: 1 }, 0);
-      window.__timelines["main"] = tl;
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+      // ── frame transitions (injected by transitions.mjs) ──
+      (function () { var tl = window.__timelines["main"];
+        tl.to("#el-02-page-native-tools", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 20.2);
+        tl.fromTo("#el-03-create-jazz-plan", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 20.2);
+        tl.to("#el-03-create-jazz-plan", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 32.23);
+        tl.fromTo("#el-04-provider-receipts", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 32.23);
+        tl.to("#el-04-provider-receipts", { x: -1920, duration: 0.5, ease: "power3.inOut" }, 46.4);
+        tl.fromTo("#el-05-search-price-replace", { x: 1920, opacity: 1 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, 46.4);
+        tl.to("#el-05-search-price-replace", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 68.33);
+        tl.fromTo("#el-06-shopping-prep-cards", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 68.33);
+        tl.to("#el-06-shopping-prep-cards", { x: -1920, duration: 0.5, ease: "power3.inOut" }, 86.33);
+        tl.fromTo("#el-07-local-grocery-estimate", { x: 1920, opacity: 1 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, 86.33);
+        tl.to("#el-07-local-grocery-estimate", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 99.13);
+        tl.fromTo("#el-08-atmosphere-provenance", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 99.13);
+        tl.to("#el-08-atmosphere-provenance", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 120.13);
+        tl.fromTo("#el-09-host-control-export", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 120.13);
+        tl.to("#el-09-host-control-export", { scale: 2.5, opacity: 0, filter: "blur(8px)", duration: 0.4, ease: "power3.in" }, 143.9);
+        tl.fromTo("#el-10-storefront-future", { scale: 0.5, opacity: 0, filter: "blur(8px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.4, ease: "power3.out" }, 143.9);
+        tl.to({}, { duration: 163.9 }, 0); // full-span anchor — main.duration() == composition total (Studio master duration)
+      })();
     </script>
   </body>
 </html>

@@ -1,0 +1,23 @@
+<link rel="stylesheet" href="/compositions/shared.css">
+<template id="09-host-control-export-template">
+  <div class="hf-frame" data-composition-id="09-host-control-export" data-width="1920" data-height="1080" data-duration="24.17">
+    <div id="f09-ground" class="clip hf-ground" data-start="0" data-duration="24.17"></div>
+    <video id="f09-video-a" class="clip hf-media" src="/assets/09a-host-control-boundary.mp4" data-start="0" data-duration="8.93" data-media-start="6.5" data-track-index="1" muted playsinline></video>
+    <video id="f09-video-b" class="clip hf-media" src="/assets/09b-approved-recipe-export.mp4" data-start="8.93" data-duration="2.5" data-media-start="0" data-track-index="1" muted playsinline></video>
+    <video id="f09-video-c" class="clip hf-media" src="/assets/09b-approved-recipe-export.mp4" data-start="11.43" data-duration="6.5" data-media-start="5" data-track-index="1" muted playsinline></video>
+    <video id="f09-video-d" class="clip hf-media" src="/assets/09b-approved-recipe-export.mp4" data-start="17.93" data-duration="6.24" data-media-start="12.5" data-track-index="1" muted playsinline></video>
+    <div id="f09-overlay" class="clip hf-overlay" data-start="0" data-duration="24.17" data-track-index="2">
+      <div id="f09-top" class="hf-topline"><span class="hf-index">09</span><span class="hf-kicker">The host decides</span><span class="hf-rule"></span></div>
+      <div id="f09-stop" class="hf-proof" style="position:absolute;left:70px;bottom:48px;border-color:#ef7458">Consequential action → stop for approval</div>
+      <div id="f09-go" class="hf-proof" style="position:absolute;right:70px;bottom:48px;border-color:#bac467">Approved → finalize → kitchen packet</div>
+      <i class="hf-corner tl"></i><i class="hf-corner br"></i>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#f09-top", { y: -65, opacity: 0 }, { y: 0, opacity: 1, duration: .6, ease: "power3.out" }, .15)
+        .fromTo("#f09-stop", { x: -100, opacity: 0 }, { x: 0, opacity: 1, duration: .65, ease: "power3.out" }, 2.0)
+        .fromTo("#f09-go", { x: 110, opacity: 0 }, { x: 0, opacity: 1, duration: .65, ease: "power3.out" }, 10.0);
+      window.__timelines["09-host-control-export"] = tl;
+    </script>
+  </div>
+</template>

@@ -1,0 +1,23 @@
+<link rel="stylesheet" href="/compositions/shared.css">
+<template id="07-local-grocery-estimate-template">
+  <div class="hf-frame" data-composition-id="07-local-grocery-estimate" data-width="1920" data-height="1080" data-duration="13.3">
+    <div id="f07-ground" class="clip hf-ground" data-start="0" data-duration="13.3"></div>
+    <video id="f07-video-a" class="clip hf-media" src="/assets/07a-find-grocery-store.mp4" data-start="0" data-duration="4.47" data-media-start="8" data-track-index="1" muted playsinline></video>
+    <video id="f07-video-b" class="clip hf-media" src="/assets/07b-grocery-pricing.mp4" data-start="4.47" data-duration="8.83" data-media-start="6.5" data-track-index="1" muted playsinline></video>
+    <div id="f07-overlay" class="clip hf-overlay" data-start="0" data-duration="13.3" data-track-index="2">
+      <div id="f07-top" class="hf-topline"><span class="hf-index">07</span><span class="hf-kicker">A real local estimate</span><span class="hf-rule"></span><span class="hf-badge">Kroger · Milwaukee</span></div>
+      <div id="f07-metrics" style="position:absolute;right:70px;bottom:52px;display:flex;gap:12px">
+        <span class="hf-badge" style="border-color:#bac467;color:#bac467">20 / 21 matched</span>
+        <span class="hf-badge">Promotions shown</span>
+        <span class="hf-badge">Confidence shown</span>
+      </div>
+      <i class="hf-corner tl"></i><i class="hf-corner br"></i>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#f07-top", { y: -70, opacity: 0 }, { y: 0, opacity: 1, duration: .6, ease: "power3.out" }, .15)
+        .fromTo("#f07-metrics .hf-badge", { y: 55, opacity: 0 }, { y: 0, opacity: 1, duration: .42, stagger: .65, ease: "power3.out" }, 5.4);
+      window.__timelines["07-local-grocery-estimate"] = tl;
+    </script>
+  </div>
+</template>

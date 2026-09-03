@@ -1,0 +1,21 @@
+<link rel="stylesheet" href="/compositions/shared.css">
+<template id="04-provider-receipts-template">
+  <div class="hf-frame" data-composition-id="04-provider-receipts" data-width="1920" data-height="1080" data-duration="14.67">
+    <div id="f04-ground" class="clip hf-ground" data-start="0" data-duration="14.67"></div>
+    <video id="f04-video-a" class="clip hf-media" src="/assets/04-provider-results.mp4" data-start="0" data-duration="8" data-media-start="0" data-track-index="1" muted playsinline></video>
+    <video id="f04-video-b" class="clip hf-media" src="/assets/04-provider-results.mp4" data-start="8" data-duration="6.67" data-media-start="17.8" data-track-index="1" muted playsinline></video>
+    <div id="f04-overlay" class="clip hf-overlay" data-start="0" data-duration="14.67" data-track-index="2">
+      <div id="f04-top" class="hf-topline"><span class="hf-index">04</span><span class="hf-kicker">Every provider leaves a receipt</span><span class="hf-rule"></span></div>
+      <div id="f04-focus-a" class="hf-focus" style="left:1315px;top:135px;width:565px;height:805px"></div>
+      <div id="f04-lower" class="hf-lower"><div class="hf-proof">Live providers · visible fallbacks</div><div class="hf-badge">Spoonacular · GrapeMinds · Perplexity · Apple Music</div></div>
+      <i class="hf-corner tl"></i><i class="hf-corner br"></i>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#f04-top", { x: -100, opacity: 0 }, { x: 0, opacity: 1, duration: .65, ease: "power3.out" }, .2)
+        .fromTo("#f04-lower", { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: .6, ease: "power3.out" }, 3.0)
+        .fromTo("#f04-focus-a", { x: 75, opacity: 0 }, { x: 0, opacity: 1, duration: .6, ease: "power3.out" }, 8.2);
+      window.__timelines["04-provider-receipts"] = tl;
+    </script>
+  </div>
+</template>

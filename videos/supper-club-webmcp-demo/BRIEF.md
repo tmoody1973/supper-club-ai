@@ -10,6 +10,10 @@ audience: "WebMCP hackathon judges"
 length: 2m55s
 angle: "Show the real product and one complete WebMCP workflow, with visible provider receipts, host-control boundaries, and a credible retailer expansion path."
 narration: yes
+vo_mode: restructure
+voice_provider: ElevenLabs
+voice_model: eleven_v3
+voice_id: RILOU7YmBhvwJGDGjNmP
 ---
 
 ## Intent
@@ -17,8 +21,9 @@ narration: yes
 Create a public, judge-facing demonstration that shows Supper Club AI working in
 the first seconds and makes WebMCP the centerpiece. Present the product as an
 agent-readable cultural hosting workspace, not a generic AI dinner planner. Use
-one strong cultural dinner example and show how a host and ChatGPT create,
-inspect, revise, price, and prepare the same shared plan.
+Toni Morrison's *Jazz* as the cultural dinner example and show how a host and
+ChatGPT create, inspect, revise, price, prepare, approve, and export the same
+shared plan.
 
 ## Assets
 
@@ -34,8 +39,10 @@ inspect, revise, price, and prepare the same shared plan.
 - Make live GrapeMinds wine discovery the pairing centerpiece: request wine
   pairings for every food course and show the GrapeMinds provider receipts.
 - Include a nearby grocery estimate with location, coverage, savings when available, and confidence.
-- Close with the embedded-storefront opportunity for wine shops and independent grocers, distinguishing live Kroger capabilities from roadmap commerce tools.
-- Use one ElevenLabs narration file per clip plus a combined master; generate narration only after clip timing is locked.
+- Close with an original HyperFrames motion-graphics sequence for the embedded-storefront opportunity, distinguishing live Kroger capabilities from roadmap commerce tools.
+- Use concise on-screen text for lists and status details; narration should carry the human story instead of reading every label aloud.
+- Use one ElevenLabs v3 narration file per story beat plus a combined master,
+  with voice `RILOU7YmBhvwJGDGjNmP` and restrained expressive audio tags.
 - Use captions, restrained brand-aligned transitions, subtle cursor emphasis, and no background-music bed.
 
 ## Notes
@@ -47,5 +54,7 @@ inspect, revise, price, and prepare the same shared plan.
 - The demo must use the website's WebMCP tools, not the Supper Club MCP plugin and not browser-only imitation of tool actions.
 - This is a wine-only demo. Never request, generate, show, or narrate
   zero-proof or non-alcoholic pairings.
-- Consequential actions remain user-confirmed; do not finalize or export a host packet during the demonstration.
+- Consequential actions remain user-confirmed. Show the agent stopping first,
+  then show the host explicitly approving finalization and the kitchen recipe
+  packet download. Do not export the separate host packet.
 - Kroger location search, retailer package matching, stock, promotions, confidence, and basket estimates are live today. Store-specific discounts, coupons, bottle inventory, and a reviewable cart are roadmap tools; any purchase would still require explicit host confirmation.

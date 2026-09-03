@@ -1,0 +1,64 @@
+{
+  "count": 28,
+  "headline": "28 PAGE-NATIVE WEBMCP TOOLS",
+  "groups": [
+    {
+      "label": "CREATE",
+      "tools": [
+        "create_party_plan",
+        "configure_party",
+        "research_theme",
+        "curate_menu",
+        "curate_pairings",
+        "curate_soundtrack"
+      ]
+    },
+    {
+      "label": "INSPECT",
+      "tools": [
+        "get_party_plan",
+        "enrich_soundtrack_context"
+      ]
+    },
+    {
+      "label": "DISCOVER",
+      "tools": [
+        "search_recipes",
+        "search_wines",
+        "search_music",
+        "find_grocery_stores",
+        "suggest_ingredient_substitutions"
+      ]
+    },
+    {
+      "label": "EDIT",
+      "tools": [
+        "set_menu_course",
+        "replace_menu_course",
+        "set_wine_pairing",
+        "refresh_music_metadata",
+        "create_zero_proof_pairings"
+      ]
+    },
+    {
+      "label": "ORGANIZE + PRICE",
+      "tools": [
+        "create_shopping_list",
+        "create_prep_timeline",
+        "price_recipe_candidates",
+        "price_shopping_list",
+        "prepare_recipe_cards"
+      ]
+    },
+    {
+      "label": "APPROVE + SHARE",
+      "tools": [
+        "finalize_party_plan",
+        "preview_guest_share_kit",
+        "export_guest_share_kit",
+        "export_recipe_packet",
+        "export_host_packet"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+[measured] Spoonacular supplied three live courses. GrapeMinds curated wine. Perplexity discovered the soundtrack, and Apple Music verified it. Every source and fallback stays visible.

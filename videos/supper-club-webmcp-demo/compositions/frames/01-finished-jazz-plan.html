@@ -1,0 +1,21 @@
+<link rel="stylesheet" href="/compositions/shared.css">
+<template id="01-finished-jazz-plan-template">
+  <div class="hf-frame" data-composition-id="01-finished-jazz-plan" data-width="1920" data-height="1080" data-duration="10">
+    <div id="f01-ground" class="clip hf-ground" data-start="0" data-duration="10"></div>
+    <video id="f01-video" class="clip hf-media" src="/assets/04-provider-results.mp4" data-start="0" data-duration="10" data-media-start="12" data-track-index="1" muted playsinline></video>
+    <div id="f01-overlay" class="clip hf-overlay" data-start="0" data-duration="10" data-track-index="2">
+      <div id="f01-top" class="hf-topline"><span class="hf-index">01</span><span class="hf-kicker">Finished first</span><span id="f01-rule" class="hf-rule"></span><span class="hf-badge">Jazz · Toni Morrison</span></div>
+      <div id="f01-focus" class="hf-focus" style="left:538px;top:120px;width:930px;height:680px"></div>
+      <div id="f01-lower" class="hf-lower"><div class="hf-proof">One shared, agent-readable plan</div><div class="hf-badge">Working product</div></div>
+      <i class="hf-corner tl"></i><i class="hf-corner br"></i>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#f01-top", { y: -70, opacity: 0 }, { y: 0, opacity: 1, duration: .7, ease: "power3.out" }, 0.15)
+        .fromTo("#f01-rule", { scaleX: 0 }, { scaleX: 1, duration: .7, ease: "power3.out" }, .45)
+        .fromTo("#f01-focus", { scale: 1.04, opacity: 0 }, { scale: 1, opacity: 1, duration: .65, ease: "power3.out" }, 1.0)
+        .fromTo("#f01-lower", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: .65, ease: "power3.out" }, 4.0);
+      window.__timelines["01-finished-jazz-plan"] = tl;
+    </script>
+  </div>
+</template>

@@ -1,0 +1,21 @@
+{
+  "provider": "ElevenLabs",
+  "model": "eleven_v3",
+  "voiceId": "RILOU7YmBhvwJGDGjNmP",
+  "sampleRateHz": 44100,
+  "channels": 1,
+  "masterDurationSeconds": 163.9,
+  "masterPath": "narration/supper-club-demo-master.wav",
+  "clips": [
+    { "id": "01-finished-jazz-plan", "durationSeconds": 6.0, "frameSeconds": 10.0, "slackSeconds": 4.0 },
+    { "id": "02-page-native-tools", "durationSeconds": 7.76, "frameSeconds": 10.2, "slackSeconds": 2.44 },
+    { "id": "03-create-jazz-plan", "durationSeconds": 9.12, "frameSeconds": 12.03, "slackSeconds": 2.91 },
+    { "id": "04-provider-receipts", "durationSeconds": 12.88, "frameSeconds": 14.17, "slackSeconds": 1.29 },
+    { "id": "05-search-price-replace", "durationSeconds": 11.84, "frameSeconds": 21.93, "slackSeconds": 10.09 },
+    { "id": "06-shopping-prep-cards", "durationSeconds": 11.68, "frameSeconds": 18.0, "slackSeconds": 6.32 },
+    { "id": "07-local-grocery-estimate", "durationSeconds": 9.68, "frameSeconds": 12.8, "slackSeconds": 3.12 },
+    { "id": "08-atmosphere-provenance", "durationSeconds": 10.64, "frameSeconds": 21.0, "slackSeconds": 10.36 },
+    { "id": "09-host-control-export", "durationSeconds": 12.64, "frameSeconds": 23.77, "slackSeconds": 11.13 },
+    { "id": "10-storefront-future", "durationSeconds": 10.48, "frameSeconds": 20.0, "slackSeconds": 9.52 }
+  ]
+}

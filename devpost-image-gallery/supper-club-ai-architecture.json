@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Supper Club AI · One Shared Creative Host Workspace",
+    "quality_profile": "showcase",
+    "viewBox": [1360, 860]
+  },
+  "components": [
+    {
+      "id": "creative-host",
+      "type": "external",
+      "label": "Creative Host",
+      "sublabel": "Taste · guests · approval",
+      "pos": [55, 350],
+      "size": [165, 76]
+    },
+    {
+      "id": "chatgpt-agent",
+      "type": "cloud",
+      "label": "ChatGPT Agent",
+      "sublabel": "Plans with the host",
+      "pos": [285, 350],
+      "size": [170, 76]
+    },
+    {
+      "id": "workspace",
+      "type": "frontend",
+      "label": "Supper Club Workspace",
+      "sublabel": "Run of show · receipts",
+      "pos": [525, 350],
+      "size": [190, 76],
+      "tag": "React + Next.js"
+    },
+    {
+      "id": "webmcp-tools",
+      "type": "frontend",
+      "label": "WebMCP Tool Registry",
+      "sublabel": "28 typed capabilities",
+      "pos": [525, 170],
+      "size": [190, 76],
+      "tag": "document.modelContext"
+    },
+    {
+      "id": "plan-api",
+      "type": "backend",
+      "label": "Plan API",
+      "sublabel": "Structured plan updates",
+      "pos": [800, 350],
+      "size": [170, 76],
+      "tag": "expectedPlanVersion"
+    },
+    {
+      "id": "plan-store",
+      "type": "database",
+      "label": "Versioned Plan Store",
+      "sublabel": "Anonymous plans · Redis",
+      "pos": [1050, 350],
+      "size": [185, 76]
+    },
+    {
+      "id": "provider-gateway",
+      "type": "backend",
+      "label": "Provider Gateway",
+      "sublabel": "Sourced curation + fallbacks",
+      "pos": [800, 600],
+      "size": [185, 76],
+      "tag": "server-only credentials"
+    },
+    {
+      "id": "curation-services",
+      "type": "external",
+      "label": "Curation Services",
+      "sublabel": "Recipes · music · pairings · grocery",
+      "pos": [1075, 600],
+      "size": [205, 76]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Supper Club AI",
+      "wraps": ["workspace", "webmcp-tools", "plan-api", "plan-store", "provider-gateway"],
+      "pad": 42
+    },
+    {
+      "kind": "security-group",
+      "label": "Same-origin server boundary",
+      "wraps": ["plan-api", "provider-gateway"],
+      "pad": 24
+    }
+  ],
+  "connections": [
+    {
+      "id": "host-to-agent",
+      "from": "creative-host",
+      "to": "chatgpt-agent",
+      "label": "brief + decisions",
+      "variant": "emphasis",
+      "labelDy": -36
+    },
+    {
+      "id": "agent-to-webmcp",
+      "from": "chatgpt-agent",
+      "to": "webmcp-tools",
+      "label": "typed tool calls",
+      "variant": "emphasis"
+    },
+    {
+      "id": "tools-to-workspace",
+      "from": "webmcp-tools",
+      "to": "workspace",
+      "label": "visible plan changes",
+      "labelDy": 24
+    },
+    {
+      "id": "workspace-to-api",
+      "from": "workspace",
+      "to": "plan-api",
+      "label": "read + update plan",
+      "labelDy": 62
+    },
+    {
+      "id": "api-to-store",
+      "from": "plan-api",
+      "to": "plan-store",
+      "label": "versioned write"
+    },
+    {
+      "id": "api-to-gateway",
+      "from": "plan-api",
+      "to": "provider-gateway",
+      "label": "curation request",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "gateway-to-services",
+      "from": "provider-gateway",
+      "to": "curation-services",
+      "label": "normalized research",
+      "variant": "dashed",
+      "labelDy": 62
+    }
+  ],
+  "cards": [
+    {
+      "dot": "violet",
+      "title": "Shared State",
+      "items": [
+        "The agent and host work on the same plan, not a disconnected chat transcript.",
+        "Stale writes are rejected rather than overwriting a newer host change."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Trust by Design",
+      "items": [
+        "Sources, fallback modes, warnings, and affected sections become visible receipts.",
+        "Finalization and file exports wait for explicit host approval."
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Provider Resilience",
+      "items": [
+        "Each menu course resolves independently through live providers and reviewed fallbacks.",
+        "Secrets remain on the server; browser tools receive structured results only."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+<link rel="stylesheet" href="/compositions/shared.css">
+<template id="10-storefront-future-template">
+  <div class="hf-frame hf-paper-scene" data-composition-id="10-storefront-future" data-width="1920" data-height="1080" data-duration="20">
+    <style>
+      #f10-ground { background-color:#eee6dd; background-image:repeating-linear-gradient(0deg,rgba(15,15,14,.045) 0,rgba(15,15,14,.045) 1px,rgba(238,230,221,0) 1px,rgba(238,230,221,0) 42px); }
+      #f10-overlay { color:#0f0f0e; background:radial-gradient(circle at 78% 16%,rgba(186,196,103,.36),rgba(186,196,103,0) 34%); }
+      .f10-phase { position:absolute; inset:0; }
+      #f10-transform, #f10-capabilities, #f10-close { opacity:0; visibility:hidden; }
+      .f10-meta { position:absolute;left:78px;top:58px;color:#983423;font:700 25px/1 "IBM Plex Mono",monospace;letter-spacing:.11em;text-transform:uppercase; }
+      .f10-headline { position:absolute;left:76px;top:188px;width:1600px;font:400 126px/.88 Garamond,serif;letter-spacing:-.045em; }
+      .f10-sub { position:absolute;left:82px;top:525px;width:1120px;font:700 30px/1.45 "IBM Plex Mono",monospace; }
+      .f10-rule { position:absolute;left:78px;right:78px;top:140px;height:3px;background:#0f0f0e;transform-origin:left center; }
+      .f10-card { position:absolute;left:242px;top:248px;width:560px;height:500px;padding:42px;background:#0f0f0e;color:#eee6dd;box-shadow:18px 18px 0 #983423; }
+      .f10-card h3 { margin:0 0 26px;font:400 66px/.95 Garamond,serif; }
+      .f10-card ul { margin:0;padding:0;list-style:none;font:400 24px/1.8 "IBM Plex Mono",monospace; }
+      .f10-card li { border-bottom:1px solid rgba(238,230,221,.26); }
+      .f10-connect { position:absolute;left:810px;top:485px;width:245px;height:4px;background:#983423;transform-origin:left center; }
+      .f10-icon-row { position:absolute;left:1045px;top:332px;display:flex;gap:24px; }
+      .f10-icon { width:210px;height:270px;padding:34px 20px;border:3px solid #0f0f0e;background:#eee6dd;text-align:center;box-shadow:10px 10px 0 rgba(15,15,14,.15); }
+      .f10-icon svg { width:92px;height:92px;stroke:#983423;fill:none;stroke-width:5; }
+      .f10-icon strong { display:block;margin-top:25px;font:700 23px/1.2 "IBM Plex Mono",monospace;text-transform:uppercase; }
+      .f10-panel { position:absolute;top:190px;width:760px;height:650px;padding:42px 46px;border:3px solid #0f0f0e;background:#eee6dd;box-shadow:14px 14px 0 rgba(15,15,14,.14); }
+      #f10-live { left:120px; }
+      #f10-roadmap { right:120px; }
+      .f10-panel h3 { margin:0;font:400 62px/1 "League Gothic",sans-serif;letter-spacing:.05em; }
+      .f10-panel p { margin:10px 0 30px;font:400 22px/1.4 "IBM Plex Mono",monospace; }
+      .f10-chips { display:flex;flex-wrap:wrap;gap:14px; }
+      .f10-chip { padding:16px 18px;border:2px solid #0f0f0e;font:700 21px/1.1 "IBM Plex Mono",monospace;text-transform:uppercase; }
+      #f10-live .f10-chip { background:#bac467; }
+      #f10-roadmap .f10-chip { background:#eee6dd;color:#6e695f;border-color:#6e695f; }
+      .f10-status { position:absolute;right:44px;top:42px;display:flex;align-items:center;gap:10px;font:700 19px/1 "IBM Plex Mono",monospace;letter-spacing:.08em; }
+      .f10-dot { width:14px;height:14px;border-radius:50%;background:#bac467; }
+      .f10-close { position:absolute;left:0;top:0;width:1920px;height:1080px;background:#0f0f0e;color:#eee6dd; }
+      .f10-lock { position:absolute;left:120px;top:178px;width:1680px;padding:54px 64px;border:3px solid #bac467; }
+      .f10-lock-label { color:#ef7458;font:700 23px/1 "IBM Plex Mono",monospace;letter-spacing:.1em;text-transform:uppercase; }
+      .f10-lock h2 { margin:30px 0 22px;max-width:1450px;font:400 105px/.92 Garamond,serif;letter-spacing:-.035em; }
+      .f10-lock p { margin:0;color:#b8ad9d;font:400 26px/1.4 "IBM Plex Mono",monospace; }
+      .f10-url { position:absolute;left:120px;bottom:82px;color:#bac467;font:700 48px/1 "IBM Plex Mono",monospace;letter-spacing:.02em; }
+    </style>
+    <div id="f10-ground" class="clip hf-ground" data-start="0" data-duration="20"></div>
+    <div id="f10-overlay" class="clip hf-overlay" data-start="0" data-duration="20" data-track-index="2">
+      <section id="f10-intro" class="f10-phase">
+        <div class="f10-meta">10 / Where this can go</div><div id="f10-rule" class="f10-rule"></div>
+        <h1 class="f10-headline">A new kind of storefront experience.</h1>
+        <p class="f10-sub">A shopping list becomes a guided local experience for wine shops and independent grocers.</p>
+      </section>
+      <section id="f10-transform" class="f10-phase">
+        <div class="f10-meta">Plan → local inventory → guided basket</div><div class="f10-rule"></div>
+        <article class="f10-card"><h3>Jazz: A Harlem Supper</h3><ul><li>3 courses</li><li>Wine pairings</li><li>21 ingredients</li><li>Host-approved plan</li></ul></article>
+        <div class="f10-connect"></div>
+        <div class="f10-icon-row">
+          <div class="f10-icon"><svg viewBox="0 0 100 100"><path d="M50 91s30-31 30-56A30 30 0 1 0 20 35c0 25 30 56 30 56Z"/><circle cx="50" cy="35" r="10"/></svg><strong>Local store</strong></div>
+          <div class="f10-icon"><svg viewBox="0 0 100 100"><path d="M40 10h20v18l8 14v46H32V42l8-14Z"/><path d="M34 54h32"/></svg><strong>Wine + grocery</strong></div>
+          <div class="f10-icon"><svg viewBox="0 0 100 100"><path d="M18 35h64L74 78H28Z"/><path d="M12 20h12l5 15"/><circle cx="34" cy="87" r="5"/><circle cx="70" cy="87" r="5"/></svg><strong>Guided basket</strong></div>
+        </div>
+      </section>
+      <section id="f10-capabilities" class="f10-phase">
+        <article id="f10-live" class="f10-panel"><div class="f10-status"><span class="f10-dot"></span>LIVE</div><h3>LIVE TODAY · KROGER</h3><p>Location-aware evidence inside the shared plan.</p><div class="f10-chips"><span class="f10-chip">Location search</span><span class="f10-chip">Package matching</span><span class="f10-chip">Stock</span><span class="f10-chip">Promotions</span><span class="f10-chip">Confidence</span><span class="f10-chip">Basket estimates</span></div></article>
+        <article id="f10-roadmap" class="f10-panel"><h3>ROADMAP</h3><p>Commerce actions remain reviewable and clearly unshipped.</p><div class="f10-chips"><span class="f10-chip">Store discounts</span><span class="f10-chip">Coupons</span><span class="f10-chip">Bottle inventory</span><span class="f10-chip">Reviewable cart</span></div></article>
+      </section>
+      <section id="f10-close" class="f10-phase f10-close"><div class="f10-lock"><div class="f10-lock-label">Host control remains the boundary</div><h2>Confirmation before purchase.</h2><p>The agent coordinates. The host decides.</p></div><div class="f10-url">thesupperclub.app</div></section>
+      <i class="hf-corner tl"></i><i class="hf-corner br"></i>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#f10-intro .f10-meta", { x: -80, opacity: 0 }, { x: 0, opacity: 1, duration: .6, ease: "power3.out" }, .1)
+        .fromTo("#f10-rule", { scaleX: 0 }, { scaleX: 1, duration: .8, ease: "power3.out" }, .3)
+        .fromTo("#f10-intro .f10-headline", { y: 90, opacity: 0 }, { y: 0, opacity: 1, duration: .8, ease: "power3.out" }, .55)
+        .fromTo("#f10-intro .f10-sub", { y: 65, opacity: 0 }, { y: 0, opacity: 1, duration: .65, ease: "power3.out" }, 1.25)
+        .to("#f10-intro", { x: -180, opacity: 0, duration: .32, ease: "power4.in" }, 2.65)
+        .set("#f10-transform", { autoAlpha: 1 }, 2.95)
+        .fromTo("#f10-transform .f10-card", { x: -220, opacity: .25 }, { x: 0, opacity: 1, duration: .62, ease: "power4.out" }, 2.95)
+        .fromTo("#f10-transform .f10-connect", { scaleX: 0 }, { scaleX: 1, duration: .55, ease: "power3.out" }, 3.45)
+        .fromTo("#f10-transform .f10-icon", { x: 120, opacity: 0 }, { x: 0, opacity: 1, duration: .48, stagger: .22, ease: "power3.out" }, 3.72)
+        .to("#f10-transform", { x: -180, opacity: 0, duration: .32, ease: "power4.in" }, 6.0)
+        .set("#f10-capabilities", { autoAlpha: 1 }, 6.3)
+        .fromTo("#f10-live", { x: -180, opacity: .2 }, { x: 0, opacity: 1, duration: .6, ease: "power4.out" }, 6.3)
+        .fromTo("#f10-live .f10-chip", { y: 38, opacity: 0 }, { y: 0, opacity: 1, duration: .36, stagger: .25, ease: "power3.out" }, 6.85)
+        .fromTo("#f10-roadmap", { x: 180, opacity: 0 }, { x: 0, opacity: 1, duration: .62, ease: "power4.out" }, 12.2)
+        .fromTo("#f10-roadmap .f10-chip", { y: 34, opacity: 0 }, { y: 0, opacity: 1, duration: .34, stagger: .24, ease: "power3.out" }, 12.65)
+        .to("#f10-capabilities", { scale: .86, opacity: 0, duration: .3, ease: "power4.in" }, 16.2)
+        .set("#f10-close", { autoAlpha: 1 }, 16.48)
+        .fromTo("#f10-close .f10-lock", { scale: 1.12, opacity: .2 }, { scale: 1, opacity: 1, duration: .65, ease: "power4.out" }, 16.48)
+        .fromTo("#f10-close .f10-url", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: .55, ease: "power3.out" }, 17.25)
+        .to("#f10-close", { opacity: 0, duration: .8, ease: "power1.inOut" }, 19.2);
+      window.__timelines["10-storefront-future"] = tl;
+    </script>
+  </div>
+</template>

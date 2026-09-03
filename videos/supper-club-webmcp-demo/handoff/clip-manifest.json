@@ -1,0 +1,142 @@
+{
+  "version": 1,
+  "project": "supper-club-webmcp-demo",
+  "canvas": "1920x1080",
+  "fps": 30,
+  "rawDurationSeconds": 221.7,
+  "plannedPictureDurationSeconds": 163.9,
+  "hardMaximumSeconds": 175,
+  "excluded": [
+    {
+      "path": "recording/raw/01-finished-workspace.mp4",
+      "reason": "Shows the older Seed & Stars plan rather than the Toni Morrison Jazz demo."
+    }
+  ],
+  "beats": [
+    {
+      "id": "01-finished-jazz-plan",
+      "timelineStart": 0,
+      "durationSeconds": 10,
+      "segments": [
+        { "path": "recording/raw/04-provider-results.mp4", "in": 12, "out": 22 }
+      ],
+      "narrationPath": "narration/clips/01-finished-jazz-plan.wav",
+      "caption": "ONE SHARED, AGENT-READABLE PLAN",
+      "crop": "Jazz title, Toni Morrison cover, run of show, and Agent Marginalia"
+    },
+    {
+      "id": "02-page-native-tools",
+      "timelineStart": 10,
+      "durationSeconds": 10.2,
+      "segments": [
+        { "path": "recording/raw/02-new-chat-open-site.mp4", "in": 2, "out": 7.5 },
+        { "path": "recording/raw/02-new-chat-open-site.mp4", "in": 10.5, "out": 15.2 }
+      ],
+      "narrationPath": "narration/clips/02-page-native-tools.wav",
+      "caption": "THE PAGE REGISTERS ITS WEBMCP TOOLS",
+      "crop": "ChatGPT composer, canonical URL, then loaded workspace"
+    },
+    {
+      "id": "03-create-jazz-plan",
+      "timelineStart": 20.2,
+      "durationSeconds": 12.03,
+      "segments": [
+        { "path": "recording/raw/03-create-party-plan.mp4", "in": 0, "out": 4 },
+        { "path": "recording/raw/03-create-party-plan.mp4", "in": 11.5, "out": 19.53 }
+      ],
+      "narrationPath": "narration/clips/03-create-jazz-plan.wav",
+      "caption": "WEBMCP · CREATE_PARTY_PLAN",
+      "crop": "real prompt, tool receipt, and new Jazz plan"
+    },
+    {
+      "id": "04-provider-receipts",
+      "timelineStart": 32.23,
+      "durationSeconds": 14.17,
+      "segments": [
+        { "path": "recording/raw/04-provider-results.mp4", "in": 0, "out": 8 },
+        { "path": "recording/raw/04-provider-results.mp4", "in": 17.8, "out": 23.97 }
+      ],
+      "narrationPath": "narration/clips/04-provider-receipts.wav",
+      "caption": "LIVE PROVIDERS · VISIBLE FALLBACKS",
+      "crop": "provider summary and scrollable Agent Marginalia"
+    },
+    {
+      "id": "05-search-price-replace",
+      "timelineStart": 46.4,
+      "durationSeconds": 21.93,
+      "segments": [
+        { "path": "recording/raw/05a-search-recipes.mp4", "in": 0, "out": 3.5 },
+        { "path": "recording/raw/05a-search-recipes.mp4", "in": 10, "out": 17.57 },
+        { "path": "recording/raw/05b-replace-main-course.mp4", "in": 0, "out": 3 },
+        { "path": "recording/raw/05b-replace-main-course.mp4", "in": 10, "out": 17.86 }
+      ],
+      "narrationPath": "narration/clips/05-search-price-replace.wav",
+      "caption": "SEARCH → PRICE → CHOOSE → REPLACE",
+      "crop": "candidate prices followed by selected course and receipt"
+    },
+    {
+      "id": "06-shopping-prep-cards",
+      "timelineStart": 68.33,
+      "durationSeconds": 18,
+      "segments": [
+        { "path": "recording/raw/06-shopping-and-prep.mp4", "in": 0, "out": 3.5 },
+        { "path": "recording/raw/06-shopping-and-prep.mp4", "in": 9, "out": 15 },
+        { "path": "recording/raw/06-shopping-and-prep.mp4", "in": 15, "out": 23.5 }
+      ],
+      "narrationPath": "narration/clips/06-shopping-prep-cards.wav",
+      "caption": "BY DISH · BY AISLE · BY PREP TIME",
+      "crop": "synchronized counts, prep tasks, then one readable recipe card"
+    },
+    {
+      "id": "07-local-grocery-estimate",
+      "timelineStart": 86.33,
+      "durationSeconds": 12.8,
+      "segments": [
+        { "path": "recording/raw/07a-find-grocery-store.mp4", "in": 8, "out": 12.47 },
+        { "path": "recording/raw/07b-grocery-pricing.mp4", "in": 6.5, "out": 14.83 }
+      ],
+      "narrationPath": "narration/clips/07-local-grocery-estimate.wav",
+      "caption": "LOCAL ESTIMATE · 20/21 MATCHED · CONFIDENCE SHOWN",
+      "crop": "selected store followed by subtotal, coverage, confidence, and review items"
+    },
+    {
+      "id": "08-atmosphere-provenance",
+      "timelineStart": 99.13,
+      "durationSeconds": 21,
+      "segments": [
+        { "path": "recording/raw/08-atmosphere-provenance.mp4", "in": 4, "out": 25 }
+      ],
+      "narrationPath": "narration/clips/08-atmosphere-provenance.wav",
+      "caption": "SOURCES AND CHANGES STAY VISIBLE",
+      "crop": "wine pairing, music artwork or preview, cultural notes, then receipts"
+    },
+    {
+      "id": "09-host-control-export",
+      "timelineStart": 120.13,
+      "durationSeconds": 23.77,
+      "segments": [
+        { "path": "recording/raw/09a-host-control-boundary.mp4", "in": 6.5, "out": 15.43 },
+        { "path": "recording/raw/09b-approved-recipe-export.mp4", "in": 0, "out": 2.5 },
+        { "path": "recording/raw/09b-approved-recipe-export.mp4", "in": 5, "out": 11.5 },
+        { "path": "recording/raw/09b-approved-recipe-export.mp4", "in": 12.5, "out": 18.33 }
+      ],
+      "narrationPath": "narration/clips/09-host-control-export.wav",
+      "caption": "THE AGENT COORDINATES · THE HOST DECIDES",
+      "crop": "confirmation boundary, approval, finalization and export receipts, then downloaded PDF"
+    },
+    {
+      "id": "10-storefront-future",
+      "timelineStart": 143.9,
+      "durationSeconds": 20,
+      "segments": [],
+      "generated": "Native HyperFrames motion graphics; never present this as captured application UI.",
+      "narrationPath": "narration/clips/10-storefront-future.wav",
+      "caption": "A NEW KIND OF STOREFRONT EXPERIENCE",
+      "onScreenFacts": {
+        "liveToday": ["Location search", "Retailer package matching", "Stock", "Promotions", "Confidence", "Basket estimates"],
+        "roadmap": ["Store discounts", "Coupons", "Bottle inventory", "Reviewable cart"],
+        "safety": "Host confirmation before purchase"
+      }
+    }
+  ]
+}

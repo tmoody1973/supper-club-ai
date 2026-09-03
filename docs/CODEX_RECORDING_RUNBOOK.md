@@ -168,13 +168,26 @@ location, matched coverage, promotional savings when present, confidence, and
 which unmatched items still require host review.
 ```
 
-### Prompt H — show the trust boundary without crossing it
+### Prompt H1 — stop at the host-control boundary
 
 ```text
 Review the current plan's provider receipts, dietary warnings, and Agent
 Marginalia. Include the recipe-card source and quantity-scaling warnings, and
-explain what still requires host review. Do not finalize the plan. Do not call
-export_recipe_packet or export_host_packet, and do not download any file.
+explain what still requires host review. I have not approved finalization or a
+download. Stop and ask for my explicit confirmation before calling
+finalize_party_plan or export_recipe_packet.
+```
+
+### Prompt H2 — explicitly approve finalization and recipe export
+
+```text
+I have reviewed the current plan and explicitly approve finalizing it and
+downloading its kitchen recipe packet. Use finalize_party_plan with confirm
+true for the current plan ID and version. After finalization succeeds, use
+export_recipe_packet with confirm true and the newly returned plan version.
+Show the finalization receipt, export receipt, downloaded filename, number of
+dish cards, and included files. Do not export the host packet and do not start
+any purchase.
 ```
 
 ### Prompt I — open the retailer opportunity section
@@ -337,17 +350,20 @@ tail after each line. Do not add a background-music bed.
 ### Clip 09 — Host-control boundary
 
 - Target picture: `02:16–02:30` (14 seconds)
-- Source file: `recording/raw/09-host-control-close.mov`
-- Show: Prompt H, review warnings, the unpressed finalization, recipe-packet,
-  and host-packet export controls, then a final wide view of the shared plan.
+- Source files: `recording/raw/09a-host-control-boundary.mov` and
+  `recording/raw/09b-approved-recipe-export.mov`
+- Show: Prompt H1 and ChatGPT stopping for explicit confirmation, then Prompt
+  H2, genuine `finalize_party_plan` and `export_recipe_packet` calls, and the
+  successful kitchen-packet download receipt. Cut all waiting.
 - On-screen label: `THE AGENT COORDINATES · THE HOST DECIDES`
+- Secondary label: `WEBMCP TOOL 28 · EXPORT_RECIPE_PACKET`
 - ElevenLabs file: `narration/clips/09-host-control-close.wav`
 - Narration:
 
 > The agent can research and coordinate, but the host stays in control.
-> Finalization and every artifact download wait for explicit confirmation.
-> Cultural inspiration becomes a coordinated, hostable experience for people
-> and agents together.
+> Finalization and downloads wait for explicit confirmation. Once the host
+> approves, WebMCP finalizes the plan and downloads a kitchen packet with a
+> combined PDF, one card per dish, and a provenance manifest.
 
 ### Clip 10 — Where this can go
 

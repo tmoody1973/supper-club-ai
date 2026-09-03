@@ -1,0 +1,66 @@
+1
+00:00:00,000 --> 00:00:06,000
+This is Supper Club AI: one agent-readable workspace
+for a complete cultural gathering.
+
+2
+00:00:10,000 --> 00:00:17,760
+We open thesupperclub dot app inside ChatGPT.
+The page registers its own WebMCP tools.
+
+3
+00:00:20,200 --> 00:00:29,320
+One brief turns Toni Morrison's Jazz into a Harlem supper for eight—
+with budget, dietary needs, and wine carried into the plan.
+
+4
+00:00:32,230 --> 00:00:38,500
+Spoonacular supplied three live courses. GrapeMinds curated wine.
+Perplexity discovered the soundtrack, and Apple Music verified it.
+
+5
+00:00:38,500 --> 00:00:45,110
+Every source and fallback stays visible.
+
+6
+00:00:46,400 --> 00:00:51,800
+The host can change one decision
+without rebuilding the evening.
+
+7
+00:00:51,800 --> 00:00:58,240
+ChatGPT searches gluten-free mains, prices exact candidates at a selected
+Kroger location, then replaces only the host's choice.
+
+8
+00:01:08,330 --> 00:01:20,010
+That one change flows downstream: ingredients regroup by dish and aisle,
+the prep timeline rebuilds, and source-aware recipe cards scale each dish.
+
+9
+00:01:26,330 --> 00:01:31,500
+With a real store selected, Kroger estimates the local basket
+and reports match coverage, promotions, and confidence—
+
+10
+00:01:31,500 --> 00:01:36,010
+without pretending every ingredient matched.
+
+11
+00:01:39,130 --> 00:01:49,770
+GrapeMinds pairings, Apple Music artwork and previews, cultural notes,
+and Agent Marginalia stay inspectable beside the shared plan.
+
+12
+00:02:00,130 --> 00:02:04,900
+The agent stops at consequential actions.
+
+13
+00:02:04,900 --> 00:02:12,770
+Only after explicit host approval does WebMCP finalize the plan
+and download a kitchen packet with recipe cards and provenance.
+
+14
+00:02:23,900 --> 00:02:34,380
+For wine shops and independent grocers, this same plan can become
+a guided storefront experience—local, useful, and always host-controlled.

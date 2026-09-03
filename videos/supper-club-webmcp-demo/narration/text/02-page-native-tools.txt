@@ -1,0 +1,1 @@
+[curious] We open thesupperclub dot app inside ChatGPT. The page registers its own Web M-C-P tools.

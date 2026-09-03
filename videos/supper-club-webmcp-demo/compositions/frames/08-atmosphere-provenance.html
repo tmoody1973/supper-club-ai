@@ -1,0 +1,22 @@
+<link rel="stylesheet" href="/compositions/shared.css">
+<template id="08-atmosphere-provenance-template">
+  <div class="hf-frame" data-composition-id="08-atmosphere-provenance" data-width="1920" data-height="1080" data-duration="21.5">
+    <div id="f08-ground" class="clip hf-ground" data-start="0" data-duration="21.5"></div>
+    <video id="f08-video" class="clip hf-media" src="/assets/08-atmosphere-provenance.mp4" data-start="0" data-duration="21.5" data-media-start="4" data-track-index="1" muted playsinline></video>
+    <div id="f08-overlay" class="clip hf-overlay" data-start="0" data-duration="21.5" data-track-index="2">
+      <div id="f08-top" class="hf-topline"><span class="hf-index">08</span><span class="hf-kicker">Atmosphere with provenance</span><span class="hf-rule"></span></div>
+      <div id="f08-rail" style="position:absolute;left:65px;bottom:46px;display:flex;gap:12px">
+        <span class="hf-badge" style="background:#0f0f0e;color:#eee6dd;border-color:#ef7458">GrapeMinds wine</span><span class="hf-badge" style="background:#0f0f0e;color:#eee6dd;border-color:#ef7458">Apple Music verified</span><span class="hf-badge" style="background:#0f0f0e;color:#eee6dd;border-color:#ef7458">Cultural notes</span><span class="hf-badge" style="background:#0f0f0e;color:#eee6dd;border-color:#ef7458">Agent Marginalia</span>
+      </div>
+      <div id="f08-proof" class="hf-proof" style="position:absolute;right:62px;top:135px;max-width:660px;background:#0f0f0e;color:#eee6dd">Sources and changes stay visible</div>
+      <i class="hf-corner tl"></i><i class="hf-corner br"></i>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#f08-top", { x: -90, opacity: 0 }, { x: 0, opacity: 1, duration: .65, ease: "power3.out" }, .2)
+        .fromTo("#f08-rail .hf-badge", { y: 55, opacity: 0 }, { y: 0, opacity: 1, duration: .42, stagger: 2.15, ease: "power3.out" }, 2.4)
+        .fromTo("#f08-proof", { x: 100, opacity: 0 }, { x: 0, opacity: 1, duration: .65, ease: "power3.out" }, 12.0);
+      window.__timelines["08-atmosphere-provenance"] = tl;
+    </script>
+  </div>
+</template>

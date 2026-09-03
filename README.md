@@ -1,12 +1,13 @@
 # Supper Club AI
 
-Supper Club AI is an **agent-readable cultural hosting workspace** for Creative Hosts—not an AI dinner planner. It turns one cultural inspiration into a shared, sourced run of show spanning the theme, menu, pairings, soundtrack, shopping list, prep timeline, private host packet, and guest-facing share kit. Its featured demo, **Seed & Stars**, composes an Afrofuturist gathering inspired by Octavia E. Butler's *Parable of the Sower*.
+Supper Club AI is an **agent-readable cultural hosting workspace** for Creative Hosts—not an AI dinner planner. It turns one cultural inspiration into a shared, sourced run of show spanning the theme, menu, pairings, soundtrack, shopping list, prep timeline, private host packet, and guest-facing share kit. The public workspace includes the reviewed **Seed & Stars** starting point, while the hackathon demo uses WebMCP to create a new Harlem supper inspired by Toni Morrison's *Jazz*.
 
 > Supper Club AI turns cultural inspiration into a coordinated, hostable experience by giving people and agents one shared, agent-readable workspace—reducing the fragmented research and manual reconciliation that make ambitious gatherings difficult to produce.
 
 The website exposes twenty-eight typed WebMCP tools so an agent can create, read, and update the same structured plan the host sees in the browser. Unlike a chat that leaves the host reconciling disconnected suggestions, Supper Club AI makes each change part of a durable, versioned plan with visible sources, warnings, and tool receipts. The repository also includes a separate MCP App for ChatGPT with eighteen focused tools and an interactive host-brief form.
 
 - **Live application:** [thesupperclub.app](https://www.thesupperclub.app/)
+- **Judge testing guide:** [Test the complete WebMCP workflow](./docs/JUDGE_TESTING.md)
 - **License:** [MIT](./LICENSE)
 
 ## Why this matters
@@ -64,6 +65,25 @@ for (const definition of tools) {
 ```
 
 The twenty-fifth website tool, `create_party_plan`, accepts an inspiration, guest count, budget, dietary requirements, and wine and zero-proof preferences. Tool twenty-six, `price_recipe_candidates`, compares up to three searched recipes against a course cap using one host-selected Kroger location and refuses to label partial ingredient coverage as within budget. Tools twenty-seven and twenty-eight, `prepare_recipe_cards` and `export_recipe_packet`, preview and download a kitchen packet containing a combined PDF, one recipe card per dish, and a provenance manifest. Source-linked dishes use an original functional preparation outline and keep the authoritative recipe link visible instead of copying protected headnotes, media, or expressive prose. The dynamic-plan endpoint activates the returned plan ID in the website and reports the provider and mode used for each curation stage. Each menu course is resolved independently through Spoonacular → Perplexity Agent API → reviewed recipe fallback, so one missing dessert does not discard a successful live starter or main. Pairings use GrapeMinds with X-Wines fallback and Perplexity-backed zero-proof discovery with a reviewed fallback. The soundtrack uses Perplexity discovery, Apple Music verification, optional Discogs context, and reviewed anchors only for unfilled slots. The executable implementation also includes version-conflict protection, structured success and error responses, visible change receipts, source attribution, and explicit confirmation for finalization and file downloads.
+
+## Judge testing
+
+The deployed application is public and requires no account or credentials. Provider keys remain server-side.
+
+1. Start a fresh ChatGPT conversation with the in-app browser available.
+2. Ask ChatGPT to open `https://www.thesupperclub.app/` and wait for the page to load. Opening the page first allows it to register its WebMCP tools.
+3. Ask ChatGPT:
+
+   > Use the WebMCP tools registered by the open Supper Club AI website—not the Supper Club MCP plugin—to create a dinner inspired by Toni Morrison's *Jazz* for 8 guests with a $250 budget. Include wine pairings and do not include zero-proof pairings. Show the provider receipts.
+
+4. Confirm that the site switches to a unique plan URL and displays the menu, wine, music, shopping list, prep timeline, cultural context, and provider receipts.
+5. Test a precise change:
+
+   > Use `search_recipes` to find gluten-free main-course alternatives under a $60 course cap. Preserve every other course and show me the candidates before saving anything.
+
+6. Select one candidate, then ask ChatGPT to rebuild the shopping list, prep timeline, and recipe cards. Finalization and file export should stop for explicit host approval.
+
+The complete expected-results checklist and troubleshooting notes are in [`docs/JUDGE_TESTING.md`](./docs/JUDGE_TESTING.md).
 
 ### How live menu and soundtrack curation work
 
@@ -147,6 +167,8 @@ PERPLEXITY_API_KEY=
 KROGER_CLIENT_ID=
 KROGER_CLIENT_SECRET=
 SUPPER_CLUB_SERVICE_TOKEN=
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
 ```
 
 Keep credentials in `.env.local` or encrypted deployment settings. Never prefix them with `NEXT_PUBLIC_`.

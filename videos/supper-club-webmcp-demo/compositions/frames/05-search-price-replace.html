@@ -1,0 +1,25 @@
+<link rel="stylesheet" href="/compositions/shared.css">
+<template id="05-search-price-replace-template">
+  <div class="hf-frame" data-composition-id="05-search-price-replace" data-width="1920" data-height="1080" data-duration="22.43">
+    <div id="f05-ground" class="clip hf-ground" data-start="0" data-duration="22.43"></div>
+    <video id="f05-video-a" class="clip hf-media" src="/assets/05a-search-recipes.mp4" data-start="0" data-duration="3.5" data-media-start="0" data-track-index="1" muted playsinline></video>
+    <video id="f05-video-b" class="clip hf-media" src="/assets/05a-search-recipes.mp4" data-start="3.5" data-duration="7.57" data-media-start="10" data-track-index="1" muted playsinline></video>
+    <video id="f05-video-c" class="clip hf-media" src="/assets/05b-replace-main-course.mp4" data-start="11.07" data-duration="3" data-media-start="0" data-track-index="1" muted playsinline></video>
+    <video id="f05-video-d" class="clip hf-media" src="/assets/05b-replace-main-course.mp4" data-start="14.07" data-duration="8.36" data-media-start="10" data-track-index="1" muted playsinline></video>
+    <div id="f05-overlay" class="clip hf-overlay" data-start="0" data-duration="22.43" data-track-index="2">
+      <div id="f05-top" class="hf-topline"><span class="hf-index">05</span><span class="hf-kicker">Change one decision</span><span class="hf-rule"></span></div>
+      <div id="f05-steps" style="position:absolute;left:70px;bottom:52px;display:flex;gap:10px">
+        <span class="hf-badge">Search</span><span class="hf-badge">Price</span><span class="hf-badge">Choose</span><span class="hf-badge">Replace</span>
+      </div>
+      <div id="f05-proof" class="hf-proof" style="position:absolute;right:62px;bottom:46px">One course changes. The evening stays intact.</div>
+      <i class="hf-corner tl"></i><i class="hf-corner br"></i>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#f05-top", { y: -65, opacity: 0 }, { y: 0, opacity: 1, duration: .6, ease: "power3.out" }, .15)
+        .fromTo("#f05-steps .hf-badge", { y: 48, opacity: 0 }, { y: 0, opacity: 1, duration: .4, stagger: 2.35, ease: "power3.out" }, 1.0)
+        .fromTo("#f05-proof", { x: 110, opacity: 0 }, { x: 0, opacity: 1, duration: .7, ease: "power3.out" }, 14.5);
+      window.__timelines["05-search-price-replace"] = tl;
+    </script>
+  </div>
+</template>

@@ -13,7 +13,8 @@ You do **not** need Codex CLI or `deskagent` for this workflow.
 - Source: ChatGPT desktop app plus Supper Club AI in its in-app browser
 - Main story: create one new cultural dinner with genuine WebMCP tools, revise
   one course, synchronize the practical work, preview source-aware recipe cards,
-  price groceries, inspect sources, and show where the product can go next
+  price groceries, inspect sources, explicitly approve and download the kitchen
+  packet, and show where the product can go next
 - Demo dinner: *Kindred* by Octavia E. Butler, eight guests, budget near $220,
   one gluten-free guest, and GrapeMinds-sourced wine pairings for every food
   course
@@ -73,7 +74,8 @@ source clips so HyperFrames can remove waits and preserve readable results.
 | 07a | `07a-find-grocery-store.mov` | The host chooses a real store before pricing |
 | 07b | `07b-grocery-pricing.mov` | Local estimate, coverage, promotions, confidence, unmatched items |
 | 08 | `08-atmosphere-provenance.mov` | GrapeMinds wines, Apple Music, and Agent Marginalia stay inspectable |
-| 09 | `09-host-control-close.mov` | Finalization and export still require the host |
+| 09a | `09a-host-control-boundary.mov` | Finalization and export stop until the host explicitly approves |
+| 09b | `09b-approved-recipe-export.mov` | The approved WebMCP export downloads the complete kitchen packet |
 | 10 | `10-storefront-future.mov` | Live retailer value today versus roadmap commerce features |
 
 ## Clip 01 — Finished workspace hook
@@ -327,28 +329,55 @@ Save as `08-atmosphere-provenance.mov`.
 
 HyperFrames label: `SOURCES AND CHANGES STAY VISIBLE`
 
-## Clip 09 — Host control boundary
+## Clip 09a — Host control boundary
 
-**Record:** 10–16 seconds after ChatGPT responds.
+**Record:** 8–14 seconds after ChatGPT responds.
 
 Paste and send:
 
 ```text
 Review the current plan's provider receipts, dietary warnings, and Agent
 Marginalia. Include the recipe-card source and quantity-scaling warnings, and
-explain what still requires host review. Do not finalize the plan. Do not call
-export_recipe_packet or export_host_packet, and do not download any file.
+explain what still requires host review. I have not approved finalization or a
+download. Stop and ask for my explicit confirmation before calling
+finalize_party_plan or export_recipe_packet.
 ```
 
 Show the warnings and the still-unpressed finalization, Download recipe packet,
-and host-packet export controls. Explain that `export_recipe_packet` creates a
-combined kitchen PDF, one PDF per dish, and a provenance manifest only after
-explicit confirmation. Do not click Finalize, Export, Download, or purchase
-anything.
+and host-packet export controls. Keep ChatGPT's request for explicit approval
+visible. Do not approve yet and do not click Finalize, Export, Download, or
+purchase anything.
 
-Save as `09-host-control-close.mov`.
+Save as `09a-host-control-boundary.mov`.
+
+## Clip 09b — Explicit approval and kitchen packet download
+
+**Record:** two short moments totaling 10–18 seconds. Capture the approval and
+real tool invocations, stop during any wait, then resume on the completed
+download receipt.
+
+Paste and send:
+
+```text
+I have reviewed the current plan and explicitly approve finalizing it and
+downloading its kitchen recipe packet. Use finalize_party_plan with confirm
+true for the current plan ID and version. After finalization succeeds, use
+export_recipe_packet with confirm true and the newly returned plan version.
+Show the finalization receipt, export receipt, downloaded filename, number of
+dish cards, and included files. Do not export the host packet and do not start
+any purchase.
+```
+
+Record until ChatGPT visibly invokes `finalize_party_plan`, then
+`export_recipe_packet`. Cut the loading wait. End on the successful
+`KITCHEN RECIPE PACKET EXPORTED` receipt or completed download message showing
+the combined kitchen PDF, one PDF per dish, and provenance manifest.
+
+Save as `09b-approved-recipe-export.mov`.
 
 HyperFrames label: `THE AGENT COORDINATES · THE HOST DECIDES`
+
+Secondary HyperFrames label: `WEBMCP TOOL 28 · EXPORT_RECIPE_PACKET`
 
 ## Clip 10 — Where this can go
 
@@ -426,7 +455,8 @@ recording/raw/06-shopping-and-prep.mov
 recording/raw/07a-find-grocery-store.mov
 recording/raw/07b-grocery-pricing.mov
 recording/raw/08-atmosphere-provenance.mov
-recording/raw/09-host-control-close.mov
+recording/raw/09a-host-control-boundary.mov
+recording/raw/09b-approved-recipe-export.mov
 recording/raw/10-storefront-future.mov
 ```
 

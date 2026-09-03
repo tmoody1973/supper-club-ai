@@ -1,0 +1,22 @@
+<link rel="stylesheet" href="/compositions/shared.css">
+<template id="03-create-jazz-plan-template">
+  <div class="hf-frame" data-composition-id="03-create-jazz-plan" data-width="1920" data-height="1080" data-duration="12.53">
+    <div id="f03-ground" class="clip hf-ground" data-start="0" data-duration="12.53"></div>
+    <video id="f03-video-a" class="clip hf-media" src="/assets/03-create-party-plan.mp4" data-start="0" data-duration="4" data-media-start="0" data-track-index="1" muted playsinline></video>
+    <video id="f03-video-b" class="clip hf-media" src="/assets/03-create-party-plan.mp4" data-start="4" data-duration="8.53" data-media-start="11.5" data-track-index="1" muted playsinline></video>
+    <div id="f03-overlay" class="clip hf-overlay" data-start="0" data-duration="12.53" data-track-index="2">
+      <div id="f03-top" class="hf-topline"><span class="hf-index">03</span><span class="hf-kicker">WebMCP · create_party_plan</span><span id="f03-rule" class="hf-rule"></span></div>
+      <div id="f03-focus" class="hf-focus" style="left:570px;top:165px;width:1270px;height:770px"></div>
+      <div id="f03-lower" class="hf-lower"><div class="hf-proof">Jazz becomes a Harlem supper for eight</div><div class="hf-badge">Budget + diet + wine carried forward</div></div>
+      <i class="hf-corner tl"></i><i class="hf-corner br"></i>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#f03-top", { y: -65, opacity: 0 }, { y: 0, opacity: 1, duration: .6, ease: "power3.out" }, .1)
+        .fromTo("#f03-rule", { scaleX: 0 }, { scaleX: 1, duration: .8, ease: "power3.out" }, .35)
+        .fromTo("#f03-focus", { opacity: 0, scale: 1.035 }, { opacity: 1, scale: 1, duration: .6, ease: "power3.out" }, 4.3)
+        .fromTo("#f03-lower", { y: 70, opacity: 0 }, { y: 0, opacity: 1, duration: .65, ease: "power3.out" }, 6.0);
+      window.__timelines["03-create-jazz-plan"] = tl;
+    </script>
+  </div>
+</template>
